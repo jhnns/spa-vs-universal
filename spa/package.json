@@ -4,18 +4,24 @@
   "private": true,
   "scripts": {
     "dev": "run-p server:dev client:dev",
-    "client:dev": "cross-env NODE_ENV=development node scripts/start.js",
+    "client:dev": "cross-env NODE_ENV=development BABEL_ENV=browser node scripts/start.js",
     "client:build": "node scripts/build.js",
     "client:test": "node scripts/test.js --env=jsdom",
-    "server:dev": "cross-env NODE_ENV=development nodemon -w src --exec \"babel-node server\"",
-    "server:build": "babel src -s -D -d dist --presets es2015,stage-0",
-    "server:start": "node dist"
+    "server:dev": "cross-env NODE_ENV=development BABEL_ENV=node nodemon -w server --exec \"babel-node server\"",
+    "server:build": "babel server -s -D -d dist/server",
+    "server:start": "node dist",
+    "lib:build": "babel lib -s -D -d dist/lib"
   },
   "dependencies": {
+    "alamid-schema": "^1.1.0",
     "body-parser": "^1.17.2",
     "compression": "^1.6.2",
     "cors": "^2.8.3",
     "express": "^4.15.3",
+    "faker": "^4.1.0",
+    "filled-array": "^1.1.0",
+    "helmet": "^3.6.1",
+    "mock-rest-middleware": "^2.3.0",
     "morgan": "^1.8.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

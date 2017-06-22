@@ -1,0 +1,36 @@
+{
+    "env": {
+        "node": {
+            "presets": [
+                [
+                    "env",
+                    {
+                        "targets": "current"
+                    }
+                ]
+            ],
+            "sourceMaps": "inline",
+            "retainLines": true
+        },
+        "browser": {
+            "presets": [
+                [
+                    "env",
+                    {
+                        "targets": {
+                            "browsers": [
+                                "last 2 versions"
+                            ]
+                        }
+                    }
+                ],
+                "react"
+            ],
+            "plugins": [
+                "transform-runtime",
+                "transform-object-rest-spread"
+            ],
+            "retainLines": true
+        }
+    }
+}
