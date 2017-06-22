@@ -1,4 +1,3 @@
-
 const path = require("path");
 const fs = require("fs");
 const url = require("url");
@@ -23,7 +22,7 @@ function ensureSlash(path, needsSlash) {
 }
 
 const getPublicUrl = appPackageJson =>
-  envPublicUrl || require(appPackageJson).homepage;
+    envPublicUrl || require(appPackageJson).homepage;
 
 // We use `PUBLIC_URL` environment variable or "homepage" field to infer
 // "public path" at which the app is served.
@@ -33,8 +32,8 @@ const getPublicUrl = appPackageJson =>
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
 function getServedPath(appPackageJson) {
     const publicUrl = getPublicUrl(appPackageJson);
-    const servedUrl = envPublicUrl ||
-    (publicUrl ? url.parse(publicUrl).pathname : "/");
+    const servedUrl =
+        envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : "/");
 
     return ensureSlash(servedUrl, true);
 }
@@ -45,11 +44,11 @@ module.exports = {
     appBuild: resolveApp("build"),
     appPublic: resolveApp("public"),
     appHtml: resolveApp("public/index.html"),
-    appIndexJs: resolveApp("src/index.js"),
+    appIndexJs: resolveApp("client/index.js"),
     appPackageJson: resolveApp("package.json"),
-    appSrc: resolveApp("src"),
+    appSrc: resolveApp("client"),
     yarnLockFile: resolveApp("yarn.lock"),
-    testsSetup: resolveApp("src/setupTests.js"),
+    testsSetup: resolveApp("client/setupTests.js"),
     appNodeModules: resolveApp("node_modules"),
     publicUrl: getPublicUrl(resolveApp("package.json")),
     servedPath: getServedPath(resolveApp("package.json")),
