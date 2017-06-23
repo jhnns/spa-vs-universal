@@ -17,6 +17,7 @@
     "body-parser": "^1.17.2",
     "compression": "^1.6.2",
     "cors": "^2.8.3",
+    "cxs": "^3.0.4",
     "express": "^4.15.3",
     "faker": "^4.1.0",
     "filled-array": "^1.1.0",
@@ -28,9 +29,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "resource-router-middleware": "^0.7.0",
-    "whatwg-fetch": "^2.0.3"
-  },
-  "devDependencies": {
+    "whatwg-fetch": "^2.0.3",
     "autoprefixer": "^7.1.1",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
@@ -51,11 +50,13 @@
     "eslint-loader": "^1.8.0",
     "eslint-plugin-flowtype": "^2.34.0",
     "eslint-plugin-import": "^2.5.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^7.1.0",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "2.28.0",
-    "nodemon": "^1.11.0",
+    "kewler": "^1.0.8",
+    "modular-scale": "^4.4.1",
     "npm-run-all": "^4.0.2",
     "postcss-loader": "^2.0.6",
     "style-loader": "^0.18.2",
@@ -64,5 +65,8 @@
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.0",
     "webpack-manifest-plugin": "1.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }

@@ -1,8 +1,19 @@
 {
+    "plugins": [
+        "jsx-a11y"
+    ],
     "extends": [
-        "peerigon/react"
+        "peerigon/react",
+        "plugin:jsx-a11y/recommended"
     ],
     "env": {
         "browser": true
+    },
+    "rules": {
+        // Since we have no store, each React component may host its own state.
+        // So, we don't use stateless functions in this SPA example to avoid unnecessary refactoring.
+        // Currently, they provide not performance benefit anyway.
+        "react/prefer-stateless-function": "off",
+        "class-methods-use-this": "off"
     }
 }

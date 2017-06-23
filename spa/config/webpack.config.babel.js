@@ -8,6 +8,11 @@ export default {
     output: {
         path: path.resolve(projectRoot, "public"),
     },
+    resolve: {
+        alias: {
+            cxs: "cxs/monolithic",
+        },
+    },
     module: {
         rules: [
             {
@@ -27,6 +32,9 @@ export default {
                 test: /\.css$/,
                 use: [
                     {
+                        loader: "style-loader",
+                    },
+                    {
                         loader: "css-loader",
                     },
                 ],
@@ -35,7 +43,10 @@ export default {
                 test: /\.(jpe?g|gif|png|svg)$/,
                 use: [
                     {
-                        loader: "file-loader",
+                        loader: "url-loader",
+                        options: {
+                            limit: 8192,
+                        },
                     },
                 ],
             },
