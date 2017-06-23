@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "preact";
 import logoSrc from "../../assets/img/peerigon-logo-mint.svg";
 import { logoImg } from "./HeaderLogo.css";
 

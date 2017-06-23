@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "preact";
 import Header from "../header/Header";
 import { root } from "./App.css";
 

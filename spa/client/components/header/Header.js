@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "preact";
 import Logo from "./HeaderLogo";
 import { root, logo, headline, offscreen } from "./Header.css";
 

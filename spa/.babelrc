@@ -23,10 +23,15 @@
                             ]
                         }
                     }
-                ],
-                "react"
+                ]
             ],
             "plugins": [
+                [
+                    "transform-react-jsx",
+                    {
+                        "pragma": "h"
+                    }
+                ],
                 "transform-runtime",
                 "transform-object-rest-spread",
                 "transform-react-constant-elements"

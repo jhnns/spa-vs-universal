@@ -9,5 +9,5 @@ export const root = cxs({
         silverLight10(),
         mintLight35() + ` ${ px(40) }px`,
     ]),
-    minHeight: "100%",
+    minHeight: "100vh",
 });

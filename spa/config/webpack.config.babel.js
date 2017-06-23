@@ -22,8 +22,6 @@ export default {
     resolve: {
         alias: {
             cxs: "cxs/monolithic",
-            react: "preact-compat",
-            "react-dom": "preact-compat",
         },
     },
     module: {
@@ -73,7 +71,7 @@ export default {
             verbose: false,
         }),
         new HtmlPlugin({
-            inject: true,
+            inject: "head",
             template: require.resolve(projectRoot + "/client/index.html"),
             minify: {
                 removeComments: true,
@@ -87,6 +85,9 @@ export default {
                 minifyCSS: isProd,
                 minifyURLs: isProd,
             },
+        }),
+        new webpack.ProvidePlugin({
+            h: ["preact", "h"],
         }),
         new webpack.DefinePlugin({
             "process.env": {
