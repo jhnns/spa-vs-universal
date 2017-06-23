@@ -2,14 +2,16 @@ import path from "path";
 import HtmlPlugin from "html-webpack-plugin";
 import CleanPlugin from "clean-webpack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 
 const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
-const isDev = env === "development";
 const isProd = env === "production";
+const isDev = isProd === false;
 
 export default {
+    bail: isProd,
     entry: {
         app: require.resolve(projectRoot + "/client"),
     },
@@ -23,6 +25,8 @@ export default {
         },
     },
     module: {
+        // See https://github.com/webpack/webpack/pull/4348
+        strictExportPresence: isProd,
         rules: [
             {
                 test: /\.js$/,
@@ -67,7 +71,20 @@ export default {
             verbose: false,
         }),
         new HtmlPlugin({
+            inject: true,
             template: require.resolve(projectRoot + "/client/index.html"),
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+                removeEmptyAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                keepClosingSlash: true,
+                minifyJS: isProd,
+                minifyCSS: isProd,
+                minifyURLs: isProd,
+            },
         }),
         new webpack.DefinePlugin({
             "process.env": {
@@ -83,6 +100,13 @@ export default {
                 NODE_ENV: JSON.stringify(env),
             },
         }),
+        new CopyPlugin([
+            {
+                from: path.resolve(projectRoot, "client", "assets", "public"),
+                to: path.resolve(projectRoot, "public"),
+            },
+        ]),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         isProd &&
             new webpack.optimize.UglifyJsPlugin({
                 /* eslint-disable camelcase */
@@ -98,13 +122,22 @@ export default {
                 /* eslint-enable camelcase */
             }),
         isProd && new webpack.optimize.ModuleConcatenationPlugin(),
-        new CopyPlugin([
-            {
-                from: path.resolve(projectRoot, "client", "assets", "public"),
-                to: path.resolve(projectRoot, "public"),
-            },
-        ]),
+        process.stdout.isTTY &&
+            isProd &&
+            new BundleAnalyzerPlugin({
+                analyzerHost: "127.0.0.1",
+                analyzerPort: 8081,
+                openAnalyzer: false,
+            }),
     ]),
+    node: {
+        fs: "empty",
+        net: "empty",
+        tls: "empty",
+    },
+    performance: {
+        hints: isProd ? "warning" : false,
+    },
     devtool: "source-map",
     devServer: {
         contentBase: path.join(projectRoot, "public"),
