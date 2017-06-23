@@ -53,11 +53,9 @@
     "modular-scale": "^4.4.1",
     "morgan": "^1.8.2",
     "npm-run-all": "^4.0.2",
-    "object-assign": "^4.1.1",
     "postcss-loader": "^2.0.6",
-    "promise": "^8.0.0",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "preact": "^8.1.0",
+    "preact-compat": "^3.16.0",
     "resource-router-middleware": "^0.7.0",
     "style-loader": "^0.18.2",
     "sw-precache-webpack-plugin": "^0.11.3",
@@ -69,6 +67,7 @@
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
+    "eslint-import-resolver-webpack": "^0.8.3",
     "nodemon": "^1.11.0"
   }
 }

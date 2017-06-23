@@ -9,6 +9,13 @@
     "env": {
         "browser": true
     },
+    "settings": {
+        "import/resolver": {
+            "webpack": {
+                "config": "config/webpack.config.babel.js"
+            }
+        }
+    },
     "rules": {
         // Since we have no store, each React component may host its own state.
         // So, we don't use stateless functions in this SPA example to avoid unnecessary refactoring.

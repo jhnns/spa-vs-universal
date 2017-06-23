@@ -29,7 +29,6 @@
             "plugins": [
                 "transform-runtime",
                 "transform-object-rest-spread",
-                "transform-react-inline-elements",
                 "transform-react-constant-elements"
             ],
             "retainLines": true

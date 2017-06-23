@@ -22,6 +22,8 @@ export default {
     resolve: {
         alias: {
             cxs: "cxs/monolithic",
+            react: "preact-compat",
+            "react-dom": "preact-compat",
         },
     },
     module: {
@@ -138,7 +140,7 @@ export default {
     performance: {
         hints: isProd ? "warning" : false,
     },
-    devtool: "source-map",
+    devtool: `${ isDev ? "eval-" : "" }source-map`,
     devServer: {
         contentBase: path.join(projectRoot, "public"),
         inline: true,
