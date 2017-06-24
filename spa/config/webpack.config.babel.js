@@ -31,8 +31,8 @@ export default {
     module: {
         // See https://github.com/webpack/webpack/pull/4348
         strictExportPresence: isProd,
-        rules: [
-            {
+        rules: clean([
+            isProd && {
                 test: cssJsModules,
                 use: ExtractTextPlugin.extract([
                     {
@@ -52,10 +52,10 @@ export default {
             },
             {
                 test: /\.js$/,
-                exclude: [
+                exclude: clean([
                     path.resolve(projectRoot, "node_modules"),
-                    cssJsModules,
-                ],
+                    isProd && cssJsModules,
+                ]),
                 use: [
                     {
                         loader: "babel-loader",
@@ -77,7 +77,7 @@ export default {
                     },
                 ],
             },
-        ],
+        ]),
     },
     plugins: clean([
         new CleanPlugin(["public"], {
