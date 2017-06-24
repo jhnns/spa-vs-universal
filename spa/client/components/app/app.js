@@ -1,6 +1,6 @@
 import { Component } from "preact";
-import Header from "../header/Header";
-import { root } from "./App.css";
+import Header from "../header/header";
+import { root } from "./app.css";
 
 export default class App extends Component {
     render() {

@@ -1,6 +1,6 @@
 import { Component } from "preact";
-import Logo from "./HeaderLogo";
-import { root, logo, headline, offscreen } from "./Header.css";
+import Logo from "../headerLogo/headerLogo";
+import { root, logo, headline, offscreen } from "./header.css";
 
 export default class Header extends Component {
     render() {

@@ -1,6 +1,6 @@
 import { Component } from "preact";
-import logoSrc from "../../assets/img/peerigon-logo-mint.svg";
-import { logoImg } from "./HeaderLogo.css";
+import logoSrc from "../../assets/img/peerigonLogoMint.svg";
+import { logoImg } from "./headerLogo.css";
 
 export default class HeaderLogo extends Component {
     render() {

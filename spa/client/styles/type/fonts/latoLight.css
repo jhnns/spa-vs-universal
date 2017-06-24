@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "Lato";
+    src: local("Lato Light"),
+       url("../../assets/fonts/lato/latoLight.woff2") format("woff2"),
+       url("../../assets/fonts/lato/latoLight.woff") format("woff"),
+       url("../../assets/fonts/lato/latoLight.ttf") format("truetype");
+    font-weight: 200;
+    font-style: normal;
+}
