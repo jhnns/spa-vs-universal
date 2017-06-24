@@ -150,6 +150,7 @@ export default {
                 analyzerPort: 8081,
                 openAnalyzer: false,
             }),
+        isProd && new webpack.HashedModuleIdsPlugin(),
     ]),
     node: {
         fs: "empty",

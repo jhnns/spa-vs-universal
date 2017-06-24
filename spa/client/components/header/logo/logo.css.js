@@ -1,5 +1,5 @@
 import cxs from "cxs";
-import { px } from "../../styles/scales";
+import { px } from "../../../styles/scales";
 
 export const logoImg = cxs({
     display: "block",
