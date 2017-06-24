@@ -1,7 +1,10 @@
 import path from "path";
+import fs from "fs";
+import os from "os";
 import HtmlPlugin from "html-webpack-plugin";
 import CleanPlugin from "clean-webpack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
+import ExtractTextPlugin from "extract-text-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 
@@ -9,6 +12,7 @@ const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
 const isProd = env === "production";
 const isDev = isProd === false;
+const cssJsModules = /\.css.js$/;
 
 export default {
     bail: isProd,
@@ -29,8 +33,29 @@ export default {
         strictExportPresence: isProd,
         rules: [
             {
+                test: cssJsModules,
+                use: ExtractTextPlugin.extract([
+                    {
+                        loader: "babel-loader",
+                        options: {
+                            cacheDirectory: true,
+                            forceEnv: "development",
+                            sourceMaps: false,
+                        },
+                    },
+                    {
+                        loader: require.resolve(
+                            "../tools/webpack/exportCssLoader"
+                        ),
+                    },
+                ]),
+            },
+            {
                 test: /\.js$/,
-                exclude: path.resolve(projectRoot, "node_modules"),
+                exclude: [
+                    path.resolve(projectRoot, "node_modules"),
+                    cssJsModules,
+                ],
                 use: [
                     {
                         loader: "babel-loader",
@@ -38,17 +63,6 @@ export default {
                             cacheDirectory: true,
                             forceEnv: "browser",
                         },
-                    },
-                ],
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: "style-loader",
-                    },
-                    {
-                        loader: "css-loader",
                     },
                 ],
             },
@@ -85,6 +99,10 @@ export default {
                 minifyCSS: isProd,
                 minifyURLs: isProd,
             },
+        }),
+        new ExtractTextPlugin({
+            filename: "[name].[contenthash].css",
+            disable: isDev,
         }),
         new webpack.ProvidePlugin({
             h: ["preact", "h"],

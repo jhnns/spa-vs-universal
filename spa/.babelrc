@@ -9,6 +9,10 @@
                     }
                 ]
             ],
+            "plugins": [
+                "transform-runtime",
+                "transform-object-rest-spread"
+            ],
             "sourceMaps": "inline",
             "retainLines": true
         },
@@ -21,7 +25,8 @@
                             "browsers": [
                                 "last 2 versions"
                             ]
-                        }
+                        },
+                        "modules": false
                     }
                 ]
             ],
