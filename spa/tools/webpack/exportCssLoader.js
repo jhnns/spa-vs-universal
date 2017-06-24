@@ -1,10 +1,12 @@
-const exportCss = `module.exports = ((cxs, locals) => {
-    const e = [[module.id, cxs.getCss()]];
+const exportCss = `module.exports = ((cxs, oldExports) => {
+    const newExports = [[module.id, cxs.getCss()]];
 
-    e.locals = locals;
+    Object.assign(newExports, oldExports);
+
+    newExports.locals = oldExports;
     cxs.reset();
 
-    return e;
+    return newExports;
 })(require("cxs"), module.exports);`;
 
 module.exports = function (source, sourceMaps) {

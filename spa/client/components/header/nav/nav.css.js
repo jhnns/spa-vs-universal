@@ -1,7 +1,7 @@
 import cxs from "cxs";
 import { px, rem } from "../../../styles/scales";
 import nexaHeavy from "../../../styles/type/nexaHeavy";
-import { baseLine } from "../header.css";
+import { baseLine } from "../common";
 
 const linkFontSize = rem(2);
 

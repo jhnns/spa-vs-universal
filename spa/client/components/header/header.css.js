@@ -1,10 +1,9 @@
 import cxs from "cxs";
 import { white, black } from "../../styles/colors";
-import { px, rem } from "../../styles/scales";
+import { px } from "../../styles/scales";
 import nexaHeavy from "../../styles/type/nexaHeavy";
 import { offscreen as a11yOffscreen } from "../../styles/a11y";
-
-export const baseLine = rem(3);
+import { baseLine } from "./common";
 
 export const root = cxs({
     position: "sticky",
