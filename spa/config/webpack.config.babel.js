@@ -164,6 +164,7 @@ export default {
     devServer: {
         contentBase: path.join(projectRoot, "public"),
         inline: true,
+        historyApiFallback: true,
         proxy: {
             "/api": "http://localhost:8080/api",
         },

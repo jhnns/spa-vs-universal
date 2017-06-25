@@ -7,10 +7,10 @@ export default class Nav extends Component {
             <nav>
                 <ul className={list}>
                     <li>
-                        <a className={link} href="">Home</a>
+                        <a className={link} href="/">Home</a>
                     </li>
                     <li>
-                        <a className={link} href="">About</a>
+                        <a className={link} href="/about">About</a>
                     </li>
                 </ul>
             </nav>

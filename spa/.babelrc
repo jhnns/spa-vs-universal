@@ -37,6 +37,7 @@
                         "pragma": "h"
                     }
                 ],
+                "syntax-dynamic-import",
                 "transform-runtime",
                 "transform-object-rest-spread",
                 "transform-react-constant-elements"
