@@ -9,10 +9,14 @@ export default class Nav extends Component {
             <nav>
                 <ul className={list}>
                     <li className={listItem}>
-                        <Link route={routes.home} className={link}>Home</Link>
+                        <Link route={routes.top5} className={link}>
+                            Top 5
+                        </Link>
                     </li>
                     <li className={listItem}>
-                        <Link route={routes.about} className={link}>About</Link>
+                        <Link route={routes.allPosts} className={link}>
+                            All
+                        </Link>
                     </li>
                 </ul>
             </nav>

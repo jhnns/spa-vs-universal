@@ -9,7 +9,7 @@ export default class Header extends Component {
     render() {
         return (
             <header className={root}>
-                <Link route={routes.home} className={logo}>
+                <Link route={routes.top5} className={logo}>
                     <Logo />
                     <h1 className={headline}>
                         <span className={offscreen}>Peerigon</span> News

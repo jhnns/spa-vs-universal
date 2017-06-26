@@ -3,9 +3,17 @@ function useDefault(p) {
 }
 
 export default {
-    home: {
+    top5: {
         match: "/",
-        component: () => useDefault(import("./components/home/home" /* webpackChunkName: "home" */)),
+        component: () => useDefault(import("./components/posts/posts" /* webpackChunkName: "posts" */)),
+        params: {
+            sortBy: "rating",
+            limit: 5,
+        },
+    },
+    allPosts: {
+        match: "/all",
+        component: () => useDefault(import("./components/posts/posts" /* webpackChunkName: "posts" */)),
     },
     about: {
         match: "/about",
