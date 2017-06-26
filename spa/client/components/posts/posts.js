@@ -7,16 +7,16 @@ const empty = [];
 
 export default class Posts extends AsyncComponent {
     componentWillMount() {
-        this.startFetch(this.props.fetch);
+        this.addPromise(this.props.promise);
     }
     componentWillReceiveProps(props) {
-        this.startFetch(props.fetch);
+        this.addPromise(props.promise);
     }
-    startFetch(fetch) {
-        this.async.add("fetch", fetch());
+    addPromise(promise) {
+        this.async.add("promise", promise);
     }
     render(props, state) {
-        const posts = state.fetchResult;
+        const posts = state.promiseResult;
 
         return (
             <div>

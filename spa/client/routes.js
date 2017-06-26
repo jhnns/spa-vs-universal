@@ -9,7 +9,7 @@ export default {
     },
     allPosts: {
         match: "/all",
-        component: () => useDefault(import("./components/posts/posts" /* webpackChunkName: "posts" */)),
+        component: () => useDefault(import("./components/allPosts/allPosts" /* webpackChunkName: "posts" */)),
     },
     about: {
         match: "/about",
