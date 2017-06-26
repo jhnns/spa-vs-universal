@@ -6,7 +6,6 @@ import ExtractTextPlugin from "extract-text-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 import reg from "readable-regex";
-import routes from "../client/routes";
 
 const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
@@ -14,16 +13,12 @@ const isProd = env === "production";
 const isDev = isProd === false;
 const cssJsModules = /\.css.js$/;
 const modulesWithDebugAssertions = ["sheet-router", "wayfarer"];
-const appEntry = require.resolve(projectRoot + "/client");
-const routeNames = routes.map(([path, config]) => config.name);
 
 export default {
     bail: isProd,
-    entry: routeNames.reduce((entries, chunk) => {
-        entries[chunk + "Entry"] = appEntry;
-
-        return entries;
-    }, {}),
+    entry: {
+        app: require.resolve(projectRoot + "/client"),
+    },
     output: {
         path: path.resolve(projectRoot, "public"),
         filename: "[name].[chunkhash].js",
@@ -129,10 +124,8 @@ export default {
             disable: isDev,
         }),
         new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
-            // names: entryChunks,
-            // children: true,
-            chunks: routeNames.concat(routeNames.map(chunk => chunk + "Entry")),
+            name: "app",
+            async: "common",
             minChunks: 3,
         }),
         new webpack.ProvidePlugin({
