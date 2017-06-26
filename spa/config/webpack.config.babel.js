@@ -7,6 +7,7 @@ import ExtractTextPlugin from "extract-text-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 import reg from "readable-regex";
+import serverConfig from "./server";
 
 const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
@@ -195,7 +196,7 @@ export default {
         inline: true,
         historyApiFallback: true,
         proxy: {
-            "/api": "http://localhost:8080/api",
+            "/api": `http://${ serverConfig.hostname }:${ serverConfig.port }/`,
         },
     },
 };

@@ -12,8 +12,9 @@ api.addResource(
             title: faker.lorem.sentence(),
             content: faker.lorem.paragraphs(),
             published: faker.date.past(),
+            starred: Math.floor(Math.random() * 100),
         }),
-        10
+        30
     )
 );
 

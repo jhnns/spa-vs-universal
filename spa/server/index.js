@@ -33,9 +33,13 @@ initializeDb(db => {
 
     app.use("/api", fakeApi.getMiddleware());
 
-    app.server.listen(process.env.PORT || config.port, () => {
-        console.log(`Started on port ${ app.server.address().port }`);
-    });
+    app.server.listen(
+        process.env.PORT || config.port,
+        config.hostname || "localhost",
+        () => {
+            console.log(`Started on port ${ app.server.address().port }`);
+        }
+    );
 });
 
 export default app;
