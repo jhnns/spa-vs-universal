@@ -120,10 +120,7 @@ export default {
                 minifyURLs: isProd,
             },
         }),
-        new PreloadWebpackPlugin({
-            rel: "prefetch",
-            as: "script",
-        }),
+        new PreloadWebpackPlugin(),
         new ExtractTextPlugin({
             filename: "[name].[contenthash].css",
             allChunks: true,
