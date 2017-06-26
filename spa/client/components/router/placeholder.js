@@ -4,10 +4,10 @@ const spinner = <div>Loading</div>;
 
 export default class Placeholder extends Component {
     componentWillMount() {
-        this.updatePromise(this.props.promise);
+        this.updatePromise(this.props.children[0]);
     }
-    componentWillReceiveProps({ promise }) {
-        this.updatePromise(promise);
+    componentWillReceiveProps(props) {
+        this.updatePromise(props.children[0]);
     }
     updatePromise(promise) {
         this.promise = promise;

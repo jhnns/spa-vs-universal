@@ -62,10 +62,9 @@ export default class Router extends Component {
         const componentPromise = state.route.component();
 
         return (
-            <Placeholder
-                promise={componentPromise}
-                props={state.params || defaultParams}
-            />
+            <Placeholder props={state.params || defaultParams}>
+                {componentPromise}
+            </Placeholder>
         );
     }
 }
