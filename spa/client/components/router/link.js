@@ -42,14 +42,18 @@ function renderHref(route, params) {
 }
 
 export default class Link extends Component {
-    render({ route, params, className, children, active = false }) {
+    render({ route, params, className, children, activeClass = "" }) {
+        const classNames = [
+            route === this.context.route ? activeClass : "",
+            className,
+        ];
         const isExternal = typeof route === "string";
         const href = isExternal === true ? route : renderHref(route, params);
 
         return (
             <a
                 href={href}
-                className={[className].join(" ")}
+                className={classNames.join(" ")}
                 data-no-routing={typeof route === "string"}
             >
                 {children}

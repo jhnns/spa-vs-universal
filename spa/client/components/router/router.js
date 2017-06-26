@@ -10,10 +10,10 @@ const defaultParams = {};
 
 function transformRoutes(routes, setState) {
     return Object.keys(routes).map(routeName => {
-        const config = routes[routeName];
+        const route = routes[routeName];
 
         return [
-            config.match,
+            route.match,
             params => {
                 const searchParams = new URLSearchParams(
                     window.location.search
@@ -24,7 +24,7 @@ function transformRoutes(routes, setState) {
                 }
 
                 setState({
-                    config,
+                    route,
                     params,
                 });
             },
@@ -45,6 +45,9 @@ function createRouter(routes, setState) {
 }
 
 export default class Router extends Component {
+    getChildContext() {
+        return { route: this.state.route || null };
+    }
     componentWillMount() {
         this.router = createRouter(routes, this.setState.bind(this));
         this.router(window.location.href);
@@ -56,7 +59,7 @@ export default class Router extends Component {
         );
     }
     render(props, state) {
-        const componentPromise = state.config.component();
+        const componentPromise = state.route.component();
 
         return (
             <Placeholder

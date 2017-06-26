@@ -10,7 +10,7 @@ import calc from "../../../styles/calc";
 
 const linkFontSize = rem(2);
 
-const activeLink = {
+const activeLinkStyles = {
     borderBottom: regularBorder(),
 };
 
@@ -39,6 +39,8 @@ export const link = cxs({
     fontSize: "1rem",
     textDecoration: "none",
     padding: `1px ${ px(5) }px`,
-    ":hover": activeLink,
-    ":active": activeLink,
+    ":hover": activeLinkStyles,
+    ":active": activeLinkStyles,
 });
+
+export const activeLink = cxs(activeLinkStyles);
