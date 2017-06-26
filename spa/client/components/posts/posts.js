@@ -7,10 +7,10 @@ const empty = [];
 
 export default class Posts extends AsyncComponent {
     componentWillMount() {
-        this.addPromise(this.props.promise);
+        this.addPromise(this.props.children[0]);
     }
     componentWillReceiveProps(props) {
-        this.addPromise(props.promise);
+        this.addPromise(props.children[0]);
     }
     addPromise(promise) {
         this.async.add("promise", promise);

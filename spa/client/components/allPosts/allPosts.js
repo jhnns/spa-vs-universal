@@ -9,7 +9,9 @@ export default class AllPosts extends Component {
 
         return (
             <WithTitle title={title}>
-                <Posts headline={title} promise={getAllPosts()} />
+                <Posts headline={title}>
+                    {getAllPosts()}
+                </Posts>
             </WithTitle>
         );
     }

@@ -9,7 +9,9 @@ export default class Top5 extends Component {
 
         return (
             <WithTitle title={title}>
-                <Posts headline={title} promise={getTop5()} />
+                <Posts headline={title}>
+                    {getTop5()}
+                </Posts>
             </WithTitle>
         );
     }
