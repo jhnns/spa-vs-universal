@@ -10,11 +10,9 @@
                 ]
             ],
             "plugins": [
-                "transform-runtime",
-                "transform-object-rest-spread"
+                "dynamic-import-node"
             ],
-            "sourceMaps": "inline",
-            "retainLines": true
+            "sourceMaps": "inline"
         },
         "browser": {
             "presets": [
@@ -37,12 +35,14 @@
                         "pragma": "h"
                     }
                 ],
-                "syntax-dynamic-import",
-                "transform-runtime",
-                "transform-object-rest-spread",
                 "transform-react-constant-elements"
-            ],
-            "retainLines": true
+            ]
         }
-    }
+    },
+    "plugins": [
+        "syntax-dynamic-import",
+        "transform-runtime",
+        "transform-object-rest-spread"
+    ],
+    "retainLines": true
 }

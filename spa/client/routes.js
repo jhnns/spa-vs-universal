@@ -4,12 +4,15 @@ function extractDefault(p) {
 
 export default [
     ["/", {
-        component: () => extractDefault(import("./components/home/home")),
+        name: "home",
+        component: () => extractDefault(import("./components/home/home" /* webpackChunkName: "home" */)),
     }],
     ["/about", {
-        component: () => extractDefault(import("./components/about/about")),
+        name: "about",
+        component: () => extractDefault(import("./components/about/about" /* webpackChunkName: "about" */)),
     }],
-    ["/404", {
-        component: () => extractDefault(import("./components/notFound/notFound")),
+    ["/not-found", {
+        name: "notFound",
+        component: () => extractDefault(import("./components/notFound/notFound" /* webpackChunkName: "notFound" */)),
     }],
 ];
