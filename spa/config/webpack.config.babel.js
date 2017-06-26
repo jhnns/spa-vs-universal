@@ -120,7 +120,6 @@ export default {
                 minifyURLs: isProd,
             },
         }),
-        new PreloadWebpackPlugin(),
         new ExtractTextPlugin({
             filename: "[name].[contenthash].css",
             allChunks: true,
@@ -155,6 +154,7 @@ export default {
             },
         ]),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        isProd && new PreloadWebpackPlugin(),
         isProd &&
             new webpack.optimize.UglifyJsPlugin({
                 /* eslint-disable camelcase */
