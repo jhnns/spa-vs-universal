@@ -1,7 +1,7 @@
 const baseFontSize = 16;
 const targetFontSize = 12;
-const pxBase = 4;
-const pxRatio = 9 / 8;
+const pxBase = 2;
+const pxRatio = 6 / 5;
 const remBase = targetFontSize / baseFontSize;
 const remRatio = 6 / 5;
 const regularDevicePixelRatio = 2;

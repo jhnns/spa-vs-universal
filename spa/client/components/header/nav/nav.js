@@ -1,15 +1,15 @@
 import { Component } from "preact";
-import { list, link } from "./nav.css";
+import { list, listItem, link } from "./nav.css";
 
 export default class Nav extends Component {
     render() {
         return (
             <nav>
                 <ul className={list}>
-                    <li>
+                    <li className={listItem}>
                         <a className={link} href="/">Home</a>
                     </li>
-                    <li>
+                    <li className={listItem}>
                         <a className={link} href="/about">About</a>
                     </li>
                 </ul>
