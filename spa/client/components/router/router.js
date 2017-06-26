@@ -13,7 +13,13 @@ function createRouter(routes, setState) {
         routes.map(([route, config]) => [
             route,
             params => {
-                setState({ config, params: parseQuery(params) });
+                setState({
+                    config,
+                    params: {
+                        ...parseQuery(window.location.href),
+                        ...params,
+                    },
+                });
             },
         ])
     );
