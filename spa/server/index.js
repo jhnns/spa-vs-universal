@@ -1,4 +1,5 @@
 import http from "http";
+import path from "path";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -26,12 +27,11 @@ app.use(
     })
 );
 
-// connect to db
 initializeDb(db => {
-    // internal middleware
     app.use(middleware({ config, db }));
 
     app.use("/api", fakeApi.getMiddleware());
+    app.use(express.static(path.resolve(__dirname, "..", "public")));
 
     app.server.listen(
         process.env.PORT || config.port,
