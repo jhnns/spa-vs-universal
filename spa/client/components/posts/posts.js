@@ -1,25 +1,31 @@
 import Header from "../header/header";
 import { root } from "./posts.css";
-import getTop5 from "../../api/posts/getTop5";
 import AsyncComponent from "../../util/asyncComponent";
+import Post from "../post/post";
 
 const empty = [];
 
 export default class Posts extends AsyncComponent {
     componentWillMount() {
-        this.async.add("getTop5", getTop5());
+        this.startFetch(this.props.fetch);
+    }
+    componentWillReceiveProps(props) {
+        this.startFetch(props.fetch);
+    }
+    startFetch(fetch) {
+        this.async.add("fetch", fetch());
     }
     render(props, state) {
-        const posts = state.getTop5Result || empty;
+        const posts = state.fetchResult;
 
         return (
             <div>
                 <Header />
                 <main>
                     <h2 className={root}>Posts</h2>
-                    {state.getTop5Result === null ?
+                    {posts === null ?
                         empty :
-                        posts.map(post => JSON.stringify(post)).join("")}
+                        posts.map(post => <Post key={post.id} post={post} />)}
                 </main>
             </div>
         );

@@ -5,11 +5,7 @@ function useDefault(p) {
 export default {
     top5: {
         match: "/",
-        component: () => useDefault(import("./components/posts/posts" /* webpackChunkName: "posts" */)),
-        params: {
-            sortBy: "rating",
-            limit: 5,
-        },
+        component: () => useDefault(import("./components/top5/top5" /* webpackChunkName: "posts" */)),
     },
     allPosts: {
         match: "/all",
