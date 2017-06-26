@@ -5,12 +5,14 @@ import CopyPlugin from "copy-webpack-plugin";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
+import reg from "readable-regex";
 
 const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
 const isProd = env === "production";
 const isDev = isProd === false;
 const cssJsModules = /\.css.js$/;
+const modulesWithDebugAssertions = ["sheet-router", "wayfarer"];
 
 export default {
     bail: isProd,
@@ -62,6 +64,23 @@ export default {
                             cacheDirectory: true,
                             forceEnv: "browser",
                         },
+                    },
+                ],
+            },
+            {
+                test: /\.js$/,
+                include: modulesWithDebugAssertions.map(moduleName =>
+                    reg([
+                        reg.charIn("/", "\\"),
+                        "node_modules",
+                        reg.charIn("/", "\\"),
+                        moduleName,
+                        reg.charIn("/", "\\"),
+                    ])
+                ),
+                use: [
+                    {
+                        loader: "transform-loader?unassertify",
                     },
                 ],
             },

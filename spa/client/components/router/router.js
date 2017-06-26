@@ -2,6 +2,7 @@ import { Component } from "preact";
 import sheetRouter from "sheet-router";
 import onHistoryPop from "sheet-router/history";
 import onLinkClick from "sheet-router/href";
+import parseQuery from "sheet-router/qs";
 import routes from "../../routes";
 import Placeholder from "./placeholder";
 
@@ -12,7 +13,7 @@ function createRouter(routes, setState) {
         routes.map(([route, config]) => [
             route,
             params => {
-                setState({ config, params });
+                setState({ config, params: parseQuery(params) });
             },
         ])
     );
