@@ -1,5 +1,6 @@
 import path from "path";
 import HtmlPlugin from "html-webpack-plugin";
+import PreloadWebpackPlugin from "preload-webpack-plugin";
 import CleanPlugin from "clean-webpack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
@@ -117,6 +118,10 @@ export default {
                 minifyCSS: isProd,
                 minifyURLs: isProd,
             },
+        }),
+        new PreloadWebpackPlugin({
+            rel: "prefetch",
+            as: "script",
         }),
         new ExtractTextPlugin({
             filename: "[name].[contenthash].css",
