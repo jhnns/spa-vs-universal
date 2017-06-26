@@ -5,9 +5,11 @@ import WithTitle from "../withTitle/withTitle";
 
 export default class AllPosts extends Component {
     render() {
+        const title = "All Peerigon News";
+
         return (
-            <WithTitle title="All Peerigon News">
-                <Posts promise={getAllPosts()} />
+            <WithTitle title={title}>
+                <Posts headline={title} promise={getAllPosts()} />
             </WithTitle>
         );
     }

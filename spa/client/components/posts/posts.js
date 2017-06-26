@@ -22,7 +22,7 @@ export default class Posts extends AsyncComponent {
             <div>
                 <Header />
                 <main>
-                    <h2 className={root}>Posts</h2>
+                    <h2 className={root}>{props.headline}</h2>
                     {posts === null ?
                         empty :
                         posts.map(post => <Post key={post.id} post={post} />)}

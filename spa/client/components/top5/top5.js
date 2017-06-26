@@ -5,9 +5,11 @@ import WithTitle from "../withTitle/withTitle";
 
 export default class Top5 extends Component {
     render() {
+        const title = "Top 5 Peerigon News";
+
         return (
-            <WithTitle title="Top 5 Peerigon News">
-                <Posts promise={getTop5()} />
+            <WithTitle title={title}>
+                <Posts headline={title} promise={getTop5()} />
             </WithTitle>
         );
     }
