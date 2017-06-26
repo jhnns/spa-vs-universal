@@ -1,6 +1,4 @@
 import path from "path";
-import fs from "fs";
-import os from "os";
 import HtmlPlugin from "html-webpack-plugin";
 import CleanPlugin from "clean-webpack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
@@ -21,7 +19,8 @@ export default {
     },
     output: {
         path: path.resolve(projectRoot, "public"),
-        filename: "[name].bundle.js",
+        filename: "[name].[chunkhash].js",
+        chunkFilename: "[name].[chunkhash].js",
     },
     resolve: {
         alias: {
@@ -102,7 +101,14 @@ export default {
         }),
         new ExtractTextPlugin({
             filename: "[name].[contenthash].css",
+            allChunks: true,
             disable: isDev,
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "app",
+            children: true,
+            async: "commons",
+            minChunks: 3,
         }),
         new webpack.ProvidePlugin({
             h: ["preact", "h"],
