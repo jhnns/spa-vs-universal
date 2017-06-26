@@ -1,5 +1,7 @@
 import { Component } from "preact";
+import Link from "../../router/link";
 import { list, listItem, link } from "./nav.css";
+import routes from "../../../routes";
 
 export default class Nav extends Component {
     render() {
@@ -7,10 +9,10 @@ export default class Nav extends Component {
             <nav>
                 <ul className={list}>
                     <li className={listItem}>
-                        <a className={link} href="/">Home</a>
+                        <Link route={routes.home} className={link}>Home</Link>
                     </li>
                     <li className={listItem}>
-                        <a className={link} href="/about">About</a>
+                        <Link route={routes.about} className={link}>About</Link>
                     </li>
                 </ul>
             </nav>
