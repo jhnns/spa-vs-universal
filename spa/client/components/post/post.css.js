@@ -11,7 +11,15 @@ import {
 export const headline = cxs({
     ...nexaHeavy,
     maxWidth: rem(30) + "rem",
-    marginBottom: rem(10) + "rem",
+    marginBottom: rem(7) + "rem",
+});
+
+export const meta = cxs({
+    ...latoLight,
+    display: "block",
+    fontSize: rem(11) + "rem",
+    lineHeight: rem(10) + "rem",
+    marginBottom: rem(13) + "rem",
 });
 
 export const paragraph = cxs({
