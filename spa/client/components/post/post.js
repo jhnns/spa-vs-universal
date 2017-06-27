@@ -1,5 +1,7 @@
 import { Component } from "preact";
-import { root } from "./post.css";
+import { root, headline, paragraph } from "./post.css";
+
+const lineBreak = /\s*[\r\n]+\s*/g;
 
 export default class Post extends Component {
     render(props, state) {
@@ -7,9 +9,11 @@ export default class Post extends Component {
 
         return (
             <article className={root}>
-                <h2>{post.title}</h2>
+                <h2 className={headline}>{post.title}</h2>
                 <div>
-                    <p>{post.content}</p>
+                    {post.content
+                        .split(lineBreak)
+                        .map(p => <p className={paragraph} key={p}>{p}</p>)}
                 </div>
             </article>
         );
