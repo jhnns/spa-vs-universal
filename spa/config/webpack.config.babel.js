@@ -124,10 +124,6 @@ export default {
         ]),
     },
     plugins: clean([
-        new CleanPlugin(["public"], {
-            root: projectRoot,
-            verbose: false,
-        }),
         new HtmlPlugin({
             inject: "head",
             template: require.resolve(projectRoot + "/client/index.html"),
@@ -179,6 +175,11 @@ export default {
             },
         ]),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        isProd &&
+            new CleanPlugin(["public"], {
+                root: projectRoot,
+                verbose: false,
+            }),
         isProd && new PreloadWebpackPlugin(),
         isProd &&
             new webpack.optimize.UglifyJsPlugin({
