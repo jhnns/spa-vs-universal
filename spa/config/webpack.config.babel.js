@@ -8,6 +8,7 @@ import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 import reg from "readable-regex";
 import serverConfig from "./server";
+import InlinePreStylesPlugin from "../tools/webpack/InlinePreStylesPlugin";
 
 const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
@@ -35,6 +36,22 @@ export default {
         // See https://github.com/webpack/webpack/pull/4348
         strictExportPresence: isProd,
         rules: clean([
+            {
+                test: /\.js$/,
+                exclude: clean([
+                    path.resolve(projectRoot, "node_modules"),
+                    isProd && cssJsModules,
+                ]),
+                use: [
+                    {
+                        loader: "babel-loader",
+                        options: {
+                            cacheDirectory: true,
+                            forceEnv: "browser",
+                        },
+                    },
+                ],
+            },
             isProd && {
                 test: cssJsModules,
                 use: ExtractTextPlugin.extract([
@@ -54,17 +71,35 @@ export default {
                 ]),
             },
             {
-                test: /\.js$/,
-                exclude: clean([
-                    path.resolve(projectRoot, "node_modules"),
-                    isProd && cssJsModules,
-                ]),
+                test: /\.css$/,
+                // prettier-ignore
+                // Prettier adds unnecessary escapes
+                include: [
+                    path.resolve(projectRoot, "client", "styles", "type", "fonts"),
+                    path.resolve(projectRoot, "client", "styles", "pre"),
+                ],
                 use: [
                     {
-                        loader: "babel-loader",
+                        loader: "file-loader",
                         options: {
-                            cacheDirectory: true,
-                            forceEnv: "browser",
+                            name: "[name].[hash].pre.css",
+                        },
+                    },
+                    {
+                        loader: "extract-loader",
+                    },
+                    {
+                        loader: "css-loader",
+                    },
+                ],
+            },
+            {
+                test: /\.(jpe?g|gif|png|svg|ttf|woff2?)$/,
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            limit: 8192,
                         },
                     },
                 ],
@@ -83,17 +118,6 @@ export default {
                 use: [
                     {
                         loader: "transform-loader?unassertify",
-                    },
-                ],
-            },
-            {
-                test: /\.(jpe?g|gif|png|svg)$/,
-                use: [
-                    {
-                        loader: "url-loader",
-                        options: {
-                            limit: 8192,
-                        },
                     },
                 ],
             },
@@ -120,6 +144,7 @@ export default {
                 minifyURLs: isProd,
             },
         }),
+        new InlinePreStylesPlugin(),
         new ExtractTextPlugin({
             filename: "[name].[contenthash].css",
             allChunks: true,
