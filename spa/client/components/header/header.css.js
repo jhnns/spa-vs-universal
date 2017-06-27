@@ -4,11 +4,13 @@ import { px, rem } from "../../styles/scales";
 import nexaHeavy from "../../styles/type/nexaHeavy";
 import { maxContentWidth } from "../../styles/layout";
 import { offscreen as a11yOffscreen } from "../../styles/a11y";
+import { header as headerZIndex } from "../../styles/zIndex";
 import { verticalOffset } from "./common";
 
 export const root = cxs({
     position: "sticky",
     top: 0,
+    zIndex: headerZIndex,
     color: black(),
     backgroundColor: white(),
     boxShadow: "0 5px 5px rgba(0, 0, 0, 0.1)",

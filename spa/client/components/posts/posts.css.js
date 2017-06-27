@@ -1,7 +1,11 @@
 import cxs from "cxs";
-import { px } from "../../styles/scales";
+import { px, rem } from "../../styles/scales";
 import { offscreen } from "../../styles/a11y";
 import { maxContentWidth } from "../../styles/layout";
+import { white, black } from "../../styles/colors";
+import { regularMaxWidth } from "../../styles/typoSizes";
+
+const sheetPadding = px(13);
 
 export const main = cxs({
     maxWidth: maxContentWidth,
@@ -16,10 +20,45 @@ export const headline = cxs({
     ...offscreen,
 });
 
+export const postImage = cxs({
+    position: "absolute",
+    maxWidth: px(30),
+    marginTop: sheetPadding,
+    transform: "translate(0%)",
+    transition: "transform 0.3s ease-in-out",
+});
+
 export const postsContainer = cxs({
+    position: "relative",
+});
+
+export const sheet = cxs({
+    position: "relative",
+    color: black(),
+    backgroundColor: white(),
+    padding: sheetPadding,
+    maxWidth: regularMaxWidth + "rem",
+});
+
+export const postContainer = cxs({
     display: "flex",
     flexDirection: "column",
-    "> *:nth-child(odd)": {
+    ":not(:last-child)": {
+        marginBottom: rem(15) + "rem",
+    },
+    [":nth-child(odd) ." + sheet]: {
         alignSelf: "flex-end",
+    },
+    [":nth-child(odd) ." + postImage]: {
+        left: px(17),
+    },
+    [":nth-child(even) ." + postImage]: {
+        right: px(17),
+    },
+    [":nth-child(odd):not(:hover) ." + postImage]: {
+        transform: "translate(10%)",
+    },
+    [":nth-child(even):not(:hover) ." + postImage]: {
+        transform: "translate(-10%)",
     },
 });
