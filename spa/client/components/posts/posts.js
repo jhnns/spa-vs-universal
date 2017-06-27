@@ -1,7 +1,7 @@
 import Header from "../header/header";
 import AsyncComponent from "../../util/asyncComponent";
 import Post from "../post/post";
-import { main, headline } from "./posts.css";
+import { main, headline, postsContainer } from "./posts.css";
 
 const empty = [];
 
@@ -23,9 +23,13 @@ export default class Posts extends AsyncComponent {
                 <Header />
                 <main className={main}>
                     <h2 className={headline}>{props.headline}</h2>
-                    {posts === null ?
-                        empty :
-                        posts.map(post => <Post key={post.id} post={post} />)}
+                    <div className={postsContainer}>
+                        {posts === null ?
+                            empty :
+                            posts.map(post => (
+                                <Post key={post.id} post={post} />
+                            ))}
+                    </div>
                 </main>
             </div>
         );

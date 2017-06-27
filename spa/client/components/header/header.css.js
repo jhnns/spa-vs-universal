@@ -1,7 +1,7 @@
 import cxs from "cxs";
 import { white, black } from "../../styles/colors";
 import { px, rem } from "../../styles/scales";
-import nexaXBold from "../../styles/type/nexaXBold";
+import nexaHeavy from "../../styles/type/nexaHeavy";
 import { maxContentWidth } from "../../styles/layout";
 import { offscreen as a11yOffscreen } from "../../styles/a11y";
 import { verticalOffset } from "./common";
@@ -38,12 +38,10 @@ export const logo = cxs({
 });
 
 export const headline = cxs({
-    ...nexaXBold,
-    position: "relative",
-    top: 2,
-    fontSize: rem(14) + "rem",
+    ...nexaHeavy,
+    fontSize: rem(13) + "rem",
     margin: 0,
-    marginLeft: px(8),
+    marginLeft: px(10),
 });
 
 export const offscreen = cxs(a11yOffscreen);

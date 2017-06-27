@@ -10,10 +10,13 @@ import {
 } from "../../styles/typoSizes";
 
 export const root = cxs({
-    marginBottom: rem(15) + "rem",
     color: black(),
     backgroundColor: white(),
     padding: px(13),
+    maxWidth: regularMaxWidth + "rem",
+    ":not(:last-child)": {
+        marginBottom: rem(15) + "rem",
+    },
 });
 
 export const headline = cxs({
@@ -24,8 +27,10 @@ export const headline = cxs({
 
 export const paragraph = cxs({
     ...latoLight,
-    marginBottom: rem(7) + "rem",
     fontSize: regular + "rem",
     lineHeight: regularLineHeight + "rem",
     maxWidth: regularMaxWidth + "rem",
+    ":not(:last-child)": {
+        marginBottom: rem(10) + "rem",
+    },
 });

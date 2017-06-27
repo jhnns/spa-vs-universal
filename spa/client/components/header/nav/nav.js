@@ -3,6 +3,8 @@ import Link from "../../router/link";
 import { list, listItem, link, activeLink } from "./nav.css";
 import routes from "../../../routes";
 
+const nbsp = "\u00a0";
+
 export default class Nav extends Component {
     render() {
         return (
@@ -14,7 +16,7 @@ export default class Nav extends Component {
                             className={link}
                             activeClass={activeLink}
                         >
-                            Top 5
+                            Top{nbsp}5
                         </Link>
                     </li>
                     <li className={listItem}>
