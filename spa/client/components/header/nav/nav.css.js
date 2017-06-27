@@ -1,6 +1,6 @@
 import cxs from "cxs";
 import { px, rem } from "../../../styles/scales";
-import nexaHeavy from "../../../styles/type/nexaHeavy";
+import nexaXBold from "../../../styles/type/nexaXBold";
 import { baseLine } from "../common";
 import {
     regular as regularBorder,
@@ -11,6 +11,7 @@ import calc from "../../../styles/calc";
 const linkFontSize = rem(2);
 
 const activeLinkStyles = {
+    borderTop: regularBorder("transparent"),
     borderBottom: regularBorder(),
 };
 
@@ -21,24 +22,16 @@ export const list = cxs({
 
 export const listItem = cxs({
     ":not(:last-child)": {
-        marginRight: px(5),
+        marginRight: px(6),
     },
 });
 
 export const link = cxs({
-    ...nexaHeavy,
-    position: "relative",
-    top: calc(
-        (baseLine - linkFontSize) / 2,
-        "rem",
-        " + ",
-        regularBorderWidth,
-        "px"
-    ),
+    ...nexaXBold,
     color: "inherit",
     fontSize: "1rem",
     textDecoration: "none",
-    padding: `1px ${ px(5) }px`,
+    padding: `2px ${ px(5) }px`,
     ":hover": activeLinkStyles,
     ":active": activeLinkStyles,
 });

@@ -1,3 +1,2 @@
-import { rem } from "../../styles/scales";
-
-export const baseLine = rem(3);
+// The type looks more vertically centered with this offset
+export const verticalOffset = 1;
