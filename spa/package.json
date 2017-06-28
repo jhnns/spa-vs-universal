@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "run-p server:dev client:dev",
     "client:dev": "cross-env NODE_ENV=development nodemon -w config --exec \"webpack-dev-server --config config/webpack.config.babel.js\"",
-    "client:build": "webpack --config config/webpack.config.babel.js",
+    "client:build": "webpack --config config/webpack.config.babel.js --display-optimization-bailout",
     "server:dev": "cross-env NODE_ENV=development nodemon -w server --exec \"babel-node server\"",
     "server:build": "babel server -s -D -d dist/server",
     "server:start": "node dist",
