@@ -14,7 +14,7 @@ const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
 const isProd = env === "production";
 const isDev = isProd === false;
-const cssJsModules = /\.css.js$/;
+const cssJsModules = /\.css\.js$/;
 const modulesWithDebugAssertions = ["sheet-router", "wayfarer"];
 
 export default {
