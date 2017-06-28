@@ -1,6 +1,5 @@
 import path from "path";
 import HtmlPlugin from "html-webpack-plugin";
-import PreloadWebpackPlugin from "preload-webpack-plugin";
 import CleanPlugin from "clean-webpack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
@@ -188,7 +187,6 @@ export default {
                 root: projectRoot,
                 verbose: false,
             }),
-        isProd && new PreloadWebpackPlugin(),
         isProd &&
             new webpack.optimize.UglifyJsPlugin({
                 /* eslint-disable camelcase */
