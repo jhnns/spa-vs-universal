@@ -1,6 +1,6 @@
 import cxs from "cxs";
-import { mintLight35, silverLight10, black } from "../../styles/colors";
-import { linear } from "../../styles/gradient";
+import { mintLight35, silverLight10, black } from "../../../styles/colors";
+import { linear } from "../../../styles/gradient";
 
 export const root = cxs({
     margin: 0,

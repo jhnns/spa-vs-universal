@@ -1,5 +1,5 @@
 import { Component } from "preact";
-import AsyncContext from "./asyncContext";
+import AsyncContext from "../../util/asyncContext";
 
 export default class AsyncComponent extends Component {
     constructor() {

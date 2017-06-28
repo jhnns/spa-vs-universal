@@ -3,14 +3,10 @@ import URLSearchParams from "url-search-params";
 import nanorouter from "nanorouter";
 import onLinkClick from "nanohref";
 import onHistoryPop from "nanohistory";
-import routes from "../../routes";
+import routes from "../../../routes";
 import Placeholder from "./placeholder";
 
 const defaultParams = {};
-
-function locationToPath(location) {
-    return location.pathname + location.search + location.hash;
-}
 
 function createRouteHandler(setState, route) {
     return params => {

@@ -1,9 +1,9 @@
 import cxs from "cxs";
-import { px, rem } from "../../styles/scales";
-import { offscreen } from "../../styles/a11y";
-import { maxContentWidth } from "../../styles/layout";
-import { white, black } from "../../styles/colors";
-import { regularMaxWidth } from "../../styles/typoSizes";
+import { px, rem } from "../../../styles/scales";
+import { offscreen } from "../../../styles/a11y";
+import { maxContentWidth } from "../../../styles/layout";
+import { white, black } from "../../../styles/colors";
+import { regularMaxWidth } from "../../../styles/typoSizes";
 
 const sheetPadding = px(13);
 

@@ -1,5 +1,5 @@
-import Header from "../header/header";
-import AsyncComponent from "../../util/asyncComponent";
+import Header from "../../header/header";
+import AsyncComponent from "../asyncComponent";
 import Post from "./post/post";
 import {
     main,
