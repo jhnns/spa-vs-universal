@@ -1,5 +1,5 @@
 import { Component } from "preact";
-import moment from "moment";
+import fromNow from "from-now";
 import { headline, paragraph, meta } from "./post.css";
 
 const lineBreak = /\s*[\r\n]+\s*/g;
@@ -13,9 +13,9 @@ export default class Post extends Component {
                 <h2 className={headline}>{post.title}</h2>
                 <div className={meta}>
                     <time dateTime={post.published}>
-                        {moment(post.published).fromNow()}
+                        {fromNow(post.published)}
                     </time>
-                    {" by "}
+                    {" ago by "}
                     {post.author}
                 </div>
                 <div>
