@@ -3,11 +3,21 @@ import URLSearchParams from "url-search-params";
 import Link from "../../common/router/link";
 
 export default class Anonymous extends Component {
+    componentWillMount() {
+        this.updateSearchParams();
+    }
+    componentWillReceiveProps() {
+        this.updateSearchParams();
+    }
+    shouldComponentUpdate() {
+        return window.location.search !== location.search;
+    }
+    updateSearchParams() {
+        this.locationSearch = window.location.search;
+        this.searchParams = new URLSearchParams(window.location.search);
+        this.searchParams.set("showLogin", true);
+    }
     render() {
-        const newParams = new URLSearchParams(window.location.search);
-
-        newParams.set("showLogin", true);
-
-        return <Link params={newParams}>{"Log in"}</Link>;
+        return <Link params={this.searchParams}>{"Log in"}</Link>;
     }
 }
