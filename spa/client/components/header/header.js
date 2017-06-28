@@ -4,6 +4,7 @@ import Nav from "./nav/nav";
 import Link from "../common/router/link";
 import routes from "../../routes";
 import { root, content, logo, headline, offscreen } from "./header.css";
+import Profile from "./profile/profile";
 
 export default class Header extends Component {
     render() {
@@ -17,6 +18,7 @@ export default class Header extends Component {
                         </h1>
                     </Link>
                     <Nav />
+                    <Profile />
                 </div>
             </header>
         );

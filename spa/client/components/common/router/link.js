@@ -2,47 +2,37 @@ import { Component } from "preact";
 import URLSearchParams from "url-search-params";
 
 function renderHref(route, params) {
-    const path = route.match;
-
     if (params === undefined) {
-        return path;
+        return route.match;
     }
 
-    const paramKeys = Object.keys(params);
-    const pathHref = paramKeys.reduce((pathHref, paramKey, i) => {
-        const paramPattern = ":" + paramKey;
-        const paramPatternIndex = pathHref.indexOf(paramPattern);
+    let href = route.match;
 
-        if (paramPatternIndex > -1) {
-            paramKeys.splice(i, 1);
+    for (const key of params.keys()) {
+        const pattern = ":" + key;
+        const patternIdx = href.indexOf(pattern);
 
-            return (
-                pathHref.slice(0, paramPatternIndex - 1) +
-                params[paramKey] +
-                pathHref.slice(paramPatternIndex + paramPattern.length)
-            );
+        if (patternIdx > -1) {
+            params.delete(key);
+
+            href =
+                href.slice(0, patternIdx - 1) +
+                params.get(key) +
+                href.slice(patternIdx + pattern.length);
         }
-
-        return pathHref;
-    }, path);
-
-    if (paramKeys.length === 0) {
-        return pathHref;
     }
 
-    return (
-        pathHref +
-        "?" +
-        paramKeys.reduce((query, paramKey) => {
-            query.append(paramKey, params[paramKey]);
-
-            return query;
-        }, new URLSearchParams())
-    );
+    return href + "?" + params.toString();
 }
 
 export default class Link extends Component {
-    render({ route, params, className, children, activeClass = "" }) {
+    render({
+        route = this.context.route,
+        params,
+        className,
+        children,
+        activeClass = "",
+    }) {
         const classNames = [
             route === this.context.route ? activeClass : "",
             className,
