@@ -163,9 +163,6 @@ export default {
             async: "common",
             minChunks: 3,
         }),
-        new webpack.ProvidePlugin({
-            h: ["preact", "h"],
-        }),
         new webpack.DefinePlugin({
             "process.env": {
                 NODE_ENV: JSON.stringify(env),
@@ -207,6 +204,7 @@ export default {
                 /* eslint-enable camelcase */
             }),
         isProd && new webpack.optimize.ModuleConcatenationPlugin(),
+        isProd && new webpack.HashedModuleIdsPlugin(),
         process.stdout.isTTY &&
             isProd &&
             new BundleAnalyzerPlugin({
@@ -214,7 +212,6 @@ export default {
                 analyzerPort: 8081,
                 openAnalyzer: false,
             }),
-        isProd && new webpack.HashedModuleIdsPlugin(),
     ]),
     node: {
         fs: "empty",
