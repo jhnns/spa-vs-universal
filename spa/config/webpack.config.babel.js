@@ -104,6 +104,14 @@ export default {
                     },
                 ],
             },
+            isProd && {
+                test: /\.(jpe?g|gif|png|svg)$/,
+                use: [
+                    {
+                        loader: "image-webpack-loader",
+                    },
+                ],
+            },
             {
                 test: /\.js$/,
                 include: modulesWithDebugAssertions.map(moduleName =>
