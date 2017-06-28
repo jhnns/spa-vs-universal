@@ -33,6 +33,7 @@ export const postsContainer = cxs({
 });
 
 export const sheet = cxs({
+    // position relative is necessary so that the position absolute image is still below the sheet
     position: "relative",
     color: black(),
     backgroundColor: white(),
@@ -41,13 +42,13 @@ export const sheet = cxs({
 });
 
 export const postContainer = cxs({
-    display: "flex",
-    flexDirection: "column",
+    position: "relative",
+    overflow: "hidden",
     ":not(:last-child)": {
         marginBottom: rem(15) + "rem",
     },
     [":nth-child(odd) ." + sheet]: {
-        alignSelf: "flex-end",
+        marginLeft: "auto",
     },
     [":nth-child(odd) ." + postImage]: {
         left: px(17),
