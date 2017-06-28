@@ -1,44 +1,43 @@
 import { Component } from "preact";
-import sheetRouter from "sheet-router";
-import onHistoryPop from "sheet-router/history";
-import onLinkClick from "sheet-router/href";
 import URLSearchParams from "url-search-params";
+import nanorouter from "nanorouter";
+import onLinkClick from "nanohref";
+import onHistoryPop from "nanohistory";
 import routes from "../../routes";
 import Placeholder from "./placeholder";
 
 const defaultParams = {};
 
-function transformRoutes(routes, setState) {
-    return Object.keys(routes).map(routeName => {
-        const route = routes[routeName];
+function locationToPath(location) {
+    return location.pathname + location.search + location.hash;
+}
 
-        return [
-            route.match,
-            params => {
-                const searchParams = new URLSearchParams(
-                    window.location.search
-                );
+function createRouteHandler(setState, route) {
+    return params => {
+        const searchParams = new URLSearchParams(window.location.search);
 
-                for (const [key, value] of searchParams.entries()) {
-                    params[key] = value;
-                }
+        for (const [key, value] of searchParams.entries()) {
+            params[key] = value;
+        }
 
-                setState({
-                    route,
-                    params,
-                });
-            },
-        ];
-    });
+        setState({
+            route,
+            params,
+        });
+    };
 }
 
 function createRouter(routes, setState) {
-    const router = sheetRouter(transformRoutes(routes, setState));
+    const router = nanorouter({ default: "/404" });
 
-    onHistoryPop(location => router(location.href));
-    onLinkClick(({ href }) => {
-        window.history.pushState({}, "", href);
-        router(href);
+    Object.values(routes).forEach(route => {
+        router.on(route.match, createRouteHandler(setState, route));
+    });
+
+    onHistoryPop(location => router(location.pathname));
+    onLinkClick(location => {
+        window.history.pushState({}, "", location.href);
+        router(location.pathname);
     });
 
     return router;
@@ -50,7 +49,7 @@ export default class Router extends Component {
     }
     componentWillMount() {
         this.router = createRouter(routes, this.setState.bind(this));
-        this.router(window.location.href);
+        this.router(location.pathname);
     }
     componentWillUnmount() {
         // We cannot undo the side-effects introduced by the router
