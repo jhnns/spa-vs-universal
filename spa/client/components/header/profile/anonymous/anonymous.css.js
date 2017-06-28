@@ -39,10 +39,6 @@ export const logo = cxs({
     color: "currentColor",
 });
 
-export const profile = cxs({
-    marginLeft: "auto",
-});
-
 export const headline = cxs({
     ...nexaHeavy,
     fontSize: rem(13) + "rem",

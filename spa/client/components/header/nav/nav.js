@@ -1,6 +1,7 @@
 import { Component } from "preact";
 import Link from "../../common/router/link";
-import { list, listItem, link, activeLink } from "./nav.css";
+import { list, listItem } from "./nav.css";
+import { link, activeLink } from "../link.css";
 import routes from "../../../routes";
 
 const nbsp = "\u00a0";

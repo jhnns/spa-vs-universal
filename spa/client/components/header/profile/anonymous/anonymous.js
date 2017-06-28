@@ -1,6 +1,7 @@
 import { Component } from "preact";
 import URLSearchParams from "url-search-params";
-import Link from "../../common/router/link";
+import Link from "../../../common/router/link";
+import { link } from "../../link.css";
 
 export default class Anonymous extends Component {
     componentWillMount() {
@@ -18,6 +19,10 @@ export default class Anonymous extends Component {
         this.searchParams.set("showLogin", true);
     }
     render() {
-        return <Link params={this.searchParams}>{"Log in"}</Link>;
+        return (
+            <Link params={this.searchParams} className={link}>
+                {"Log in"}
+            </Link>
+        );
     }
 }
