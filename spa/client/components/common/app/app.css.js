@@ -1,8 +1,8 @@
-import cxs from "cxs";
+import { css } from "glamor";
 import { mintLight35, silverLight10, black } from "../../../styles/colors";
 import { linear } from "../../../styles/gradient";
 
-export const root = cxs({
+export const root = css({
     margin: 0,
     color: black(),
     backgroundImage: linear("to bottom", [

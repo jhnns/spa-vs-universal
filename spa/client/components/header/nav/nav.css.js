@@ -1,12 +1,12 @@
-import cxs from "cxs";
+import { css } from "glamor";
 import { px } from "../../../styles/scales";
 
-export const list = cxs({
+export const list = css({
     display: "flex",
     listStyleType: "none",
 });
 
-export const listItem = cxs({
+export const listItem = css({
     ":not(:last-child)": {
         marginRight: px(10),
     },

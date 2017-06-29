@@ -1,4 +1,4 @@
-import cxs from "cxs";
+import { css } from "glamor";
 import { px, rem } from "../../../styles/scales";
 import { offscreen } from "../../../styles/a11y";
 import { maxContentWidth } from "../../../styles/layout";
@@ -7,7 +7,7 @@ import { regularMaxWidth } from "../../../styles/typoSizes";
 
 const sheetPadding = px(13);
 
-export const main = cxs({
+export const main = css({
     maxWidth: maxContentWidth,
     marginLeft: "auto",
     marginRight: "auto",
@@ -16,11 +16,11 @@ export const main = cxs({
     },
 });
 
-export const headline = cxs({
+export const headline = css({
     ...offscreen,
 });
 
-export const postImage = cxs({
+export const postImage = css({
     position: "absolute",
     maxWidth: px(30),
     marginTop: sheetPadding,
@@ -28,11 +28,11 @@ export const postImage = cxs({
     transition: "transform 0.3s ease-in-out",
 });
 
-export const postsContainer = cxs({
+export const postsContainer = css({
     position: "relative",
 });
 
-export const sheet = cxs({
+export const sheet = css({
     // position relative is necessary so that the position absolute image is still below the sheet
     position: "relative",
     color: black(),
@@ -41,7 +41,7 @@ export const sheet = cxs({
     maxWidth: regularMaxWidth + "rem",
 });
 
-export const postContainer = cxs({
+export const postContainer = css({
     position: "relative",
     overflow: "hidden",
     ":not(:last-child)": {

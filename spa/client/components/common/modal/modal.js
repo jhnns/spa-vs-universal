@@ -1,4 +1,5 @@
 import { Component, render as preactRender } from "preact";
+import { root } from "./modal.css";
 
 export default class Modal extends Component {
     componentWillMount() {
@@ -9,10 +10,7 @@ export default class Modal extends Component {
         document.body.removeChild(this.root);
     }
     render() {
-        preactRender(
-            <div style={"position: fixed; top: 0; font-size: 5rem"}>Test</div>,
-            this.root
-        );
+        preactRender(<div class={root}>{"..."}</div>, this.root);
 
         return null;
     }

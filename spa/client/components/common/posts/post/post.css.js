@@ -1,4 +1,4 @@
-import cxs from "cxs";
+import { css } from "glamor";
 import nexaHeavy from "../../../../styles/type/nexaHeavy";
 import latoLight from "../../../../styles/type/latoLight";
 import { rem } from "../../../../styles/scales";
@@ -8,13 +8,13 @@ import {
     regularMaxWidth,
 } from "../../../../styles/typoSizes";
 
-export const headline = cxs({
+export const headline = css({
     ...nexaHeavy,
     maxWidth: rem(30) + "rem",
     marginBottom: rem(7) + "rem",
 });
 
-export const meta = cxs({
+export const meta = css({
     ...latoLight,
     display: "block",
     fontSize: rem(11) + "rem",
@@ -22,7 +22,7 @@ export const meta = cxs({
     marginBottom: rem(13) + "rem",
 });
 
-export const paragraph = cxs({
+export const paragraph = css({
     ...latoLight,
     fontSize: regular + "rem",
     lineHeight: regularLineHeight + "rem",

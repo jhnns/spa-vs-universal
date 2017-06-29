@@ -1,8 +1,8 @@
-import cxs from "cxs";
+import { css } from "glamor";
 import latoLight from "../../../styles/type/latoLight";
 import { rem } from "../../../styles/scales";
 
-export const root = cxs({
+export const root = css({
     ...latoLight,
     fontSize: rem(13) + "rem",
     display: "flex",

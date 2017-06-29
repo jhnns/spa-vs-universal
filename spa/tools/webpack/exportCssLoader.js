@@ -1,13 +1,24 @@
-const exportCss = `module.exports = ((cxs, oldExports) => {
-    const newExports = [[module.id, cxs.getCss()]];
+const exportCss = `module.exports = (({ renderStatic }, oldExports) => {
+    const oldKeys = Object.keys(oldExports);
+    const locals = {};
+    const { css } = renderStatic(() => {
+        oldKeys.forEach(key => {
+            const exportValue = oldExports[key];
+
+            if (exportValue !== undefined && exportValue !== null) {
+                locals[key] = exportValue.toString();
+            }
+        });
+
+        return "";
+    });
+    const newExports = [[module.id, css]];
 
     Object.assign(newExports, oldExports);
-
-    newExports.locals = oldExports;
-    cxs.reset();
+    newExports.locals = locals;
 
     return newExports;
-})(require("cxs"), module.exports);`;
+})(require("glamor/server"), module.exports);`;
 
 module.exports = function (source, sourceMaps) {
     this.callback(null, source + ";" + exportCss, sourceMaps);

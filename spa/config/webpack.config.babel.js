@@ -31,11 +31,6 @@ export default {
         filename: "[name].[chunkhash].js",
         chunkFilename: "[name].[chunkhash].js",
     },
-    resolve: {
-        alias: {
-            cxs: "cxs/monolithic",
-        },
-    },
     module: {
         // See https://github.com/webpack/webpack/pull/4348
         strictExportPresence: isProd,

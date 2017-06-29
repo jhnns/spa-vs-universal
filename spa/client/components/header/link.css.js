@@ -1,4 +1,4 @@
-import cxs from "cxs";
+import { css } from "glamor";
 import { px, rem } from "../../styles/scales";
 import nexaXBold from "../../styles/type/nexaXBold";
 import { regular as regularBorder } from "../../styles/borders";
@@ -8,7 +8,7 @@ const activeLinkStyles = {
     borderBottom: regularBorder(),
 };
 
-export const link = cxs({
+export const link = css({
     ...nexaXBold,
     color: "currentColor",
     fontSize: rem(12) + "rem",
@@ -18,4 +18,4 @@ export const link = cxs({
     ":active": activeLinkStyles,
 });
 
-export const activeLink = cxs(activeLinkStyles);
+export const activeLink = css(activeLinkStyles);
