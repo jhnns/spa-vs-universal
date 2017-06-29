@@ -19,21 +19,21 @@ export default class Posts extends AsyncCacheComponent {
         return (
             <div>
                 <Header />
-                <main className={main}>
-                    <h2 className={headline}>{props.headline}</h2>
-                    <div className={postsContainer}>
-                        {posts === null ?
-                            empty :
-                            posts.map(post => (
-                                <div className={postContainer} key={post.id}>
-                                    <img
-                                        className={postImage}
-                                        src={post.image}
-                                        alt={post.title}
-                                    />
-                                    <Post className={sheet} post={post} />
-                                </div>
-                            ))}
+                <main class={main}>
+                    <h2 class={headline}>{props.headline}</h2>
+                    <div class={postsContainer}>
+                        {posts === null
+                            ? empty
+                            : posts.map(post => (
+                                  <div class={postContainer} key={post.id}>
+                                      <img
+                                          class={postImage}
+                                          src={post.image}
+                                          alt={post.title}
+                                      />
+                                      <Post class={sheet} post={post} />
+                                  </div>
+                              ))}
                     </div>
                 </main>
             </div>

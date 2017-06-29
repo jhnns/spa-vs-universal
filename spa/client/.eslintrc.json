@@ -22,6 +22,11 @@
         // Currently, they provide not performance benefit anyway.
         "react/prefer-stateless-function": "off",
         "class-methods-use-this": "off",
-        "no-mixed-operators": "off"
+        "react/no-unknown-property": [
+            "error",
+            {
+                "ignore": "class"
+            }
+        ]
     }
 }

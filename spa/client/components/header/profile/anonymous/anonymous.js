@@ -27,7 +27,7 @@ export default class Anonymous extends Component {
     render() {
         return (
             <div>
-                <Link params={this.paramsAndShowLogin} className={link}>
+                <Link params={this.paramsAndShowLogin} class={link}>
                     {"Log in"}
                 </Link>
                 {this.showLogin ? <Modal /> : null}

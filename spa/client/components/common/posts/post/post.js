@@ -9,9 +9,9 @@ export default class Post extends Component {
         const post = props.post;
 
         return (
-            <article className={props.className}>
-                <h2 className={headline}>{post.title}</h2>
-                <div className={meta}>
+            <article class={props.class}>
+                <h2 class={headline}>{post.title}</h2>
+                <div class={meta}>
                     <time dateTime={post.published}>
                         {fromNow(post.published)}
                     </time>
@@ -21,7 +21,7 @@ export default class Post extends Component {
                 <div>
                     {post.content
                         .split(lineBreak)
-                        .map(p => <p className={paragraph} key={p}>{p}</p>)}
+                        .map(p => <p class={paragraph} key={p}>{p}</p>)}
                 </div>
             </article>
         );

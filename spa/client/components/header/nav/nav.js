@@ -10,20 +10,20 @@ export default class Nav extends Component {
     render() {
         return (
             <nav>
-                <ul className={list}>
-                    <li className={listItem}>
+                <ul class={list}>
+                    <li class={listItem}>
                         <Link
                             route={routes.top5}
-                            className={link}
+                            class={link}
                             activeClass={activeLink}
                         >
                             Top{nbsp}5
                         </Link>
                     </li>
-                    <li className={listItem}>
+                    <li class={listItem}>
                         <Link
                             route={routes.allPosts}
-                            className={link}
+                            class={link}
                             activeClass={activeLink}
                         >
                             All

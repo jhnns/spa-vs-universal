@@ -16,16 +16,16 @@ import Profile from "./profile/profile";
 export default class Header extends Component {
     render() {
         return (
-            <header className={root}>
-                <div className={content}>
-                    <Link route={routes.top5} className={logo}>
+            <header class={root}>
+                <div class={content}>
+                    <Link route={routes.top5} class={logo}>
                         <Logo />
-                        <h1 className={headline}>
-                            <span className={offscreen}>Peerigon</span> News
+                        <h1 class={headline}>
+                            <span class={offscreen}>Peerigon</span> News
                         </h1>
                     </Link>
                     <Nav />
-                    <Profile className={profile} />
+                    <Profile class={profile} />
                 </div>
             </header>
         );

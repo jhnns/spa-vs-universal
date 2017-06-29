@@ -5,7 +5,7 @@ import { root } from "./app.css";
 export default class App extends Component {
     render() {
         return (
-            <div className={root}>
+            <div class={root}>
                 <Router />
             </div>
         );

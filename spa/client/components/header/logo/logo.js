@@ -7,7 +7,7 @@ export default class HeaderLogo extends Component {
         return (
             <div>
                 <img
-                    className={logoImg}
+                    class={logoImg}
                     src={logoSrc}
                     /* Do not display when CSS is not working */
                     width={0}

@@ -1,5 +1,4 @@
 import { Component } from "preact";
-import URLSearchParams from "url-search-params";
 
 function renderHref(route, params) {
     if (params === undefined) {
@@ -26,26 +25,22 @@ function renderHref(route, params) {
 }
 
 export default class Link extends Component {
-    render({
-        route = this.context.route,
-        params,
-        className,
-        children,
-        activeClass = "",
-    }) {
-        const classNames = [
+    render(props) {
+        const {
+            route = this.context.route,
+            params,
+            children,
+            activeClass = "",
+        } = props;
+        const classes = [
             route === this.context.route ? activeClass : "",
-            className,
+            props.class,
         ];
         const isExternal = typeof route === "string";
         const href = isExternal === true ? route : renderHref(route, params);
 
         return (
-            <a
-                href={href}
-                className={classNames.join(" ")}
-                data-no-routing={typeof route === "string"}
-            >
+            <a href={href} class={classes.join(" ")} dataNoRouting={isExternal}>
                 {children}
             </a>
         );
