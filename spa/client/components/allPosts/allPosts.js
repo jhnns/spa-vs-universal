@@ -9,9 +9,7 @@ export default class AllPosts extends Component {
 
         return (
             <WithTitle title={title}>
-                <Posts headline={title}>
-                    {getAllPosts()}
-                </Posts>
+                <Posts headline={title} posts={getAllPosts} />
             </WithTitle>
         );
     }

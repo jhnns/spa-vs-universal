@@ -1,5 +1,5 @@
 import Header from "../../header/header";
-import AsyncComponent from "../asyncComponent";
+import AsyncCacheComponent from "../asyncCacheComponent";
 import Post from "./post/post";
 import {
     main,
@@ -12,18 +12,9 @@ import {
 
 const empty = [];
 
-export default class Posts extends AsyncComponent {
-    componentWillMount() {
-        this.addPromise(this.props.children[0]);
-    }
-    componentWillReceiveProps(props) {
-        this.addPromise(props.children[0]);
-    }
-    addPromise(promise) {
-        this.async.add("promise", promise);
-    }
+export default class Posts extends AsyncCacheComponent {
     render(props, state) {
-        const posts = state.promiseResult;
+        const posts = state.postsResult;
 
         return (
             <div>
