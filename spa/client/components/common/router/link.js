@@ -25,34 +25,34 @@ function renderHref(route, params) {
 }
 
 export default class Link extends Component {
-    updateMouseOverHandler(props) {
-        const route = props.route;
-
-        if (route && typeof route.component === "function") {
-            this.handleMouseOver = () => {
-                route.component();
-            };
-        } else {
-
-        }
-    }
     render(props) {
         const {
             route = this.context.route,
             params,
             children,
+            replaceState = false,
             activeClass = "",
         } = props;
         const classes = [
             route === this.context.route ? activeClass : "",
             props.class,
         ];
-        const isExternal = typeof route === "string";
-        const href = isExternal === true ? route : renderHref(route, params);
-        const preLoadComponent = route.component;
+        const isExternal = typeof props.href === "string";
+        const href = isExternal === true ?
+            props.href :
+            renderHref(route, params);
+        const preLoadComponent = route && route.component;
 
         return (
-            <a href={href} class={classes.join(" ")} dataNoRouting={isExternal} onMouseOver={preLoadComponent}>
+            <a
+                {...props}
+                href={href}
+                class={classes.join(" ")}
+                onMouseOver={preLoadComponent}
+                onFocus={preLoadComponent}
+                dataNoRouting={isExternal}
+                dataReplaceState={replaceState}
+            >
                 {children}
             </a>
         );

@@ -8,7 +8,7 @@ import Placeholder from "../placeholder";
 
 const defaultParams = {};
 
-function createRouteHandler(setState, route) {
+function createRouteHandler(route, component) {
     return params => {
         const searchParams = new URLSearchParams(window.location.search);
 
@@ -16,23 +16,33 @@ function createRouteHandler(setState, route) {
             params[key] = value;
         }
 
-        setState({
+        component.setState({
             route,
             params,
         });
     };
 }
 
-function createRouter(routes, setState) {
+function createRouter(routes, component) {
     const router = nanorouter({ default: "/404" });
 
     Object.values(routes).forEach(route => {
-        router.on(route.match, createRouteHandler(setState, route));
+        router.on(route.match, createRouteHandler(route, component));
     });
 
-    onHistoryPop(location => router(location.pathname));
-    onLinkClick(location => {
-        window.history.pushState({}, "", location.href);
+    onHistoryPop(location => {
+        router(location.pathname);
+    });
+    onLinkClick(node => {
+        if (node.href === window.location.href) {
+            return;
+        }
+
+        const saveState = node.hasAttribute("data-replace-state") === true ?
+            window.history.replaceState :
+            window.history.pushState;
+
+        saveState.call(history, {}, "", node.href);
         router(location.pathname);
     });
 
@@ -41,10 +51,12 @@ function createRouter(routes, setState) {
 
 export default class Router extends Component {
     getChildContext() {
-        return { route: this.state.route || null };
+        return {
+            route: this.state.route || null,
+        };
     }
     componentWillMount() {
-        this.router = createRouter(routes, this.setState.bind(this));
+        this.router = createRouter(routes, this);
         this.router(location.pathname);
     }
     componentWillUnmount() {

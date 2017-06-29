@@ -1,5 +1,6 @@
 import { Component, render as preactRender } from "preact";
-import { root } from "./modal.css";
+import { root, backdrop } from "./modal.css";
+import GoBack from "../router/goBack";
 
 export default class Modal extends Component {
     componentWillMount() {
@@ -10,7 +11,13 @@ export default class Modal extends Component {
         document.body.removeChild(this.root);
     }
     render() {
-        preactRender(<div class={root}>{"..."}</div>, this.root);
+        preactRender(
+            <div class={root}>
+                {"..."}
+                <GoBack class={backdrop} />
+            </div>,
+            this.root
+        );
 
         return null;
     }
