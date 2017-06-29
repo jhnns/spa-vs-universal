@@ -29,6 +29,15 @@ export default class Nav extends Component {
                             All
                         </Link>
                     </li>
+                    <li class={listItem}>
+                        <Link
+                            route={routes.about}
+                            class={link}
+                            activeClass={activeLink}
+                        >
+                            About
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         );
