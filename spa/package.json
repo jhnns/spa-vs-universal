@@ -7,13 +7,12 @@
     "client:dev": "cross-env NODE_ENV=development nodemon -w config --exec \"webpack-dev-server --config config/webpack.config.babel.js\"",
     "client:build": "webpack --config config/webpack.config.babel.js --display-optimization-bailout",
     "server:dev": "cross-env NODE_ENV=development nodemon -w server --exec \"babel-node server\"",
-    "server:build": "babel server -s -D -d dist/server",
-    "server:start": "node dist",
-    "lib:build": "babel lib -s -D -d dist/lib"
+    "server:build": "babel server -s -D -d dist",
+    "server:start": "cross-env NODE_ENV=production node dist",
+    "build": "run-p client:build server:build",
+    "start": "cross-env WEBPACK_ENV=production run-s build server:start"
   },
   "dependencies": {
-    "alamid-schema": "^1.1.0",
-    "autoprefixer": "^7.1.1",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-eslint": "7.2.3",

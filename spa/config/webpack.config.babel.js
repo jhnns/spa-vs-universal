@@ -11,7 +11,8 @@ import InlinePreStylesPlugin from "../tools/webpack/InlinePreStylesPlugin";
 
 const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
-const isProd = env === "production";
+const isAnalysis = env === "analysis";
+const isProd = isAnalysis || env === "production";
 const isDev = isProd === false;
 const cssJsModules = /\.css\.js$/;
 const modulesWithDebugAssertions = [
@@ -200,8 +201,7 @@ export default {
             }),
         isProd && new webpack.optimize.ModuleConcatenationPlugin(),
         isProd && new webpack.HashedModuleIdsPlugin(),
-        process.stdout.isTTY &&
-            isProd &&
+        isAnalysis &&
             new BundleAnalyzerPlugin({
                 analyzerHost: "127.0.0.1",
                 analyzerPort: 8081,
