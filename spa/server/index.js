@@ -4,8 +4,11 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import bodyParser from "body-parser";
+import compression from "compression";
+import connectGzipStatic from "connect-gzip-static";
 import helmet from "helmet";
 import config from "../config/server";
+import { isProd } from "./env";
 import fakeApi from "./api";
 
 const app = express();
@@ -25,14 +28,17 @@ app.use(
         limit: config.bodyLimit,
     })
 );
+if (isProd) {
+    app.use("/api", compression());
+}
 app.use("/api", (req, res, next) => {
     // Fake a delayed DB response
     setTimeout(next, config.responseDelay);
 });
 app.use("/api", fakeApi.getMiddleware());
-app.use(express.static(path.resolve(__dirname, "..", "public")));
+app.use(connectGzipStatic(path.resolve(__dirname, "..", "public")));
 app.use((req, res, next) => {
-    res.sendfile(pathToIndexHtml);
+    res.sendFile(pathToIndexHtml);
 });
 
 app.server.listen(

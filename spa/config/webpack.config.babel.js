@@ -3,6 +3,7 @@ import HtmlPlugin from "html-webpack-plugin";
 import CleanPlugin from "clean-webpack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
 import ExtractTextPlugin from "extract-text-webpack-plugin";
+import CompressionPlugin from "compression-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 import reg from "readable-regex";
@@ -198,6 +199,19 @@ export default {
                 },
                 comments: false,
                 /* eslint-enable camelcase */
+            }),
+        isProd &&
+            new CompressionPlugin({
+                test: {
+                    // Fake RegExp
+                    test(file) {
+                        return (
+                            /\.pre\.css$/.test(file) === false &&
+                            /\.(js|css|svg)$/.test(file) === true
+                        );
+                    },
+                },
+                deleteOriginalAssets: true,
             }),
         isProd && new webpack.optimize.ModuleConcatenationPlugin(),
         isProd && new webpack.HashedModuleIdsPlugin(),
