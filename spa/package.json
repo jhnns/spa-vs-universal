@@ -61,7 +61,7 @@
     "sw-precache-webpack-plugin": "^0.11.3",
     "transform-loader": "^0.2.4",
     "unassertify": "^2.0.4",
-    "unfetch": "^2.1.2",
+    "unfetch": "^3.0.0",
     "url-loader": "^0.5.9",
     "url-search-params": "^0.9.0",
     "webpack": "^3.0.0",
