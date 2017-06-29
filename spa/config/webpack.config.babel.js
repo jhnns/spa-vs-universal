@@ -182,7 +182,7 @@ export default {
         ]),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         isProd &&
-            new CleanPlugin(["public"], {
+            new CleanPlugin(["public/*.*"], {
                 root: projectRoot,
                 verbose: false,
             }),
