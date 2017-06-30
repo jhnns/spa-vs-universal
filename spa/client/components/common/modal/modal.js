@@ -1,4 +1,6 @@
 import { Component, render as preactRender } from "preact";
+import URLSearchParams from "url-search-params";
+import WithContext from "../withContext";
 import {
     root,
     backdrop,
@@ -7,6 +9,14 @@ import {
     fadeDuration,
 } from "./modal.css";
 import GoBack from "../router/goBack";
+
+function getBackParams(modalParam) {
+    const params = new URLSearchParams(window.location.search);
+
+    params.delete(modalParam);
+
+    return params;
+}
 
 export default class Modal extends Component {
     constructor() {
@@ -27,15 +37,18 @@ export default class Modal extends Component {
             document.body.removeChild(this.root);
         }, fadeDuration);
     }
-    render() {
+    render(props) {
         preactRender(
-            <div class={root}>
-                {"..."}
-                <GoBack
-                    class={[backdrop, backdropFadeIn].join(" ")}
-                    onClick={this.handleClick}
-                />
-            </div>,
+            <WithContext context={this.context}>
+                <div class={root}>
+                    {"..."}
+                    <GoBack
+                        class={[backdrop, backdropFadeIn].join(" ")}
+                        params={getBackParams(props.activationParam)}
+                        onClick={this.handleClick}
+                    />
+                </div>,
+            </WithContext>,
             this.root
         );
 

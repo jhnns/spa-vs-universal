@@ -1,8 +1,8 @@
 import { Component } from "preact";
 import createEventHandler from "../../../util/createEventHandler";
 
-function renderHref(route, params) {
-    if (params === undefined) {
+function routeToHref(route, params) {
+    if (params === null) {
         return route.match;
     }
 
@@ -22,7 +22,13 @@ function renderHref(route, params) {
         }
     }
 
-    return href + "?" + params.toString();
+    const paramString = params.toString();
+
+    if (paramString === "") {
+        return href;
+    }
+
+    return href + "?" + paramString;
 }
 
 export default class Link extends Component {
@@ -33,7 +39,7 @@ export default class Link extends Component {
 
         this.handleMouseOver = createEventHandler(
             this,
-            "onClick",
+            "onMouseOver",
             preloadNextComponent
         );
         this.handleFocus = createEventHandler(
@@ -50,32 +56,50 @@ export default class Link extends Component {
             component();
         }
     }
-    render(props) {
+    componentWillMount() {
+        this.splitProps(this.props);
+    }
+    componentWillReceiveProps(props) {
+        this.splitProps(props);
+    }
+    splitProps(props) {
+        const aProps = (this.aProps = {});
+        const ownProps = (this.ownProps = {
+            route: props.route || this.context.route,
+            params: props.params || null,
+            children: props.children,
+            replaceUrl: Boolean(props.replaceUrl),
+            activeClass: props.activeClass || "",
+        });
+
+        Object.keys(props)
+            .filter(key => key in ownProps === false)
+            .forEach(key => {
+                aProps[key] = props[key];
+            });
+    }
+    render() {
         const {
-            route = this.context.route,
+            route,
             params,
             children,
-            replaceState = false,
-            activeClass = "",
-        } = props;
+            replaceUrl,
+            activeClass,
+        } = this.ownProps;
         const classes = [
             route === this.context.route ? activeClass : "",
-            props.class,
+            this.aProps.class,
         ];
-        const isExternal = typeof props.href === "string";
-        const href = isExternal === true ?
-            props.href :
-            renderHref(route, params);
 
         return (
             <a
-                {...props}
-                href={href}
+                {...this.aProps}
+                href={routeToHref(route, params)}
                 class={classes.join(" ")}
                 onMouseOver={this.handleMouseOver}
                 onFocus={this.handleFocus}
-                dataNoRouting={isExternal}
-                dataReplaceState={replaceState}
+                data-route={true}
+                data-replace-url={replaceUrl}
             >
                 {children}
             </a>

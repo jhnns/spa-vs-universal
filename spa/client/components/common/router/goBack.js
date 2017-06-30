@@ -1,28 +1,29 @@
 import { Component } from "preact";
+import Link from "./link";
+import createEventHandler from "../../../util/createEventHandler";
 
 export default class GoBack extends Component {
     constructor() {
         super();
-        this.handleClick = this.handleClick.bind(this);
+        this.handleClick = createEventHandler(this, "onClick", e => {
+            if (this.prevRouteUnknown() === true) {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            history.back();
+        });
     }
-    handleClick(e) {
-        const onClick = this.props.onClick;
-
-        history.back();
-        if (typeof onClick === "function") {
-            onClick(e);
-        }
+    prevRouteUnknown() {
+        return this.context.previousRoute === null;
     }
     render(props) {
         return (
-            <a
+            <Link
                 {...props}
-                href={"?"}
                 onClick={this.handleClick}
-                dataNoRouting={true}
-            >
-                {props.children}
-            </a>
+                replaceUrl={this.prevRouteUnknown()}
+            />
         );
     }
 }

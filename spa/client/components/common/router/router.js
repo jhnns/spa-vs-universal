@@ -17,6 +17,8 @@ function createRouteHandler(route, component) {
         }
 
         component.setState({
+            previousRoute: component.state.route || null,
+            previousParams: component.state.params || null,
             route,
             params,
         });
@@ -38,11 +40,21 @@ function createRouter(routes, component) {
             return;
         }
 
-        const saveState = node.hasAttribute("data-replace-state") === true ?
+        const isRoute = node.hasAttribute("data-route") === true;
+        const href = node.href;
+
+        if (isRoute === false) {
+            window.location = href;
+
+            return;
+        }
+
+        const replaceUrl = node.hasAttribute("data-replace-url") === true;
+        const saveState = replaceUrl === true ?
             window.history.replaceState :
             window.history.pushState;
 
-        saveState.call(history, {}, "", node.href);
+        saveState.call(history, {}, "", href);
         router(location.pathname);
     });
 
@@ -53,6 +65,9 @@ export default class Router extends Component {
     getChildContext() {
         return {
             route: this.state.route || null,
+            params: this.state.params || null,
+            previousRoute: this.state.previousRoute || null,
+            previousParams: this.state.previousParams || null,
         };
     }
     componentWillMount() {

@@ -30,7 +30,9 @@ export default class Anonymous extends Component {
                 <Link params={this.paramsAndShowLogin} class={link}>
                     {"Log in"}
                 </Link>
-                {this.showLogin ? <Modal /> : null}
+                {this.showLogin ?
+                    <Modal activationParam={"showLogin"} /> :
+                    null}
             </div>
         );
     }
