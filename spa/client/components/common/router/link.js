@@ -1,4 +1,5 @@
 import { Component } from "preact";
+import createEventHandler from "../../../util/createEventHandler";
 
 function renderHref(route, params) {
     if (params === undefined) {
@@ -25,6 +26,30 @@ function renderHref(route, params) {
 }
 
 export default class Link extends Component {
+    constructor() {
+        super();
+
+        const preloadNextComponent = this.preloadNextComponent.bind(this);
+
+        this.handleMouseOver = createEventHandler(
+            this,
+            "onClick",
+            preloadNextComponent
+        );
+        this.handleFocus = createEventHandler(
+            this,
+            "onFocus",
+            preloadNextComponent
+        );
+    }
+    preloadNextComponent() {
+        const route = this.props.route;
+        const component = route && route.component;
+
+        if (typeof component === "function") {
+            component();
+        }
+    }
     render(props) {
         const {
             route = this.context.route,
@@ -41,15 +66,14 @@ export default class Link extends Component {
         const href = isExternal === true ?
             props.href :
             renderHref(route, params);
-        const preLoadComponent = route && route.component;
 
         return (
             <a
                 {...props}
                 href={href}
                 class={classes.join(" ")}
-                onMouseOver={preLoadComponent}
-                onFocus={preLoadComponent}
+                onMouseOver={this.handleMouseOver}
+                onFocus={this.handleFocus}
                 dataNoRouting={isExternal}
                 dataReplaceState={replaceState}
             >
