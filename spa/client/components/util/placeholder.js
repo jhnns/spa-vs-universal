@@ -1,7 +1,14 @@
-import AsyncCacheComponent from "./asyncCacheComponent";
+import { Component } from "preact";
 import Loading from "../loading/loading";
+import AsyncPropsCache from "../../util/asyncPropsCache";
 
-export default class Placeholder extends AsyncCacheComponent {
+export default class Placeholder extends Component {
+    constructor(props) {
+        super();
+        this.asyncPropsCache = new AsyncPropsCache(this, {
+            component: props.component,
+        });
+    }
     render(props, state) {
         const Component = state.component;
 

@@ -1,10 +1,17 @@
-import AsyncCacheComponent from "../util/asyncCacheComponent";
+import { Component } from "preact";
+import AsyncPropsCache from "../../util/asyncPropsCache";
 import Post from "./post/post";
 import { a11yTitle, root, postContainer, sheet, postImage } from "./posts.css";
 
 const empty = [];
 
-export default class Posts extends AsyncCacheComponent {
+export default class Posts extends Component {
+    constructor(props) {
+        super();
+        this.asyncPropsCache = new AsyncPropsCache(this, {
+            posts: props.posts,
+        });
+    }
     render(props, state) {
         const posts = state.posts;
 

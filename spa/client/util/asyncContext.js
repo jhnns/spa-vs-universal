@@ -1,7 +1,19 @@
 export default class AsyncContext {
     constructor(component) {
+        const unmountHandler = component.componentWillUnmount;
+
         this.component = component;
         this.pending = new Map();
+
+        component.componentWillUnmount = (...args) => {
+            const result = unmountHandler ?
+                unmountHandler.apply(component, args) :
+                undefined;
+
+            this.reset();
+
+            return result;
+        };
     }
     add(name, promise, initialValue) {
         const proceed = () => this.pending.get(name) === promise;
