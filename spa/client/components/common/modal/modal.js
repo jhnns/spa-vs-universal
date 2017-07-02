@@ -18,13 +18,6 @@ function getBackParams(modalParam) {
 }
 
 export default class Modal extends Component {
-    constructor(props) {
-        super();
-        this.updateMountState(props);
-    }
-    componentWillReceiveProps(nextProps) {
-        this.updateMountState(nextProps);
-    }
     componentWillMount() {
         this.root = document.createElement("section");
         document.body.appendChild(this.root);
@@ -36,17 +29,15 @@ export default class Modal extends Component {
             document.body.removeChild(root);
         }, fadeDuration);
     }
-    updateMountState(props) {
-        const params = new URLSearchParams(location.search);
-
-        this.mountState = params.has(props.activationParam) === true;
-    }
     render(props) {
         const isInitialRender = this.root.children.length === 0;
+        const mountState =
+            new URLSearchParams(location.search).has(props.activationParam) ===
+            true;
         const backdropClass = [backdrop];
 
         backdropClass.push(
-            this.mountState === true ? backdropVisible : backdropHidden
+            mountState === true ? backdropVisible : backdropHidden
         );
 
         preactRender(
