@@ -36,22 +36,6 @@ export default class Modal extends Component {
             document.body.removeChild(root);
         }, fadeDuration);
     }
-    // mountModal() {
-    //     this.root = document.createElement("section");
-    //     document.body.appendChild(this.root);
-    // }
-    // unmountModal(event) {
-    //     const goBackLink = event.target;
-    //     const root = this.root;
-
-    //     goBackLink.classList.remove(backdropFadeIn);
-    //     goBackLink.classList.add(backdropFadeOut);
-    //     this.root = null;
-
-    //     setTimeout(() => {
-    //         document.body.removeChild(root);
-    //     }, fadeDuration);
-    // }
     updateMountState(props) {
         const params = new URLSearchParams(location.search);
 
