@@ -3,28 +3,33 @@ import nexaHeavy from "../../../styles/type/nexaHeavy";
 import latoLight from "../../../styles/type/latoLight";
 import { rem } from "../../../styles/scales";
 import {
-    regular,
+    regularFontSize,
     regularLineHeight,
     regularMaxWidth,
+    headlineFontSize,
+    headlineLineHeight,
+    headlineMaxWidth,
 } from "../../../styles/typoSizes";
 
 export const headline = css({
     ...nexaHeavy,
-    maxWidth: rem(30) + "rem",
-    marginBottom: rem(7) + "rem",
+    fontSize: headlineFontSize + "rem",
+    lineHeight: headlineLineHeight + "rem",
+    maxWidth: headlineMaxWidth + "rem",
+    marginBottom: rem(6) + "rem",
 });
 
-export const meta = css({
+export const aside = css({
     ...latoLight,
     display: "block",
     fontSize: rem(11) + "rem",
-    lineHeight: rem(10) + "rem",
+    lineHeight: rem(12) + "rem",
     marginBottom: rem(13) + "rem",
 });
 
 export const paragraph = css({
     ...latoLight,
-    fontSize: regular + "rem",
+    fontSize: regularFontSize + "rem",
     lineHeight: regularLineHeight + "rem",
     maxWidth: regularMaxWidth + "rem",
     ":not(:last-child)": {

@@ -1,6 +1,6 @@
 import { Component } from "preact";
 import fromNow from "from-now";
-import { headline, paragraph, meta } from "./post.css";
+import { headline, paragraph, aside } from "./post.css";
 
 const lineBreak = /\s*[\r\n]+\s*/g;
 
@@ -11,7 +11,7 @@ export default class Post extends Component {
         return (
             <article class={props.class}>
                 <h2 class={headline}>{post.title}</h2>
-                <div class={meta}>
+                <div class={aside}>
                     <time dateTime={post.published}>
                         {fromNow(post.published)}
                     </time>
