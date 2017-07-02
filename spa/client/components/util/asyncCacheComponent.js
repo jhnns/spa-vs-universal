@@ -22,7 +22,7 @@ export default class AsyncCacheComponent extends AsyncComponent {
                 const prop = props[key];
 
                 if (typeof prop === "function") {
-                    this.async.add(key, prop());
+                    this.async.add(key, prop(), null);
                 }
                 this.propsCache.set(key, prop);
             });

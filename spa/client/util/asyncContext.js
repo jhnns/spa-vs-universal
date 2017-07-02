@@ -3,10 +3,10 @@ export default class AsyncContext {
         this.component = component;
         this.pending = new Map();
     }
-    add(name, promise) {
+    add(name, promise, initialValue) {
         const proceed = () => this.pending.get(name) === promise;
 
-        this.setStartState(name);
+        this.setStartState(name, initialValue);
         this.pending.set(name, promise);
 
         return promise.then(
@@ -30,12 +30,12 @@ export default class AsyncContext {
             }
         );
     }
-    setStartState(name) {
+    setStartState(name, initialValue) {
         this.component.setState({
             ...this.component.state,
             [name + "Pending"]: true,
             [name + "Error"]: null,
-            [name + "Result"]: null,
+            [name]: initialValue,
         });
     }
     setSuccessState(name, result) {
@@ -43,7 +43,7 @@ export default class AsyncContext {
             ...this.component.state,
             [name + "Pending"]: false,
             [name + "Error"]: null,
-            [name + "Result"]: result,
+            [name]: result,
         });
     }
     setFailState(name, error) {
@@ -51,7 +51,7 @@ export default class AsyncContext {
             ...this.component.state,
             [name + "Pending"]: false,
             [name + "Error"]: error,
-            [name + "Result"]: null,
+            [name]: null,
         });
     }
     reset() {

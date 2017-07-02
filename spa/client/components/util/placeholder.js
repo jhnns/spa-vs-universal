@@ -3,7 +3,7 @@ import Loading from "../loading/loading";
 
 export default class Placeholder extends AsyncCacheComponent {
     render(props, state) {
-        const Component = state.componentResult;
+        const Component = state.component;
 
         if (Component !== null) {
             return <Component {...props.props} />;

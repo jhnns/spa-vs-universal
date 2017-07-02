@@ -6,7 +6,7 @@ const empty = [];
 
 export default class Posts extends AsyncCacheComponent {
     render(props, state) {
-        const posts = state.postsResult;
+        const posts = state.posts;
 
         return (
             <div class={root}>
