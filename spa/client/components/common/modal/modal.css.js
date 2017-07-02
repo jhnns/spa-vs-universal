@@ -2,45 +2,27 @@ import { css } from "glamor";
 import { modal as modalZIndex } from "../../../styles/zIndex";
 import { msToSeconds } from "../../../styles/timing";
 
-const backdropFadeOutStyles = {
-    backgroundColor: "rgba(0, 0, 0, 0)",
-};
-const backdropFadeInStyles = {
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
-};
-
-const fadeIn = css.keyframes({
-    from: backdropFadeOutStyles,
-    to: backdropFadeInStyles,
-});
-
-const fadeOut = css.keyframes({
-    from: backdropFadeInStyles,
-    to: backdropFadeOutStyles,
-});
-
 export const fadeDuration = 100;
 const fadeDurationCss = msToSeconds(fadeDuration) + "s";
 
-export const root = css({
-    position: "absolute",
+export const backdrop = css({
+    position: "fixed",
     top: 0,
-    right: 0,
-    bottom: 0,
     left: 0,
     zIndex: modalZIndex,
+    overflow: "hidden",
 });
 
-export const backdrop = css({
-    display: "block",
+export const backdropHidden = css({
+    width: 0,
+    height: 0,
+    backgroundColor: "rgba(0, 0, 0, 0)",
+    transition: `background-color ${ fadeDurationCss } ease-in-out, width 0s ${ fadeDurationCss }, height 0s ${ fadeDurationCss }`,
+});
+
+export const backdropVisible = css({
     width: "100%",
     height: "100%",
-});
-
-export const backdropFadeIn = css({
-    animation: `${ fadeIn } ${ fadeDurationCss } ease-in-out forwards`,
-});
-
-export const backdropFadeOut = css({
-    animation: `${ fadeOut } ${ fadeDurationCss } ease-in-out forwards`,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    transition: `background-color ${ fadeDurationCss } ease-in-out`,
 });

@@ -2,10 +2,9 @@ import { Component, render as preactRender } from "preact";
 import URLSearchParams from "url-search-params";
 import WithContext from "../withContext";
 import {
-    root,
     backdrop,
-    backdropFadeIn,
-    backdropFadeOut,
+    backdropHidden,
+    backdropVisible,
     fadeDuration,
 } from "./modal.css";
 import GoBack from "../router/goBack";
@@ -19,37 +18,62 @@ function getBackParams(modalParam) {
 }
 
 export default class Modal extends Component {
-    constructor() {
+    constructor(props) {
         super();
-        this.handleClick = this.handleClick.bind(this);
+        this.updateMountState(props);
+    }
+    componentWillReceiveProps(nextProps) {
+        this.updateMountState(nextProps);
     }
     componentWillMount() {
         this.root = document.createElement("section");
         document.body.appendChild(this.root);
     }
-    handleClick(event) {
-        const goBackLink = event.target;
-
-        goBackLink.classList.remove(backdropFadeIn);
-        goBackLink.classList.add(backdropFadeOut);
+    componentWillUnmount() {
+        const root = this.root;
 
         setTimeout(() => {
-            document.body.removeChild(this.root);
+            document.body.removeChild(root);
         }, fadeDuration);
     }
+    // mountModal() {
+    //     this.root = document.createElement("section");
+    //     document.body.appendChild(this.root);
+    // }
+    // unmountModal(event) {
+    //     const goBackLink = event.target;
+    //     const root = this.root;
+
+    //     goBackLink.classList.remove(backdropFadeIn);
+    //     goBackLink.classList.add(backdropFadeOut);
+    //     this.root = null;
+
+    //     setTimeout(() => {
+    //         document.body.removeChild(root);
+    //     }, fadeDuration);
+    // }
+    updateMountState(props) {
+        const params = new URLSearchParams(location.search);
+
+        this.mountState = params.has(props.activationParam) === true;
+    }
     render(props) {
+        const isInitialRender = this.root.children.length === 0;
+        const backdropClass = [backdrop];
+
+        backdropClass.push(
+            this.mountState === true ? backdropVisible : backdropHidden
+        );
+
         preactRender(
             <WithContext context={this.context}>
-                <div class={root}>
-                    {"..."}
-                    <GoBack
-                        class={[backdrop, backdropFadeIn].join(" ")}
-                        params={getBackParams(props.activationParam)}
-                        onClick={this.handleClick}
-                    />
-                </div>,
+                <GoBack
+                    class={backdropClass.join(" ")}
+                    params={getBackParams(props.activationParam)}
+                />
             </WithContext>,
-            this.root
+            this.root,
+            isInitialRender === true ? undefined : this.root.firstElementChild
         );
 
         return null;

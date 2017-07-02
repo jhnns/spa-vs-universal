@@ -5,7 +5,8 @@ import Modal from "../../../common/modal/modal";
 import { link } from "../../link.css";
 
 export default class Anonymous extends Component {
-    componentWillMount() {
+    constructor() {
+        super();
         this.updateSearchParams();
     }
     componentWillUpdate() {
@@ -18,10 +19,9 @@ export default class Anonymous extends Component {
         const search = window.location.search;
         const params = new URLSearchParams(search);
 
-        this.locationSearch = search;
-        this.showLogin = Boolean(params.get("showLogin"));
-
         params.set("showLogin", 1);
+
+        this.locationSearch = search;
         this.paramsAndShowLogin = params;
     }
     render() {
@@ -30,9 +30,7 @@ export default class Anonymous extends Component {
                 <Link params={this.paramsAndShowLogin} class={link}>
                     {"Log in"}
                 </Link>
-                {this.showLogin ?
-                    <Modal activationParam={"showLogin"} /> :
-                    null}
+                <Modal activationParam={"showLogin"} />
             </div>
         );
     }
