@@ -12,9 +12,6 @@ export default class Anonymous extends Component {
     componentWillUpdate() {
         this.updateSearchParams();
     }
-    shouldComponentUpdate() {
-        return window.location.search !== this.locationSearch;
-    }
     updateSearchParams() {
         const search = window.location.search;
         const params = new URLSearchParams(search);

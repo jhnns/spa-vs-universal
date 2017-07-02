@@ -4,9 +4,6 @@ import nanorouter from "nanorouter";
 import onLinkClick from "nanohref";
 import onHistoryPop from "nanohistory";
 import routes from "../../../routes";
-import Placeholder from "../placeholder";
-
-const defaultParams = {};
 
 function createRouteHandler(route, component) {
     return params => {
@@ -81,8 +78,6 @@ export default class Router extends Component {
         );
     }
     render(props, state) {
-        const params = state.params || defaultParams;
-
-        return <Placeholder component={state.route.component} props={params} />;
+        return props.children[0];
     }
 }

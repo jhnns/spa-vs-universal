@@ -1,13 +1,20 @@
 import { Component } from "preact";
+import Header from "../../header/header";
 import Router from "../router/router";
-import { root } from "./app.css";
+import RoutePlaceholder from "../router/routePlaceholder";
+import { root, main } from "./app.css";
 
 export default class App extends Component {
     render() {
         return (
-            <div class={root}>
-                <Router />
-            </div>
+            <Router>
+                <div class={root}>
+                    <Header />
+                    <main class={main}>
+                        <RoutePlaceholder />
+                    </main>
+                </div>
+            </Router>
         );
     }
 }

@@ -9,7 +9,7 @@ export default class Top5 extends Component {
 
         return (
             <WithTitle title={title}>
-                <Posts headline={title} posts={getTop5} />
+                <Posts a11yTitle={title} posts={getTop5} />
             </WithTitle>
         );
     }

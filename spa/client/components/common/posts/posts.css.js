@@ -1,22 +1,16 @@
 import { css } from "glamor";
 import { px, rem } from "../../../styles/scales";
 import { offscreen } from "../../../styles/a11y";
-import { maxContentWidth } from "../../../styles/layout";
 import { white, black } from "../../../styles/colors";
 import { regularMaxWidth } from "../../../styles/typoSizes";
 
 const sheetPadding = px(13);
 
-export const main = css({
-    maxWidth: maxContentWidth,
-    marginLeft: "auto",
-    marginRight: "auto",
-    ["@media (min-width: " + px(14) * 20 + "px)"]: {
-        padding: px(14),
-    },
+export const root = css({
+    position: "relative",
 });
 
-export const headline = css({
+export const a11yTitle = css({
     ...offscreen,
 });
 
@@ -26,10 +20,6 @@ export const postImage = css({
     marginTop: sheetPadding,
     transform: "translate(0%)",
     transition: "transform 0.3s ease-in-out",
-});
-
-export const postsContainer = css({
-    position: "relative",
 });
 
 export const sheet = css({

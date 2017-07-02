@@ -56,12 +56,6 @@ export default class Link extends Component {
             component();
         }
     }
-    componentWillMount() {
-        this.splitProps(this.props);
-    }
-    componentWillReceiveProps(props) {
-        this.splitProps(props);
-    }
     splitProps(props) {
         const aProps = (this.aProps = {});
         const ownProps = (this.ownProps = {
@@ -79,6 +73,8 @@ export default class Link extends Component {
             });
     }
     render() {
+        this.splitProps(this.props);
+
         const {
             route,
             params,
