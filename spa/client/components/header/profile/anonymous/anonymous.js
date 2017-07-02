@@ -1,7 +1,7 @@
 import { Component } from "preact";
 import URLSearchParams from "url-search-params";
-import Link from "../../../common/router/link";
-import Modal from "../../../common/modal/modal";
+import Link from "../../../router/link";
+import Modal from "../../../modal/modal";
 import { link } from "../../link.css";
 
 export default class Anonymous extends Component {

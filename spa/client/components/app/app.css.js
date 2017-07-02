@@ -1,8 +1,8 @@
 import { css } from "glamor";
-import { mintLight35, silverLight10, black } from "../../../styles/colors";
-import { linear } from "../../../styles/gradient";
-import { maxContentWidth } from "../../../styles/layout";
-import { px } from "../../../styles/scales";
+import { mintLight35, silverLight10, black } from "../../styles/colors";
+import { linear } from "../../styles/gradient";
+import { maxContentWidth } from "../../styles/layout";
+import { px } from "../../styles/scales";
 
 export const root = css({
     margin: 0,

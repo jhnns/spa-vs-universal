@@ -1,5 +1,5 @@
 import { Component } from "preact";
-import Link from "../../common/router/link";
+import Link from "../../router/link";
 import { list, listItem } from "./nav.css";
 import { link, activeLink } from "../link.css";
 import routes from "../../../routes";

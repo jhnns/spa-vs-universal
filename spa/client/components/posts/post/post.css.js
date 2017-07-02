@@ -1,12 +1,12 @@
 import { css } from "glamor";
-import nexaHeavy from "../../../../styles/type/nexaHeavy";
-import latoLight from "../../../../styles/type/latoLight";
-import { rem } from "../../../../styles/scales";
+import nexaHeavy from "../../../styles/type/nexaHeavy";
+import latoLight from "../../../styles/type/latoLight";
+import { rem } from "../../../styles/scales";
 import {
     regular,
     regularLineHeight,
     regularMaxWidth,
-} from "../../../../styles/typoSizes";
+} from "../../../styles/typoSizes";
 
 export const headline = css({
     ...nexaHeavy,

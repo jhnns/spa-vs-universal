@@ -1,4 +1,4 @@
-import AsyncCacheComponent from "../asyncCacheComponent";
+import AsyncCacheComponent from "../util/asyncCacheComponent";
 import Post from "./post/post";
 import { a11yTitle, root, postContainer, sheet, postImage } from "./posts.css";
 

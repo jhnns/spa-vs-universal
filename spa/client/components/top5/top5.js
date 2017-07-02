@@ -1,7 +1,7 @@
 import { Component } from "preact";
 import getTop5 from "../../api/posts/getTop5";
-import Posts from "../common/posts/posts";
-import WithTitle from "../common/withTitle";
+import Posts from "../posts/posts";
+import WithTitle from "../util/withTitle";
 
 export default class Top5 extends Component {
     render() {

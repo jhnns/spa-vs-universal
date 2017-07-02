@@ -1,6 +1,6 @@
 import { Component, render as preactRender } from "preact";
 import URLSearchParams from "url-search-params";
-import WithContext from "../withContext";
+import WithContext from "../util/withContext";
 import {
     backdrop,
     backdropHidden,

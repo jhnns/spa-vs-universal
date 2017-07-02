@@ -1,11 +1,11 @@
 import { css } from "glamor";
-import { white, black } from "../../styles/colors";
-import { px, rem } from "../../styles/scales";
-import nexaHeavy from "../../styles/type/nexaHeavy";
-import { maxContentWidth } from "../../styles/layout";
-import { offscreen as a11yOffscreen } from "../../styles/a11y";
-import { header as headerZIndex } from "../../styles/zIndex";
-import { verticalOffset } from "./common";
+import { white, black } from "../../../../styles/colors";
+import { px, rem } from "../../../../styles/scales";
+import nexaHeavy from "../../../../styles/type/nexaHeavy";
+import { maxContentWidth } from "../../../../styles/layout";
+import { offscreen as a11yOffscreen } from "../../../../styles/a11y";
+import { header as headerZIndex } from "../../../../styles/zIndex";
+import { verticalOffset } from "../../common";
 
 export const root = css({
     position: "sticky",

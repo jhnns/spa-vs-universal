@@ -1,8 +1,8 @@
 import { css } from "glamor";
-import { px, rem } from "../../../styles/scales";
-import { offscreen } from "../../../styles/a11y";
-import { white, black } from "../../../styles/colors";
-import { regularMaxWidth } from "../../../styles/typoSizes";
+import { px, rem } from "../../styles/scales";
+import { offscreen } from "../../styles/a11y";
+import { white, black } from "../../styles/colors";
+import { regularMaxWidth } from "../../styles/typoSizes";
 
 const sheetPadding = px(13);
 

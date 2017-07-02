@@ -1,6 +1,6 @@
 import { css } from "glamor";
-import latoLight from "../../../styles/type/latoLight";
-import { rem } from "../../../styles/scales";
+import latoLight from "../../styles/type/latoLight";
+import { rem } from "../../styles/scales";
 
 export const root = css({
     ...latoLight,

@@ -1,4 +1,4 @@
-import Placeholder from "../placeholder";
+import Placeholder from "../util/placeholder";
 
 const defaultParams = {};
 

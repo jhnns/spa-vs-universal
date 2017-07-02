@@ -1,5 +1,5 @@
 import { Component } from "preact";
-import createEventHandler from "../../../util/createEventHandler";
+import createEventHandler from "../../util/createEventHandler";
 
 function routeToHref(route, params) {
     if (params === null) {

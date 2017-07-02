@@ -1,6 +1,6 @@
 import { css } from "glamor";
-import { modal as modalZIndex } from "../../../styles/zIndex";
-import { msToSeconds } from "../../../styles/timing";
+import { modal as modalZIndex } from "../../styles/zIndex";
+import { msToSeconds } from "../../styles/timing";
 
 export const fadeDuration = 100;
 const fadeDurationCss = msToSeconds(fadeDuration) + "s";

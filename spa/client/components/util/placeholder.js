@@ -1,5 +1,5 @@
 import AsyncCacheComponent from "./asyncCacheComponent";
-import Loading from "./loading/loading";
+import Loading from "../loading/loading";
 
 export default class Placeholder extends AsyncCacheComponent {
     render(props, state) {

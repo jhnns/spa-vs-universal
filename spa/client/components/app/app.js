@@ -1,5 +1,5 @@
 import { Component } from "preact";
-import Header from "../../header/header";
+import Header from "../header/header";
 import Router from "../router/router";
 import RoutePlaceholder from "../router/routePlaceholder";
 import { root, main } from "./app.css";

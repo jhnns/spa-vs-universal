@@ -1,6 +1,6 @@
 import { Component } from "preact";
 import Link from "./link";
-import createEventHandler from "../../../util/createEventHandler";
+import createEventHandler from "../../util/createEventHandler";
 
 export default class GoBack extends Component {
     constructor() {

@@ -3,7 +3,7 @@ import URLSearchParams from "url-search-params";
 import nanorouter from "nanorouter";
 import onLinkClick from "nanohref";
 import onHistoryPop from "nanohistory";
-import routes from "../../../routes";
+import routes from "../../routes";
 
 function createRouteHandler(route, component) {
     return params => {
