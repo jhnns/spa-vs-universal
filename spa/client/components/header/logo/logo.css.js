@@ -1,10 +1,9 @@
 import { css } from "glamor";
-import { px } from "../../../styles/scales";
-import { verticalOffset } from "../common";
+import { verticalOffset, logoHeight } from "../common";
 
 export const logoImg = css({
     position: "relative",
     display: "block",
-    width: px(17),
+    width: logoHeight,
     top: -verticalOffset,
 });

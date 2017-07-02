@@ -7,6 +7,7 @@ import {
     root,
     content,
     logo,
+    nav,
     headline,
     profile,
     offscreen,
@@ -24,7 +25,7 @@ export default class Header extends Component {
                             <span class={offscreen}>Peerigon</span> News
                         </h1>
                     </Link>
-                    <Nav />
+                    <Nav class={nav} />
                     <Profile class={profile} />
                 </div>
             </header>

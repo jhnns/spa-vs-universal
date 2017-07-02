@@ -7,9 +7,9 @@ import routes from "../../../routes";
 const nbsp = "\u00a0";
 
 export default class Nav extends Component {
-    render() {
+    render(props) {
         return (
-            <nav>
+            <nav class={props.class}>
                 <ul class={list}>
                     <li class={listItem}>
                         <Link
