@@ -1,6 +1,7 @@
 import { css } from "glamor";
 import { px, rem } from "../../styles/scales";
 import { white } from "../../styles/colors";
+import sheet, { sheetPadding } from "../../styles/block/sheet";
 import {
     regularFontSize,
     regularLineHeight,
@@ -11,17 +12,13 @@ import {
 import nexaHeavy from "../../styles/type/nexaHeavy";
 import latoLight from "../../styles/type/latoLight";
 
-const sheetPadding = px(13);
-
 export const root = css({
     position: "relative",
 });
 
-export const sheet = css({
-    ...sheetPadding,
+export const aboutSheet = css({
+    ...sheet,
     maxWidth: regularMaxWidth + "rem",
-    padding: sheetPadding,
-    backgroundColor: white(),
     marginLeft: "auto",
     marginRight: "auto",
 });

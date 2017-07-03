@@ -1,11 +1,11 @@
 import { Component } from "preact";
-import { sheet, title, text } from "./about.css";
+import { aboutSheet, title, text } from "./about.css";
 
 export default class About extends Component {
     render() {
         return (
             <div>
-                <div class={sheet}>
+                <div class={aboutSheet}>
                     <h2 class={title}>About</h2>
                     <div class={text}>
                         <p>
