@@ -3,8 +3,7 @@ import { px, rem } from "../../styles/scales";
 import { offscreen } from "../../styles/a11y";
 import { white, black } from "../../styles/colors";
 import { regularMaxWidth } from "../../styles/typoSizes";
-
-const sheetPadding = px(13);
+import sheet, { sheetPadding } from "../../styles/block/sheet";
 
 export const root = css({
     position: "relative",
@@ -22,12 +21,10 @@ export const postImage = css({
     transition: "transform 0.3s ease-in-out",
 });
 
-export const sheet = css({
+export const postSheet = css({
+    ...sheet,
     // position relative is necessary so that the position absolute image is still below the sheet
     position: "relative",
-    color: black(),
-    backgroundColor: white(),
-    padding: sheetPadding,
     maxWidth: regularMaxWidth + "rem",
 });
 
@@ -37,7 +34,7 @@ export const postContainer = css({
     ":not(:last-child)": {
         marginBottom: rem(15) + "rem",
     },
-    [":nth-child(odd) ." + sheet]: {
+    [":nth-child(odd) ." + postSheet]: {
         marginLeft: "auto",
     },
     [":nth-child(odd) ." + postImage]: {

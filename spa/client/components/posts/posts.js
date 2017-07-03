@@ -1,7 +1,13 @@
 import { Component } from "preact";
 import AsyncPropsCache from "../../util/asyncPropsCache";
 import Post from "./post/post";
-import { a11yTitle, root, postContainer, sheet, postImage } from "./posts.css";
+import {
+    a11yTitle,
+    root,
+    postContainer,
+    postSheet,
+    postImage,
+} from "./posts.css";
 
 const empty = [];
 
@@ -27,7 +33,7 @@ export default class Posts extends Component {
                                 src={post.image}
                                 alt={post.title}
                             />
-                            <Post class={sheet} post={post} />
+                            <Post class={postSheet} post={post} />
                         </div>
                     ))}
             </div>
