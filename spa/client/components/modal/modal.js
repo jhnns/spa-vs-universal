@@ -20,27 +20,44 @@ function getBackParams(modalParam) {
 }
 
 export default class Modal extends Component {
-    componentWillMount() {
-        this.root = document.createElement("section");
-        document.body.appendChild(this.root);
+    constructor(props) {
+        super();
+        this.renderContainer = document.createElement("section");
+        this.updateActiveState(props);
     }
-    componentWillUnmount() {
-        const root = this.root;
-
-        setTimeout(() => {
-            document.body.removeChild(root);
-        }, fadeDuration);
+    componentWillReceiveProps(newProps) {
+        this.updateActiveState(newProps);
     }
-    render(props) {
-        const isInitialRender = this.root.children.length === 0;
-        const mountState =
-            new URLSearchParams(location.search).has(props.activationParam) ===
-            true;
-        const backdropClass = [backdrop];
+    updateActiveState(props) {
+        this.setState(prevState => {
+            const active =
+                new URLSearchParams(location.search).has(
+                    props.activationParam
+                ) === true;
 
-        backdropClass.push(
-            mountState === true ? backdropVisible : backdropHidden
-        );
+            if (prevState.active === true && active === false) {
+                setTimeout(() => {
+                    if (this.state.active === true) {
+                        return;
+                    }
+                    document.body.removeChild(this.renderContainer);
+                }, fadeDuration);
+            } else if (prevState.active === false && active === true) {
+                document.body.appendChild(this.renderContainer);
+                // Trigger reflow to kick off the transition
+                void this.renderContainer.offsetHeight;
+            }
+
+            return {
+                active,
+            };
+        });
+    }
+    render(props, state) {
+        const backdropClass = [
+            backdrop,
+            state.active === true ? backdropVisible : backdropHidden,
+        ];
 
         preactRender(
             <WithContext context={this.context}>
@@ -49,15 +66,15 @@ export default class Modal extends Component {
                         class={backdropClass.join(" ")}
                         params={getBackParams(props.activationParam)}
                     />
-                    {mountState ?
+                    {props.render || state.active ?
                         <div class={modalWindow}>
                             {props.children}
                         </div> :
                         null}
                 </div>
             </WithContext>,
-            this.root,
-            isInitialRender === true ? undefined : this.root.firstElementChild
+            this.renderContainer,
+            this.renderContainer.firstElementChild
         );
 
         return null;
