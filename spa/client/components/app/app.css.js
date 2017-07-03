@@ -2,7 +2,7 @@ import { css } from "glamor";
 import { mintLight35, silverLight10, black } from "../../styles/colors";
 import { linear } from "../../styles/gradients";
 import { maxContentWidth } from "../../styles/layout";
-import { documentPadding } from "../../styles/paddings";
+import { paddingRegular } from "../../styles/paddings";
 
 export const root = css({
     margin: 0,
@@ -18,7 +18,7 @@ export const main = css({
     maxWidth: maxContentWidth,
     marginLeft: "auto",
     marginRight: "auto",
-    ["@media (min-width: " + documentPadding * 20 + "px)"]: {
-        padding: documentPadding,
+    ["@media (min-width: " + paddingRegular * 20 + "px)"]: {
+        padding: paddingRegular,
     },
 });

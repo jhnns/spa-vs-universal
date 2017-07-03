@@ -7,9 +7,9 @@ import {
     regularLineHeight,
     regularMaxWidth,
 } from "../../styles/typoSizes";
-import nexaHeavy from "../../styles/type/nexaHeavy";
 import latoLight from "../../styles/type/latoLight";
 import inputText from "../../styles/block/inputText";
+import inputSubmit from "../../styles/block/inputSubmit";
 import { paddingBigger } from "../../styles/paddings";
 
 export const loginSheet = css({
@@ -33,4 +33,8 @@ export const loginLabel = css({
 export const loginInput = css({
     ...inputText,
     marginBottom: rem(14) + "rem",
+});
+
+export const loginSubmit = css({
+    ...inputSubmit,
 });
