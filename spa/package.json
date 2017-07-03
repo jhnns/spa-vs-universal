@@ -43,6 +43,7 @@
     "from-now": "^1.0.2",
     "glamor": "^2.20.25",
     "helmet": "^3.6.1",
+    "hex-to-rgba": "^0.2.0",
     "html-webpack-plugin": "2.28.0",
     "image-webpack-loader": "^3.3.1",
     "kewler": "^1.0.8",

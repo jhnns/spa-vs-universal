@@ -20,6 +20,7 @@ export default class GoBack extends Component {
     render(props) {
         return (
             <Link
+                title={"Go back"}
                 {...props}
                 onClick={this.handleClick}
                 replaceUrl={this.prevRouteUnknown()}

@@ -1,16 +1,23 @@
 import { css } from "glamor";
+import hexToRgba from "hex-to-rgba";
 import {
     backdrop as backdropZIndex,
     modal as modalZIndex,
 } from "../../styles/zIndex";
 import { msToSeconds } from "../../styles/timing";
-import { white } from "../../styles/colors";
+import { white, mint } from "../../styles/colors";
 import { paddingRegular } from "../../styles/paddings";
 import calc from "../../styles/calc";
 
 export const fadeDuration = 100;
 const fadeDurationCss = msToSeconds(fadeDuration) + "s";
 const backdropOpacity = 0.4;
+
+const backdropGlowAnimation = css.keyframes({
+    "50%": {
+        backgroundColor: hexToRgba(mint(), "0.2"),
+    },
+});
 
 export const root = css({
     position: "absolute",
@@ -30,17 +37,21 @@ export const backdrop = css({
     right: 0,
     bottom: 0,
     zIndex: backdropZIndex,
+    backgroundColor: "black",
+    ":focus": {
+        animation: `${ backdropGlowAnimation } infinite 3s ease-in-out`,
+    },
 });
 
 export const backdropHidden = css({
-    backgroundColor: "rgba(0, 0, 0, 0)",
-    transition: `background-color ${ fadeDurationCss } ease-in-out, transform 0s ${ fadeDurationCss }`,
+    opacity: 0,
+    transition: `opacity ${ fadeDurationCss } ease-in-out, transform 0s ${ fadeDurationCss }`,
     transform: "translateX(100%)",
 });
 
 export const backdropVisible = css({
-    backgroundColor: `rgba(0, 0, 0, ${ backdropOpacity })`,
-    transition: `background-color ${ fadeDurationCss } ease-in-out`,
+    opacity: backdropOpacity,
+    transition: `opacity ${ fadeDurationCss } ease-in-out`,
 });
 
 export const window = css({
