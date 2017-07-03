@@ -1,6 +1,6 @@
 import { css } from "glamor";
 import { px, rem } from "../../styles/scales";
-import { white, mint } from "../../styles/colors";
+import { white, mint, red } from "../../styles/colors";
 import sheet, { sheetPadding } from "../../styles/block/sheet";
 import { regularFontSize, regularLineHeight } from "../../styles/typoSizes";
 import nexaHeavy from "../../styles/type/nexaHeavy";
@@ -19,5 +19,8 @@ export default {
     ":focus": {
         borderColor: mint(),
         outlineColor: mint(),
+    },
+    "[invalid]": {
+        borderBottomColor: red(),
     },
 };

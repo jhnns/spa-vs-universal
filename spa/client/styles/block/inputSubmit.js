@@ -1,9 +1,6 @@
-import { css } from "glamor";
-import { px, rem } from "../../styles/scales";
-import { white, mint } from "../../styles/colors";
-import sheet, { sheetPadding } from "../../styles/block/sheet";
+import { rem } from "../../styles/scales";
+import { mint } from "../../styles/colors";
 import { regularFontSize, regularLineHeight } from "../../styles/typoSizes";
-import nexaHeavy from "../../styles/type/nexaHeavy";
 import nexaXBold from "../../styles/type/nexaXBold";
 import { regular } from "../borders";
 

@@ -32,7 +32,10 @@ export const loginLabel = css({
 
 export const loginInput = css({
     ...inputText,
-    marginBottom: rem(14) + "rem",
+});
+
+export const validationMessage = css({
+    marginBottom: rem(10) + "rem",
 });
 
 export const loginSubmit = css({
