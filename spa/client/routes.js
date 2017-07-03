@@ -1,6 +1,4 @@
-function useDefault(p) {
-    return p.then(e => e.default);
-}
+import useDefault from "./util/useDefault";
 
 export default {
     top5: {

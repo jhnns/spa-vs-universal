@@ -2,10 +2,12 @@ import { Component, render as preactRender } from "preact";
 import URLSearchParams from "url-search-params";
 import WithContext from "../util/withContext";
 import {
+    root,
     backdrop,
     backdropHidden,
     backdropVisible,
     fadeDuration,
+    window as modalWindow,
 } from "./modal.css";
 import GoBack from "../router/goBack";
 
@@ -42,10 +44,17 @@ export default class Modal extends Component {
 
         preactRender(
             <WithContext context={this.context}>
-                <GoBack
-                    class={backdropClass.join(" ")}
-                    params={getBackParams(props.activationParam)}
-                />
+                <div class={root}>
+                    <GoBack
+                        class={backdropClass.join(" ")}
+                        params={getBackParams(props.activationParam)}
+                    />
+                    {mountState ?
+                        <div class={modalWindow}>
+                            {props.children}
+                        </div> :
+                        null}
+                </div>
             </WithContext>,
             this.root,
             isInitialRender === true ? undefined : this.root.firstElementChild

@@ -2,7 +2,13 @@ import { Component } from "preact";
 import URLSearchParams from "url-search-params";
 import Link from "../../../router/link";
 import Modal from "../../../modal/modal";
+import Placeholder from "../../../util/placeholder";
 import { link } from "../../link.css";
+import useDefault from "../../../../util/useDefault";
+
+function loadLoginForm() {
+    return useDefault(import("../../../loginForm/loginForm"));
+}
 
 export default class Anonymous extends Component {
     constructor() {
@@ -27,7 +33,9 @@ export default class Anonymous extends Component {
                 <Link params={this.paramsAndShowLogin} class={link}>
                     {"Log in"}
                 </Link>
-                <Modal activationParam={"showLogin"} />
+                <Modal activationParam={"showLogin"}>
+                    <Placeholder component={loadLoginForm} />
+                </Modal>
             </div>
         );
     }
