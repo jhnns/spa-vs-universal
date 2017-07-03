@@ -9,6 +9,7 @@ import { regular } from "../borders";
 
 export default {
     ...latoLight,
+    width: "100%",
     fontSize: regularFontSize + "rem",
     lineHeight: regularLineHeight + "rem",
     padding: rem(7) + "rem 0",

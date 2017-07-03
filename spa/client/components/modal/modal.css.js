@@ -1,8 +1,11 @@
 import { css } from "glamor";
-import { modal as modalZIndex } from "../../styles/zIndex";
+import {
+    backdrop as backdropZIndex,
+    modal as modalZIndex,
+} from "../../styles/zIndex";
 import { msToSeconds } from "../../styles/timing";
 import { white } from "../../styles/colors";
-import { documentPadding } from "../../styles/paddings";
+import { paddingDefault } from "../../styles/paddings";
 import calc from "../../styles/calc";
 
 export const fadeDuration = 100;
@@ -14,8 +17,10 @@ export const root = css({
     display: "flex",
     flexDirection: "column",
     top: 0,
-    width: "100%",
-    zIndex: modalZIndex,
+    width: "100vw",
+    height: "100vh",
+    alignItems: "center",
+    justifyContent: "center",
 });
 
 export const backdrop = css({
@@ -24,7 +29,7 @@ export const backdrop = css({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: -1,
+    zIndex: backdropZIndex,
 });
 
 export const backdropHidden = css({
@@ -39,8 +44,11 @@ export const backdropVisible = css({
 });
 
 export const window = css({
+    position: "fixed",
+    zIndex: modalZIndex,
     backgroundColor: white(),
-    maxWidth: calc("100vw - ", 2 + documentPadding, "px"),
-    margin: "10vh auto",
     boxShadow: "0 7px 7px rgba(0, 0, 0, 0.3)",
+    "> *": {
+        width: calc("100vw - ", paddingDefault * 2, "px"),
+    },
 });
