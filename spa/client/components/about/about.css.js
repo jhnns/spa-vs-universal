@@ -1,7 +1,6 @@
 import { css } from "glamor";
-import { px, rem } from "../../styles/scales";
-import { white } from "../../styles/colors";
-import sheet, { sheetPadding } from "../../styles/block/sheet";
+import { rem } from "../../styles/scales";
+import sheet from "../../styles/block/sheet";
 import {
     regularFontSize,
     regularLineHeight,
