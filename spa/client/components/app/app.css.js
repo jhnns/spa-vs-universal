@@ -1,6 +1,6 @@
 import { css } from "glamor";
 import { mintLight35, silverLight10, black } from "../../styles/colors";
-import { linear } from "../../styles/gradient";
+import { linear } from "../../styles/gradients";
 import { maxContentWidth } from "../../styles/layout";
 import { documentPadding } from "../../styles/paddings";
 
