@@ -22,6 +22,7 @@ function getBackParams(modalParam) {
 export default class Modal extends Component {
     constructor(props) {
         super();
+        this.setState({ active: false });
         this.renderContainer = document.createElement("section");
         this.updateActiveState(props);
     }

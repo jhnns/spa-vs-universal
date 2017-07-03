@@ -42,4 +42,5 @@ export const window = css({
     backgroundColor: white(),
     maxWidth: calc("100vw - ", 2 + documentPadding, "px"),
     margin: "10vh auto",
+    boxShadow: "0 7px 7px rgba(0, 0, 0, 0.3)",
 });

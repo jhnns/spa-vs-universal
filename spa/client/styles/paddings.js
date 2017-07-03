@@ -1,3 +1,4 @@
 import { px } from "./scales";
 
-export const documentPadding = px(14);
+export const paddingDefault = px(14);
+export const paddingBigger = px(15);
