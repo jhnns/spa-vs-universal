@@ -5,7 +5,7 @@ import {
 } from "../../styles/zIndex";
 import { msToSeconds } from "../../styles/timing";
 import { white } from "../../styles/colors";
-import { paddingDefault } from "../../styles/paddings";
+import { paddingRegular } from "../../styles/paddings";
 import calc from "../../styles/calc";
 
 export const fadeDuration = 100;
@@ -49,6 +49,6 @@ export const window = css({
     backgroundColor: white(),
     boxShadow: "0 7px 7px rgba(0, 0, 0, 0.3)",
     "> *": {
-        width: calc("100vw - ", paddingDefault * 2, "px"),
+        width: calc("100vw - ", paddingRegular * 2, "px"),
     },
 });
