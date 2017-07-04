@@ -7,7 +7,7 @@ import {
     loginInput,
     loginLabel,
     loginSubmit,
-    validationMessage,
+    formFeedback,
 } from "./loginForm.css";
 import Form from "../form/form";
 
@@ -15,9 +15,8 @@ export default class LoginForm extends Component {
     constructor() {
         super();
         this.renderForm = this.renderForm.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
-    renderForm({ id, errors }) {
+    renderForm({ id, errors, submitError }) {
         const nameId = `${ id }-login-name`;
         const passwordId = `${ id }-login-password`;
 
@@ -33,7 +32,7 @@ export default class LoginForm extends Component {
                 invalid={Boolean(errors.get("name"))}
                 type="text"
             />,
-            <FormFeedback class={validationMessage}>
+            <FormFeedback class={formFeedback}>
                 {errors.get("name")}
             </FormFeedback>,
             <label htmlFor={passwordId} class={loginLabel}>
@@ -46,8 +45,11 @@ export default class LoginForm extends Component {
                 invalid={Boolean(errors.get("password"))}
                 type="password"
             />,
-            <FormFeedback class={validationMessage}>
+            <FormFeedback class={formFeedback}>
                 {errors.get("password")}
+                {submitError === null || submitError === undefined ?
+                    null :
+                    submitError.message}
             </FormFeedback>,
             <input
                 class={loginSubmit}
@@ -58,15 +60,12 @@ export default class LoginForm extends Component {
         ];
         /* eslint-enable react/jsx-key */
     }
-    handleSubmit(formData) {
-        createSession(formData.get("name"), formData.get("password"));
-    }
     render(props, state) {
         return (
             <Form
                 class={loginSheet}
                 validators={loginFormValidators}
-                onSubmit={this.handleSubmit}
+                onSubmit={createSession}
             >
                 {this.renderForm}
             </Form>

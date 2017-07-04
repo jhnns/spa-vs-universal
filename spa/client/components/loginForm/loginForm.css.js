@@ -34,7 +34,7 @@ export const loginInput = css({
     ...inputText,
 });
 
-export const validationMessage = css({
+export const formFeedback = css({
     marginBottom: rem(10) + "rem",
 });
 

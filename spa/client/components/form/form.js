@@ -1,5 +1,7 @@
 import { Component } from "preact";
-import generateId from "../util/generateId";
+import generateId from "../../util/generateId";
+import AsyncContext from "../../util/asyncContext";
+import mapToObject from "../../util/mapToObject";
 
 function validate(validators, values) {
     const errors = new Map();
@@ -23,6 +25,7 @@ export default class Form extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.saveFormRef = this.saveFormRef.bind(this);
+        this.async = new AsyncContext(this);
         this.setState({
             errors: new Map(),
         });
@@ -69,7 +72,13 @@ export default class Form extends Component {
         const { errors, formData } = this.performValidation();
 
         if (errors.size === 0) {
-            this.props.onSubmit(formData);
+            this.async
+                .add("submit", this.props.onSubmit(mapToObject(formData)))
+                .then(res => {
+                    if (this.props.onSubmitSuccess) {
+                        this.props.onSubmitSuccess(res);
+                    }
+                });
         }
     }
     handleFocus(e) {
@@ -78,19 +87,23 @@ export default class Form extends Component {
         if (this.formElement.elements[field.name] === undefined) {
             return;
         }
+
         this.setState(state => {
+            const submitError = state.submitError !== null &&
+                state.submitError !== undefined ?
+                null :
+                state.submitError;
             const errors = state.errors;
 
             errors.delete(field.name);
 
             return {
+                submitError,
                 errors,
             };
         });
     }
     render(props, state) {
-        const id = this.id;
-        const errors = state.errors;
         const formGenerator = props.children[0];
 
         return (
@@ -102,8 +115,11 @@ export default class Form extends Component {
             >
                 {typeof formGenerator === "function" ?
                     formGenerator({
-                        id,
-                        errors,
+                        id: this.id,
+                        errors: state.errors,
+                        submitPending: state.submitPending,
+                        submitSuccess: state.submitSuccess,
+                        submitError: state.submitError,
                     }) :
                     null}
             </form>

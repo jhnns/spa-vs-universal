@@ -8,18 +8,19 @@ const defaultOptions = {
     },
 };
 
-export default function create(name, password) {
+export default function create(payload) {
     return fetch(`${ config.root }/session`, {
         ...defaultOptions,
-        body: JSON.stringify({
-            name,
-            password,
-        }),
+        body: JSON.stringify(payload),
     })
         .then(res => res.json())
         .then(res => {
-            config.token = res.data.token;
+            if (res.status === "success") {
+                config.token = res.data.token;
 
-            return res.data;
+                return res.data;
+            }
+
+            throw new Error(res.message);
         });
 }

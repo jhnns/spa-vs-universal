@@ -59,17 +59,19 @@ function createRouter(routes, component) {
 }
 
 export default class Router extends Component {
+    constructor() {
+        super();
+        this.router = createRouter(routes, this);
+        this.router(location.pathname);
+    }
     getChildContext() {
         return {
             route: this.state.route || null,
             params: this.state.params || null,
             previousRoute: this.state.previousRoute || null,
             previousParams: this.state.previousParams || null,
+            router: this.router,
         };
-    }
-    componentWillMount() {
-        this.router = createRouter(routes, this);
-        this.router(location.pathname);
     }
     componentWillUnmount() {
         // We cannot undo the side-effects introduced by the router
