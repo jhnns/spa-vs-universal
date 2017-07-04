@@ -33,7 +33,7 @@ export default class Link extends Component {
             route: props.route || this.context.route,
             params: props.params || null,
             children: props.children,
-            replaceUrl: Boolean(props.replaceUrl),
+            replaceRoute: Boolean(props.replaceRoute),
             activeClass: props.activeClass || "",
         });
 
@@ -50,7 +50,7 @@ export default class Link extends Component {
             route,
             params,
             children,
-            replaceUrl,
+            replaceRoute,
             activeClass,
         } = this.ownProps;
         const classes = [
@@ -66,7 +66,7 @@ export default class Link extends Component {
                 onMouseOver={this.handleMouseOver}
                 onFocus={this.handleFocus}
                 data-route={true}
-                data-replace-url={replaceUrl}
+                data-replace-url={replaceRoute}
             >
                 {children}
             </a>

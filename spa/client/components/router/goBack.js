@@ -23,7 +23,7 @@ export default class GoBack extends Component {
                 title={"Go back"}
                 {...props}
                 onClick={this.handleClick}
-                replaceUrl={this.prevRouteUnknown()}
+                replaceRoute={this.prevRouteUnknown()}
             />
         );
     }
