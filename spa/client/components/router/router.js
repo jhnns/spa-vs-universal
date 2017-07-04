@@ -4,6 +4,7 @@ import nanorouter from "nanorouter";
 import onLinkClick from "nanohref";
 import onHistoryPop from "nanohistory";
 import routes from "../../routes";
+import trigger from "./util/trigger";
 
 function createRouteHandler(route, component) {
     return params => {
@@ -33,26 +34,16 @@ function createRouter(routes, component) {
         router(location.pathname);
     });
     onLinkClick(node => {
-        if (node.href === window.location.href) {
-            return;
-        }
-
-        const isRoute = node.hasAttribute("data-route") === true;
         const href = node.href;
 
-        if (isRoute === false) {
+        if (node.hasAttribute("data-route") === false) {
             window.location = href;
 
             return;
         }
-
-        const replaceUrl = node.hasAttribute("data-replace-url") === true;
-        const saveState = replaceUrl === true ?
-            window.history.replaceState :
-            window.history.pushState;
-
-        saveState.call(history, {}, "", href);
-        router(location.pathname);
+        trigger(router, node.href, {
+            replaceUrl: node.hasAttribute("data-replace-url") === true,
+        });
     });
 
     return router;
