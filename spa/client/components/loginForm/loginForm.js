@@ -16,7 +16,7 @@ export default class LoginForm extends Component {
         super();
         this.renderForm = this.renderForm.bind(this);
     }
-    renderForm({ id, errors, submitError }) {
+    renderForm({ id, errors, submitPending, submitError }) {
         const nameId = `${ id }-login-name`;
         const passwordId = `${ id }-login-password`;
 
@@ -55,7 +55,8 @@ export default class LoginForm extends Component {
                 class={loginSubmit}
                 type="submit"
                 value="Log in"
-                disabled={errors.size !== 0}
+                data-pending={submitPending}
+                disabled={errors.size !== 0 || submitPending}
             />,
         ];
         /* eslint-enable react/jsx-key */

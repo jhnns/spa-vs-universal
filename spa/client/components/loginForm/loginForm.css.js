@@ -38,6 +38,4 @@ export const formFeedback = css({
     marginBottom: rem(10) + "rem",
 });
 
-export const loginSubmit = css({
-    ...inputSubmit,
-});
+export const loginSubmit = css(inputSubmit);
