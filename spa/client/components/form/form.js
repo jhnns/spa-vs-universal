@@ -51,6 +51,7 @@ export default class Form extends Component {
                 formData,
             };
         }
+
         const errors = validate(validators, formData);
 
         this.setState({
@@ -64,6 +65,7 @@ export default class Form extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
+
         const { errors, formData } = this.performValidation();
 
         if (errors.size === 0) {

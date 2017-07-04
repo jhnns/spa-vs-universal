@@ -1,5 +1,5 @@
 import { Component } from "preact";
-import ValidationMessage from "../validationMessage/validationMessage";
+import FormFeedback from "../formFeedback/formFeedback";
 import loginFormValidators from "./loginFormValidators";
 import createSession from "../../api/session/create";
 import {
@@ -33,9 +33,9 @@ export default class LoginForm extends Component {
                 invalid={Boolean(errors.get("name"))}
                 type="text"
             />,
-            <ValidationMessage class={validationMessage}>
+            <FormFeedback class={validationMessage}>
                 {errors.get("name")}
-            </ValidationMessage>,
+            </FormFeedback>,
             <label htmlFor={passwordId} class={loginLabel}>
                 Password
             </label>,
@@ -46,9 +46,9 @@ export default class LoginForm extends Component {
                 invalid={Boolean(errors.get("password"))}
                 type="password"
             />,
-            <ValidationMessage class={validationMessage}>
+            <FormFeedback class={validationMessage}>
                 {errors.get("password")}
-            </ValidationMessage>,
+            </FormFeedback>,
             <input
                 class={loginSubmit}
                 type="submit"
