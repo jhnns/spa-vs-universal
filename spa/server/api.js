@@ -24,6 +24,10 @@ passport.use(
     })
 );
 
+const authenticateJwt = passport.authenticate("jwt", {
+    session: false,
+    failWithError: true,
+});
 const api = mockRestMiddleware();
 
 api.addResource("/posts", dummyPosts);
@@ -44,10 +48,15 @@ export default app => {
         // Fake a delayed DB response
         setTimeout(next, config.responseDelay);
     });
-    app.use(
-        "/api/users",
-        passport.authenticate("jwt", { session: false, failWithError: true })
-    );
+    app.use("/api/users", authenticateJwt);
+    app.get("/api/session", authenticateJwt, (req, res) => {
+        res.status(200).json({
+            status: "success",
+            data: {
+                user: req.user,
+            },
+        });
+    });
     app.post("/api/session", (req, res, next) => {
         const name = req.body.name;
         const password = req.body.password;
@@ -68,7 +77,7 @@ export default app => {
         const payload = { id: user.id };
         const token = jwt.sign(payload, jwtOptions.secretOrKey);
 
-        res.status(201).json({ status: "success", token });
+        res.status(201).json({ status: "success", data: { token, user } });
     });
     app.use("/api", api.getMiddleware());
     app.use((err, req, res, next) => {
