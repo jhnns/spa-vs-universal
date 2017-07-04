@@ -5,7 +5,11 @@ function validate(validators, values) {
     const errors = new Map();
 
     for (const [key, validator] of validators.entries()) {
-        errors.set(key, validator(values));
+        const result = validator(values);
+
+        if (result !== null) {
+            errors.set(key, result);
+        }
     }
 
     return errors;
@@ -26,31 +30,45 @@ export default class Form extends Component {
     saveFormRef(formElement) {
         this.formElement = formElement;
     }
-    collectValues() {
-        const values = new Map();
+    collectFormData() {
+        const formData = new Map();
 
         for (const { name, value } of this.formElement.elements) {
-            values.set(name, value);
+            if (name !== "") {
+                formData.set(name, value);
+            }
         }
 
-        return values;
+        return formData;
     }
     performValidation() {
         const validators = this.props.validators;
+        const formData = this.collectFormData();
 
         if (validators instanceof Map === false) {
-            return;
+            return {
+                errors: new Map(),
+                formData,
+            };
         }
-
-        const errors = validate(validators, this.collectValues());
+        const errors = validate(validators, formData);
 
         this.setState({
             errors,
         });
+
+        return {
+            errors,
+            formData,
+        };
     }
     handleSubmit(e) {
         e.preventDefault();
-        this.performValidation();
+        const { errors, formData } = this.performValidation();
+
+        if (errors.size === 0) {
+            this.props.onSubmit(formData);
+        }
     }
     handleFocus(e) {
         const field = e.target;
@@ -61,7 +79,7 @@ export default class Form extends Component {
         this.setState(state => {
             const errors = state.errors;
 
-            errors.set(field.name, null);
+            errors.delete(field.name);
 
             return {
                 errors,

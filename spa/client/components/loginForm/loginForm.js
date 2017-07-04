@@ -1,6 +1,7 @@
 import { Component } from "preact";
 import ValidationMessage from "../validationMessage/validationMessage";
 import loginFormValidators from "./loginFormValidators";
+import createSession from "../../api/session/create";
 import {
     loginSheet,
     loginInput,
@@ -14,6 +15,7 @@ export default class LoginForm extends Component {
     constructor() {
         super();
         this.renderForm = this.renderForm.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     renderForm({ id, errors }) {
         const nameId = `${ id }-login-name`;
@@ -47,13 +49,25 @@ export default class LoginForm extends Component {
             <ValidationMessage class={validationMessage}>
                 {errors.get("password")}
             </ValidationMessage>,
-            <input class={loginSubmit} type="submit" value="Log in" />,
+            <input
+                class={loginSubmit}
+                type="submit"
+                value="Log in"
+                disabled={errors.size !== 0}
+            />,
         ];
         /* eslint-enable react/jsx-key */
     }
+    handleSubmit(formData) {
+        createSession(formData.get("name"), formData.get("password"));
+    }
     render(props, state) {
         return (
-            <Form class={loginSheet} validators={loginFormValidators}>
+            <Form
+                class={loginSheet}
+                validators={loginFormValidators}
+                onSubmit={this.handleSubmit}
+            >
                 {this.renderForm}
             </Form>
         );
