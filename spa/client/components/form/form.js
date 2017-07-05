@@ -78,7 +78,7 @@ export default class Form extends Component {
                     if (res && this.props.onSubmitSuccess) {
                         this.props.onSubmitSuccess(res);
                     }
-                });
+                }, console.warn.bind(console));
         }
     }
     handleFocus(e) {
@@ -118,8 +118,10 @@ export default class Form extends Component {
                     formGenerator({
                         id: this.id,
                         errors: state.errors,
-                        submitPending: submitPending !== undefined &&
-                              submitPending !== null,
+                        submitPending: submitPending === null ||
+                              submitPending === undefined ?
+                            false :
+                            submitPending,
                         submitSuccess: submit !== undefined &&
                               submit !== null,
                         submitError: submitError === null ||

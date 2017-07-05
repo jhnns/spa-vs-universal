@@ -34,11 +34,10 @@ export default class AsyncContext {
             },
             err => {
                 if (proceed() === true) {
-                    console.error(err);
                     this.pending.delete("name");
                     this.setFailState(name, err);
 
-                    return err;
+                    throw err;
                 }
 
                 console.log("An error happened in an abandoned async context");
@@ -50,7 +49,6 @@ export default class AsyncContext {
     }
     setStartState(name, initialValue) {
         this.component.setState({
-            ...this.component.state,
             [name + "Pending"]: true,
             [name + "Error"]: null,
             [name]: initialValue,
@@ -58,7 +56,6 @@ export default class AsyncContext {
     }
     setSuccessState(name, result) {
         this.component.setState({
-            ...this.component.state,
             [name + "Pending"]: false,
             [name + "Error"]: null,
             [name]: result,
@@ -66,7 +63,6 @@ export default class AsyncContext {
     }
     setFailState(name, error) {
         this.component.setState({
-            ...this.component.state,
             [name + "Pending"]: false,
             [name + "Error"]: error,
             [name]: null,

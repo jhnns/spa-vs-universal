@@ -1,9 +1,17 @@
 import { Component } from "preact";
 import Link from "../../../router/link";
+import destroySession from "../../../../api/session/destroy";
 import { root, userName, userImage } from "./personal.css";
 import headerLink from "../../link.css";
 
 export default class Personal extends Component {
+    constructor() {
+        super();
+        this.handleLogout = this.handleLogout.bind(this);
+    }
+    handleLogout() {
+        destroySession();
+    }
     render(props) {
         const user = props.user;
 
@@ -16,7 +24,7 @@ export default class Personal extends Component {
                 <img class={userImage} src={user.image} alt={user.name} />
                 <span class={userName}>{user.name}</span>
                 <span>
-                    <Link class={headerLink}>
+                    <Link class={headerLink} onClick={this.handleLogout}>
                         {"Log out"}
                     </Link>
                 </span>
