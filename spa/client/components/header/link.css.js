@@ -8,7 +8,9 @@ const activeLinkStyles = {
     borderBottom: regularBorder(),
 };
 
-export const link = css({
+export const active = css(activeLinkStyles);
+
+export default css({
     ...nexaXBold,
     color: "currentColor",
     fontSize: rem(12) + "rem",
@@ -17,5 +19,3 @@ export const link = css({
     ":hover": activeLinkStyles,
     ":active": activeLinkStyles,
 });
-
-export const activeLink = css(activeLinkStyles);

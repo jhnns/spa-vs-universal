@@ -1,7 +1,7 @@
 import { Component } from "preact";
 import Link from "../../router/link";
 import { list, listItem } from "./nav.css";
-import { link, activeLink } from "../link.css";
+import headerLink, { active as activeLink } from "../link.css";
 import routes from "../../../routes";
 
 const nbsp = "\u00a0";
@@ -14,7 +14,7 @@ export default class Nav extends Component {
                     <li class={listItem}>
                         <Link
                             route={routes.top5}
-                            class={link}
+                            class={headerLink}
                             activeClass={activeLink}
                         >
                             Top{nbsp}5
@@ -23,7 +23,7 @@ export default class Nav extends Component {
                     <li class={listItem}>
                         <Link
                             route={routes.allPosts}
-                            class={link}
+                            class={headerLink}
                             activeClass={activeLink}
                         >
                             All
@@ -32,7 +32,7 @@ export default class Nav extends Component {
                     <li class={listItem}>
                         <Link
                             route={routes.about}
-                            class={link}
+                            class={headerLink}
                             activeClass={activeLink}
                         >
                             About

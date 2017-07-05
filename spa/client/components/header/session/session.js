@@ -9,7 +9,7 @@ export default class Profile extends Component {
 
         return (
             <div class={props.class}>
-                {user ? <Personal user={user} /> : <Anonymous />}
+                {user === null ? <Anonymous /> : <Personal user={user} />}
             </div>
         );
     }

@@ -52,7 +52,7 @@ export const nav = css({
     },
 });
 
-export const profile = css({
+export const session = css({
     marginLeft: "auto",
 });
 

@@ -9,10 +9,10 @@ import {
     logo,
     nav,
     headline,
-    profile,
+    session,
     offscreen,
 } from "./header.css";
-import Profile from "./profile/profile";
+import Session from "./session/session";
 
 export default class Header extends Component {
     render() {
@@ -26,7 +26,7 @@ export default class Header extends Component {
                         </h1>
                     </Link>
                     <Nav class={nav} />
-                    <Profile class={profile} />
+                    <Session class={session} />
                 </div>
             </header>
         );
