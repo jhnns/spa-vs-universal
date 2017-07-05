@@ -150,11 +150,6 @@ export default {
             async: "common",
             minChunks: 3,
         }),
-        new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify(env),
-            },
-        }),
         new webpack.LoaderOptionsPlugin({
             minimize: isProd,
             debug: isDev,
