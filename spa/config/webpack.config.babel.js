@@ -197,6 +197,7 @@ export default {
                 /* eslint-enable camelcase */
             }),
         isProd &&
+            isAnalysis === false &&
             new CompressionPlugin({
                 test: {
                     // Fake RegExp
