@@ -3,8 +3,7 @@ import Link from "../../router/link";
 import { list, listItem } from "./nav.css";
 import { link, activeLink } from "../link.css";
 import routes from "../../../routes";
-
-const nbsp = "\u00a0";
+import { nbsp } from "../../../util/htmlEntities";
 
 export default class Nav extends Component {
     render(props) {

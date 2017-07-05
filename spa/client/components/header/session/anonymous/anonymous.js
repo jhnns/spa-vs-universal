@@ -6,6 +6,7 @@ import Placeholder from "../../../util/placeholder";
 import { link } from "../../link.css";
 import useDefault from "../../../../util/useDefault";
 import RoutingContext from "../../../router/util/routingContext";
+import { nbsp } from "../../../../util/htmlEntities";
 
 function loadLoginForm() {
     return useDefault(import("../../../loginForm/loginForm"));
@@ -36,7 +37,7 @@ export default class Anonymous extends Component {
         return (
             <div>
                 <Link params={paramsAndShowLogin} class={link}>
-                    Log in
+                    Log{nbsp}in
                 </Link>
                 <Modal activationParam={"showLogin"}>
                     <Placeholder component={loadLoginForm} props={this.loginFormProps} />
