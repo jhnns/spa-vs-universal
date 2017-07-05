@@ -10,7 +10,9 @@ export default class Post extends Component {
 
         return (
             <article class={props.class}>
-                <h2 class={headline}>{post.title}</h2>
+                <h2 class={headline}>
+                    {post.title}
+                </h2>
                 <div class={aside}>
                     <time dateTime={post.published}>
                         {fromNow(post.published)}
@@ -19,9 +21,11 @@ export default class Post extends Component {
                     {post.author}
                 </div>
                 <div>
-                    {post.content
-                        .split(lineBreak)
-                        .map(p => <p class={paragraph} key={p}>{p}</p>)}
+                    {post.content.split(lineBreak).map(p =>
+                        (<p class={paragraph} key={p}>
+                            {p}
+                        </p>)
+                    )}
                 </div>
             </article>
         );

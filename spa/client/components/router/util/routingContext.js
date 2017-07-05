@@ -18,10 +18,6 @@ export default class RoutingContext {
         };
     }
     next(route, params = null, options) {
-        trigger(
-            this.component.context.router,
-            routeToHref(route, params),
-            options
-        );
+        trigger(this.component.context.router, routeToHref(route, params), options);
     }
 }

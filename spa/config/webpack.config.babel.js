@@ -16,12 +16,7 @@ const isAnalysis = env === "analysis";
 const isProd = isAnalysis || env === "production";
 const isDev = isProd === false;
 const cssJsModules = /\.css\.js$/;
-const modulesWithDebugAssertions = [
-    "nanorouter",
-    "nanohref",
-    "nanohistory",
-    "wayfarer",
-];
+const modulesWithDebugAssertions = ["nanorouter", "nanohref", "nanohistory", "wayfarer"];
 
 export default {
     bail: isProd,
@@ -39,10 +34,7 @@ export default {
         rules: clean([
             {
                 test: /\.js$/,
-                exclude: clean([
-                    path.resolve(projectRoot, "node_modules"),
-                    isProd && cssJsModules,
-                ]),
+                exclude: clean([path.resolve(projectRoot, "node_modules"), isProd && cssJsModules]),
                 use: [
                     {
                         loader: "babel-loader",
@@ -65,9 +57,7 @@ export default {
                         },
                     },
                     {
-                        loader: require.resolve(
-                            "../tools/webpack/exportCssLoader"
-                        ),
+                        loader: require.resolve("../tools/webpack/exportCssLoader"),
                     },
                 ]),
             },
@@ -181,6 +171,12 @@ export default {
             },
         ]),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        isAnalysis &&
+            new BundleAnalyzerPlugin({
+                analyzerHost: "127.0.0.1",
+                analyzerPort: 8081,
+                openAnalyzer: false,
+            }),
         isProd &&
             new CleanPlugin(["public/*.*"], {
                 root: projectRoot,
@@ -205,22 +201,13 @@ export default {
                 test: {
                     // Fake RegExp
                     test(file) {
-                        return (
-                            /\.pre\.css$/.test(file) === false &&
-                            /\.(js|css|svg)$/.test(file) === true
-                        );
+                        return /\.pre\.css$/.test(file) === false && /\.(js|css|svg)$/.test(file) === true;
                     },
                 },
                 deleteOriginalAssets: true,
             }),
         isProd && new webpack.optimize.ModuleConcatenationPlugin(),
         isProd && new webpack.HashedModuleIdsPlugin(),
-        isAnalysis &&
-            new BundleAnalyzerPlugin({
-                analyzerHost: "127.0.0.1",
-                analyzerPort: 8081,
-                openAnalyzer: false,
-            }),
     ]),
     node: {
         fs: "empty",

@@ -26,12 +26,8 @@ app.use((req, res, next) => {
     res.sendFile(pathToIndexHtml);
 });
 
-app.server.listen(
-    process.env.PORT || config.port,
-    config.hostname || "localhost",
-    () => {
-        console.log(`Started on port ${ app.server.address().port }`);
-    }
-);
+app.server.listen(process.env.PORT || config.port, config.hostname || "localhost", () => {
+    console.log(`Started on port ${ app.server.address().port }`);
+});
 
 export default app;

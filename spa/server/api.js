@@ -82,9 +82,7 @@ export default app => {
     app.use("/api", api.getMiddleware());
     app.use((err, req, res, next) => {
         if (err.name === "AuthenticationError") {
-            res
-                .status(err.status)
-                .json({ status: "fail", message: err.message });
+            res.status(err.status).json({ status: "fail", message: err.message });
 
             return;
         }

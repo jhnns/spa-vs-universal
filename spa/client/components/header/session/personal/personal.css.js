@@ -1,11 +1,7 @@
 import { css } from "glamor";
 import { px } from "../../../../styles/scales";
 import latoLight from "../../../../styles/type/latoLight";
-import {
-    headerCollapseBreakpoint,
-    logoHeight,
-    verticalOffset,
-} from "../../common";
+import { headerCollapseBreakpoint, logoHeight, verticalOffset } from "../../common";
 import { regularFontSize } from "../../../../styles/typoSizes";
 
 export const root = css({

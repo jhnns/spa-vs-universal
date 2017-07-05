@@ -39,10 +39,7 @@ export default class Anonymous extends Component {
                     Log in
                 </Link>
                 <Modal activationParam={"showLogin"}>
-                    <Placeholder
-                        component={loadLoginForm}
-                        props={this.loginFormProps}
-                    />
+                    <Placeholder component={loadLoginForm} props={this.loginFormProps} />
                 </Modal>
             </div>
         );

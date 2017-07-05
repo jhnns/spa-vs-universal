@@ -12,10 +12,7 @@ export default function routeToHref(route, params) {
         if (patternIdx > -1) {
             params.delete(key);
 
-            href =
-                href.slice(0, patternIdx - 1) +
-                params.get(key) +
-                href.slice(patternIdx + pattern.length);
+            href = href.slice(0, patternIdx - 1) + params.get(key) + href.slice(patternIdx + pattern.length);
         }
     }
 

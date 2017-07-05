@@ -18,13 +18,6 @@ export default class GoBack extends Component {
         return this.context.previousRoute === null;
     }
     render(props) {
-        return (
-            <Link
-                title={"Go back"}
-                {...props}
-                onClick={this.handleClick}
-                replaceRoute={this.prevRouteUnknown()}
-            />
-        );
+        return <Link title={"Go back"} {...props} onClick={this.handleClick} replaceRoute={this.prevRouteUnknown()} />;
     }
 }

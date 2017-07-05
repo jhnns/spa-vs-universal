@@ -1,13 +1,7 @@
 import { Component } from "preact";
 import AsyncPropsCache from "../../util/asyncPropsCache";
 import Post from "./post/post";
-import {
-    a11yTitle,
-    root,
-    postContainer,
-    postSheet,
-    postImage,
-} from "./posts.css";
+import { a11yTitle, root, postContainer, postSheet, postImage } from "./posts.css";
 
 const empty = [];
 
@@ -23,19 +17,17 @@ export default class Posts extends Component {
 
         return (
             <div class={root}>
-                <h2 class={a11yTitle}>{props.a11yTitle}</h2>
+                <h2 class={a11yTitle}>
+                    {props.a11yTitle}
+                </h2>
                 {posts === null ?
                     empty :
-                    posts.map(post => (
-                        <div class={postContainer} key={post.id}>
-                            <img
-                                class={postImage}
-                                src={post.image}
-                                alt={post.title}
-                            />
+                    posts.map(post =>
+                        (<div class={postContainer} key={post.id}>
+                            <img class={postImage} src={post.image} alt={post.title} />
                             <Post class={postSheet} post={post} />
-                        </div>
-                    ))}
+                        </div>)
+                    )}
             </div>
         );
     }

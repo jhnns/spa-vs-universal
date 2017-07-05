@@ -21,13 +21,11 @@ export default class Personal extends Component {
         return (
             <div class={root}>
                 <img class={userImage} src={user.image} alt={user.name} />
-                <span class={userName}>{user.name}</span>
+                <span class={userName}>
+                    {user.name}
+                </span>
                 <span>
-                    <a
-                        href={window.location.href}
-                        class={headerLink}
-                        onClick={this.handleLogout}
-                    >
+                    <a href={window.location.href} class={headerLink} onClick={this.handleLogout}>
                         Log out
                     </a>
                 </span>

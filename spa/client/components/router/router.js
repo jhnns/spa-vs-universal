@@ -66,9 +66,7 @@ export default class Router extends Component {
     }
     componentWillUnmount() {
         // We cannot undo the side-effects introduced by the router
-        throw new Error(
-            "Cannot unmount router: The router is intended to be used top-level"
-        );
+        throw new Error("Cannot unmount router: The router is intended to be used top-level");
     }
     render(props, state) {
         return props.children[0];

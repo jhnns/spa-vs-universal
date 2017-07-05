@@ -1,12 +1,7 @@
 import { css } from "glamor";
-import { px, rem } from "../../styles/scales";
-import { white, mint } from "../../styles/colors";
-import sheet, { sheetPadding } from "../../styles/block/sheet";
-import {
-    regularFontSize,
-    regularLineHeight,
-    regularMaxWidth,
-} from "../../styles/typoSizes";
+import { rem } from "../../styles/scales";
+import sheet from "../../styles/block/sheet";
+import { regularFontSize, regularLineHeight } from "../../styles/typoSizes";
 import latoLight from "../../styles/type/latoLight";
 import inputText from "../../styles/block/inputText";
 import inputSubmit from "../../styles/block/inputSubmit";

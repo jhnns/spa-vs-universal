@@ -8,16 +8,8 @@ export default class Link extends Component {
 
         const preloadNextComponent = this.preloadNextComponent.bind(this);
 
-        this.handleMouseOver = createEventHandler(
-            this,
-            "onMouseOver",
-            preloadNextComponent
-        );
-        this.handleFocus = createEventHandler(
-            this,
-            "onFocus",
-            preloadNextComponent
-        );
+        this.handleMouseOver = createEventHandler(this, "onMouseOver", preloadNextComponent);
+        this.handleFocus = createEventHandler(this, "onFocus", preloadNextComponent);
     }
     preloadNextComponent() {
         const route = this.props.route;
@@ -37,26 +29,15 @@ export default class Link extends Component {
             activeClass: props.activeClass || "",
         });
 
-        Object.keys(props)
-            .filter(key => key in ownProps === false)
-            .forEach(key => {
-                aProps[key] = props[key];
-            });
+        Object.keys(props).filter(key => key in ownProps === false).forEach(key => {
+            aProps[key] = props[key];
+        });
     }
     render() {
         this.splitProps(this.props);
 
-        const {
-            route,
-            params,
-            children,
-            replaceRoute,
-            activeClass,
-        } = this.ownProps;
-        const classes = [
-            route === this.context.route ? activeClass : "",
-            this.aProps.class,
-        ];
+        const { route, params, children, replaceRoute, activeClass } = this.ownProps;
+        const classes = [route === this.context.route ? activeClass : "", this.aProps.class];
 
         return (
             <a

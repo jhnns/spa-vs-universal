@@ -6,9 +6,7 @@ export default class AsyncContext {
         this.pending = new Map();
 
         component.componentWillUnmount = (...args) => {
-            const result = unmountHandler ?
-                unmountHandler.apply(component, args) :
-                undefined;
+            const result = unmountHandler ? unmountHandler.apply(component, args) : undefined;
 
             this.reset();
 

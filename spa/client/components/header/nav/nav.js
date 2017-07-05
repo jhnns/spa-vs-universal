@@ -12,29 +12,17 @@ export default class Nav extends Component {
             <nav class={props.class}>
                 <ul class={list}>
                     <li class={listItem}>
-                        <Link
-                            route={routes.top5}
-                            class={headerLink}
-                            activeClass={activeLink}
-                        >
+                        <Link route={routes.top5} class={headerLink} activeClass={activeLink}>
                             Top{nbsp}5
                         </Link>
                     </li>
                     <li class={listItem}>
-                        <Link
-                            route={routes.allPosts}
-                            class={headerLink}
-                            activeClass={activeLink}
-                        >
+                        <Link route={routes.allPosts} class={headerLink} activeClass={activeLink}>
                             All
                         </Link>
                     </li>
                     <li class={listItem}>
-                        <Link
-                            route={routes.about}
-                            class={headerLink}
-                            activeClass={activeLink}
-                        >
+                        <Link route={routes.about} class={headerLink} activeClass={activeLink}>
                             About
                         </Link>
                     </li>

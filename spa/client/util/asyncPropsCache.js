@@ -11,9 +11,7 @@ export default class AsyncPropsCache {
 
         component.componentWillReceiveProps = (...args) => {
             const nextProps = args[0];
-            const result = willReceiveProps ?
-                willReceiveProps.apply(component, args) :
-                undefined;
+            const result = willReceiveProps ? willReceiveProps.apply(component, args) : undefined;
 
             this.fetchNewProps(nextProps);
 
@@ -24,11 +22,7 @@ export default class AsyncPropsCache {
     }
     fetchNewProps(props) {
         Object.keys(this.asyncProps)
-            .filter(
-                key =>
-                    this.cache.has(key) === false ||
-                    this.cache.get(key) !== props[key]
-            )
+            .filter(key => this.cache.has(key) === false || this.cache.get(key) !== props[key])
             .forEach(key => {
                 const prop = props[key];
 
