@@ -103,7 +103,7 @@ export default {
                     },
                 ],
             },
-            {
+            isProd && {
                 test: /\.js$/,
                 include: modulesWithDebugAssertions.map(moduleName =>
                     reg([
