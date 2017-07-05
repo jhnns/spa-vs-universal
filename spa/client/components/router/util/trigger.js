@@ -1,8 +1,8 @@
-export default function trigger(router, href, { replaceRoute = false } = {}) {
-    if (href === window.location.href) {
-        return;
-    }
-
+export default function trigger(
+    router,
+    href,
+    { replaceRoute = href === window.location.href } = {}
+) {
     const saveState = replaceRoute === true ?
         window.history.replaceState :
         window.history.pushState;

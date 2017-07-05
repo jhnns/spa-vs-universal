@@ -19,6 +19,7 @@ export default class LoginForm extends Component {
     renderForm({ id, errors, submitPending, submitError }) {
         const nameId = `${ id }-login-name`;
         const passwordId = `${ id }-login-password`;
+        const { autoFocus = false } = this.props;
 
         /* eslint-disable react/jsx-key */
         return [
@@ -31,6 +32,8 @@ export default class LoginForm extends Component {
                 class={loginInput}
                 invalid={Boolean(errors.get("name"))}
                 type="text"
+                // Let the loginForm user decide if autoFocus is appropriate
+                autoFocus={autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
             />,
             <FormFeedback class={formFeedback}>
                 {errors.get("name")}

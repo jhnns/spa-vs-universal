@@ -16,6 +16,7 @@ export default class Anonymous extends Component {
         super();
         this.loginFormProps = {
             handleLogin: this.handleLogin.bind(this),
+            autoFocus: true,
         };
         this.routingContext = new RoutingContext(this);
     }
@@ -35,7 +36,7 @@ export default class Anonymous extends Component {
         return (
             <div>
                 <Link params={paramsAndShowLogin} class={headerLink}>
-                    {"Log in"}
+                    Log in
                 </Link>
                 <Modal activationParam={"showLogin"}>
                     <Placeholder
