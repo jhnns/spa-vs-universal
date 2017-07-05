@@ -2,7 +2,20 @@
   "name": "universal",
   "version": "0.1.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "app:client:dev": "cross-env WEBPACK_ENV=development WEBPACK_TARGET=web nodemon -w config --exec \"webpack-dev-server --config config/webpack.config.babel.js\"",
+    "app:server:dev": "cross-env WEBPACK_ENV=development WEBPACK_TARGET=node nodemon -w config --exec \"webpack --config config/webpack.config.babel.js\"",
+    "app:dev": "run-p app:client:dev app:server:dev",
+    "server:dev": "cross-env NODE_ENV=development nodemon -w server --exec \"babel-node server\"",
+    "dev": "run-p server:dev app:dev",
+    "app:client:build": "cross-env WEBPACK_TARGET=web webpack --config config/webpack.config.babel.js\"",
+    "app:server:build": "cross-env WEBPACK_TARGET=node webpack --config config/webpack.config.babel.js\"",
+    "app:build": "run-p app:client:build app:server:build",
+    "server:build": "babel server -s -D -d dist",
+    "build": "run-p app:build server:build",
+    "server:start": "cross-env NODE_ENV=production node dist",
+    "start": "cross-env WEBPACK_ENV=production run-s build server:start"
+  },
   "dependencies": {
     "body-parser": "^1.17.2",
     "compression": "^1.6.2",
