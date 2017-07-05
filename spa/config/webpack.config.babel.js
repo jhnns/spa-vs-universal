@@ -165,7 +165,6 @@ export default {
                 to: path.resolve(projectRoot, "public"),
             },
         ]),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         isAnalysis &&
             new BundleAnalyzerPlugin({
                 analyzerHost: "127.0.0.1",
