@@ -5,4 +5,6 @@ export default function destroy() {
         token: null,
         user: null,
     });
+    // Only a hard reload ensures that all personal data is cleared
+    window.location.reload();
 }
