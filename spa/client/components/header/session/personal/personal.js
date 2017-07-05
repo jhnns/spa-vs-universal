@@ -1,5 +1,4 @@
 import { Component } from "preact";
-import Link from "../../../router/link";
 import destroySession from "../../../../api/session/destroy";
 import { root, userName, userImage } from "./personal.css";
 import headerLink from "../../link.css";

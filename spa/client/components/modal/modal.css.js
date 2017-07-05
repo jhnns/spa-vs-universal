@@ -1,9 +1,6 @@
 import { css } from "glamor";
 import hexToRgba from "hex-to-rgba";
-import {
-    backdrop as backdropZIndex,
-    modal as modalZIndex,
-} from "../../styles/zIndex";
+import { backdrop as backdropZIndex, modal as modalZIndex } from "../../styles/zIndex";
 import { msToSeconds } from "../../styles/timing";
 import { white, mint } from "../../styles/colors";
 import { paddingRegular } from "../../styles/paddings";
@@ -21,13 +18,9 @@ const backdropGlowAnimation = css.keyframes({
 
 export const root = css({
     position: "absolute",
-    display: "flex",
-    flexDirection: "column",
     top: 0,
     width: "100vw",
     height: "100vh",
-    alignItems: "center",
-    justifyContent: "center",
 });
 
 export const backdrop = css({
@@ -57,6 +50,9 @@ export const backdropVisible = css({
 export const window = css({
     position: "fixed",
     zIndex: modalZIndex,
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     backgroundColor: white(),
     boxShadow: "0 7px 7px rgba(0, 0, 0, 0.3)",
     "> *": {

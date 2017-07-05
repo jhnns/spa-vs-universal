@@ -3,6 +3,8 @@ import generateId from "../../util/generateId";
 import AsyncContext from "../../util/asyncContext";
 import mapToObject from "../../util/mapToObject";
 
+const toArray = Array.from.bind(Array);
+
 function validate(validators, values) {
     const errors = new Map();
 
@@ -36,7 +38,7 @@ export default class Form extends Component {
     collectFormData() {
         const formData = new Map();
 
-        for (const { name, value } of this.formElement.elements) {
+        for (const { name, value } of toArray(this.formElement.elements)) {
             if (name !== "") {
                 formData.set(name, value);
             }
@@ -72,13 +74,11 @@ export default class Form extends Component {
         const { errors, formData } = this.performValidation();
 
         if (errors.size === 0) {
-            this.async
-                .add("submit", this.props.onSubmit(mapToObject(formData)))
-                .then(res => {
-                    if (res && this.props.onSubmitSuccess) {
-                        this.props.onSubmitSuccess(res);
-                    }
-                }, console.warn.bind(console));
+            this.async.add("submit", this.props.onSubmit(mapToObject(formData))).then(res => {
+                if (res && this.props.onSubmitSuccess) {
+                    this.props.onSubmitSuccess(res);
+                }
+            }, console.warn.bind(console));
         }
     }
     handleFocus(e) {
@@ -89,10 +89,8 @@ export default class Form extends Component {
         }
 
         this.setState(state => {
-            const submitError = state.submitError !== null &&
-                state.submitError !== undefined ?
-                null :
-                state.submitError;
+            const submitError =
+                state.submitError !== null && state.submitError !== undefined ? null : state.submitError;
             const errors = state.errors;
 
             errors.delete(field.name);
@@ -118,16 +116,9 @@ export default class Form extends Component {
                     formGenerator({
                         id: this.id,
                         errors: state.errors,
-                        submitPending: submitPending === null ||
-                              submitPending === undefined ?
-                            false :
-                            submitPending,
-                        submitSuccess: submit !== undefined &&
-                              submit !== null,
-                        submitError: submitError === null ||
-                              submitError === undefined ?
-                            null :
-                            submitError,
+                        submitPending: submitPending === null || submitPending === undefined ? false : submitPending,
+                        submitSuccess: submit !== undefined && submit !== null,
+                        submitError: submitError === null || submitError === undefined ? null : submitError,
                     }) :
                     null}
             </form>

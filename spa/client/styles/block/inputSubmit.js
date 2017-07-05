@@ -15,9 +15,15 @@ const stripeAnimation = css.keyframes({
         backgroundPosition: "71px 0px",
     },
 });
+// Mobile safari adds weird styles
+const mobileSafariStyleFixes = {
+    "-webkit-appearance": "none",
+    borderRadius: 0,
+};
 
 export default {
     ...nexaXBold,
+    ...mobileSafariStyleFixes,
     width: "100%",
     fontSize: regularFontSize + "rem",
     lineHeight: regularLineHeight + "rem",

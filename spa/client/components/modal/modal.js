@@ -1,14 +1,7 @@
 import { Component, render as preactRender } from "preact";
 import URLSearchParams from "url-search-params";
 import WithContext from "../util/withContext";
-import {
-    root,
-    backdrop,
-    backdropHidden,
-    backdropVisible,
-    fadeDuration,
-    window as modalWindow,
-} from "./modal.css";
+import { root, backdrop, backdropHidden, backdropVisible, fadeDuration, window as modalWindow } from "./modal.css";
 import GoBack from "../router/goBack";
 
 function getBackParams(modalParam) {
@@ -36,10 +29,7 @@ export default class Modal extends Component {
     }
     updateActiveState(props) {
         this.setState(prevState => {
-            const active =
-                new URLSearchParams(location.search).has(
-                    props.activationParam
-                ) === true;
+            const active = new URLSearchParams(location.search).has(props.activationParam) === true;
 
             if (prevState.active === true && active === false) {
                 setTimeout(() => {
@@ -60,18 +50,12 @@ export default class Modal extends Component {
         });
     }
     renderModal(props, state) {
-        const backdropClass = [
-            backdrop,
-            state.active === true ? backdropVisible : backdropHidden,
-        ];
+        const backdropClass = [backdrop, state.active === true ? backdropVisible : backdropHidden];
 
         preactRender(
             <WithContext context={this.context}>
                 <div class={root}>
-                    <GoBack
-                        class={backdropClass.join(" ")}
-                        params={getBackParams(props.activationParam)}
-                    />
+                    <GoBack class={backdropClass.join(" ")} params={getBackParams(props.activationParam)} />
                     {props.render || state.active ?
                         <div class={modalWindow}>
                             {props.children}

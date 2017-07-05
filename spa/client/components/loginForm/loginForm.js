@@ -2,13 +2,7 @@ import { Component } from "preact";
 import FormFeedback from "../formFeedback/formFeedback";
 import loginFormValidators from "./loginFormValidators";
 import createSession from "../../api/session/create";
-import {
-    loginSheet,
-    loginInput,
-    loginLabel,
-    loginSubmit,
-    formFeedback,
-} from "./loginForm.css";
+import { loginSheet, loginInput, loginLabel, loginSubmit, formFeedback } from "./loginForm.css";
 import Form from "../form/form";
 
 export default class LoginForm extends Component {
@@ -31,6 +25,9 @@ export default class LoginForm extends Component {
                 name={"name"}
                 class={loginInput}
                 invalid={Boolean(errors.get("name"))}
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
                 type="text"
                 // Let the loginForm user decide if autoFocus is appropriate
                 autoFocus={autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
@@ -46,6 +43,9 @@ export default class LoginForm extends Component {
                 name={"password"}
                 class={loginInput}
                 invalid={Boolean(errors.get("password"))}
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
                 type="password"
             />,
             <FormFeedback class={formFeedback}>

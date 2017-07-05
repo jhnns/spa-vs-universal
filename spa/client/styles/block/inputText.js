@@ -7,8 +7,14 @@ import nexaHeavy from "../../styles/type/nexaHeavy";
 import latoLight from "../../styles/type/latoLight";
 import { regular } from "../borders";
 
+const mobileSafariStyleFixes = {
+    "-webkit-appearance": "none",
+    borderRadius: 0,
+};
+
 export default {
     ...latoLight,
+    ...mobileSafariStyleFixes,
     width: "100%",
     fontSize: regularFontSize + "rem",
     lineHeight: regularLineHeight + "rem",
