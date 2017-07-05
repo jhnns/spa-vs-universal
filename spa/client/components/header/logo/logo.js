@@ -10,7 +10,7 @@ export default class HeaderLogo extends Component {
                     class={logoImg}
                     src={logoSrc}
                     /* Do not display when CSS is not working */
-                    width={0}
+                    height={0}
                     alt={"Peerigon logo"}
                 />
             </div>

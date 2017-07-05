@@ -4,6 +4,6 @@ import { verticalOffset, logoHeight } from "../common";
 export const logoImg = css({
     position: "relative",
     display: "block",
-    width: logoHeight,
+    height: logoHeight + "rem",
     top: -verticalOffset,
 });

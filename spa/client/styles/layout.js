@@ -1,3 +1,3 @@
-import { px } from "./scales";
+import { rem } from "./scales";
 
-export const maxContentWidth = px(34);
+export const maxContentWidth = rem(34);

@@ -15,7 +15,7 @@ export const root = css({
 });
 
 export const main = css({
-    maxWidth: maxContentWidth,
+    maxWidth: maxContentWidth + "rem",
     marginLeft: "auto",
     marginRight: "auto",
     ["@media (min-width: " + paddingRegular * 20 + "px)"]: {

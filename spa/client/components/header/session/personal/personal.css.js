@@ -1,16 +1,19 @@
 import { css } from "glamor";
-import { white, black } from "../../../../styles/colors";
-import { px, rem } from "../../../../styles/scales";
-import nexaHeavy from "../../../../styles/type/nexaHeavy";
+import { px } from "../../../../styles/scales";
 import latoLight from "../../../../styles/type/latoLight";
 import {
-    regularFontSize,
-    regularLineHeight,
-} from "../../../../styles/typoSizes";
+    headerCollapseBreakpoint,
+    logoHeight,
+    verticalOffset,
+} from "../../common";
+import { regularFontSize } from "../../../../styles/typoSizes";
 
 export const root = css({
     display: "flex",
-    alignItems: "baseline",
+    alignItems: "center",
+    fontSize: regularFontSize + "rem",
+    // Avoids jumping header when the session state has changed
+    lineHeight: 0,
     "> *:not(:last-child)": {
         marginRight: px(10),
     },
@@ -18,16 +21,17 @@ export const root = css({
 
 export const userName = css({
     ...latoLight,
-    fontSize: regularFontSize + "rem",
-    lineHeight: regularLineHeight + "rem",
+    position: "relative",
+    top: -verticalOffset,
+    [headerCollapseBreakpoint]: {
+        display: "none",
+    },
 });
 
 export const userImage = css({
-    height: px(16),
+    position: "relative",
+    top: -verticalOffset,
+    display: "block",
+    height: logoHeight + "rem",
     borderRadius: "100%",
-    alignSelf: "center",
-});
-
-export const logoutLink = css({
-    ...nexaHeavy,
 });

@@ -25,7 +25,7 @@ export default class Personal extends Component {
                 <span class={userName}>{user.name}</span>
                 <span>
                     <Link class={headerLink} onClick={this.handleLogout}>
-                        {"Log out"}
+                        Log out
                     </Link>
                 </span>
             </div>

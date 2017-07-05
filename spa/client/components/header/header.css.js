@@ -5,9 +5,7 @@ import nexaHeavy from "../../styles/type/nexaHeavy";
 import { maxContentWidth } from "../../styles/layout";
 import { offscreen as a11yOffscreen } from "../../styles/a11y";
 import { header as headerZIndex } from "../../styles/zIndex";
-import { verticalOffset, logoHeight } from "./common";
-
-const multiLine = "@media (max-width: 30rem)";
+import { verticalOffset, logoHeight, headerCollapseBreakpoint } from "./common";
 
 export const root = css({
     position: "sticky",
@@ -21,7 +19,7 @@ export const root = css({
 export const content = css({
     display: "flex",
     alignItems: "center",
-    lineHeight: logoHeight + "px",
+    lineHeight: logoHeight + "rem",
     flexWrap: "wrap",
     padding: [
         px(6) + verticalOffset,
@@ -31,7 +29,7 @@ export const content = css({
         px(6) - verticalOffset,
         "px",
     ].join(""),
-    maxWidth: maxContentWidth,
+    maxWidth: maxContentWidth + "rem",
     marginLeft: "auto",
     marginRight: "auto",
 });
@@ -45,7 +43,7 @@ export const logo = css({
 
 export const nav = css({
     marginLeft: rem(12) + "rem",
-    [multiLine]: {
+    [headerCollapseBreakpoint]: {
         marginLeft: 0,
         width: "100%",
         order: 1,
