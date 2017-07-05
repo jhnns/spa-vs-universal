@@ -1,4 +1,4 @@
-export default function trigger(router, href, { replaceRoute = false }) {
+export default function trigger(router, href, { replaceRoute = false } = {}) {
     if (href === window.location.href) {
         return;
     }

@@ -7,11 +7,11 @@ import routes from "../../routes";
 import trigger from "./util/trigger";
 
 function createRouteHandler(route, component) {
-    return params => {
-        const searchParams = new URLSearchParams(window.location.search);
+    return urlParams => {
+        const params = new URLSearchParams(window.location.search);
 
-        for (const [key, value] of searchParams.entries()) {
-            params[key] = value;
+        for (const key of Object.keys(urlParams)) {
+            params.set(key, urlParams[key]);
         }
 
         component.setState({

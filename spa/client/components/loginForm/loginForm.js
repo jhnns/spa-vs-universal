@@ -47,9 +47,7 @@ export default class LoginForm extends Component {
             />,
             <FormFeedback class={formFeedback}>
                 {errors.get("password")}
-                {submitError === null || submitError === undefined ?
-                    null :
-                    submitError.message}
+                {submitError === null ? null : submitError.message}
             </FormFeedback>,
             <input
                 class={loginSubmit}
@@ -67,6 +65,7 @@ export default class LoginForm extends Component {
                 class={loginSheet}
                 validators={loginFormValidators}
                 onSubmit={createSession}
+                onSubmitSuccess={props.handleLogin}
             >
                 {this.renderForm}
             </Form>

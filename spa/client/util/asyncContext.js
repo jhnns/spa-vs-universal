@@ -26,19 +26,25 @@ export default class AsyncContext {
                 if (proceed() === true) {
                     this.pending.delete("name");
                     this.setSuccessState(name, res);
+
+                    return res;
                 }
+
+                return null;
             },
             err => {
                 if (proceed() === true) {
                     console.error(err);
                     this.pending.delete("name");
                     this.setFailState(name, err);
-                } else {
-                    console.log(
-                        "An error happened in an abandoned async context"
-                    );
-                    console.log(err);
+
+                    return err;
                 }
+
+                console.log("An error happened in an abandoned async context");
+                console.log(err);
+
+                return null;
             }
         );
     }

@@ -1,4 +1,5 @@
 import fetch from "unfetch";
+import localSession from "./local";
 import config from "../config";
 
 const defaultOptions = {
@@ -16,7 +17,8 @@ export default function create(payload) {
         .then(res => res.json())
         .then(res => {
             if (res.status === "success") {
-                config.token = res.data.token;
+                localSession.token = res.data.token;
+                localSession.user = res.data.user;
 
                 return res.data;
             }

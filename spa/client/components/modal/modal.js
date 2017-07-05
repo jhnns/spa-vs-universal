@@ -29,6 +29,11 @@ export default class Modal extends Component {
     componentWillReceiveProps(newProps) {
         this.updateActiveState(newProps);
     }
+    componentWillUnmount() {
+        // Trigger renderModal manually
+        this.updateActiveState(this.props);
+        this.renderModal(this.props, this.state);
+    }
     updateActiveState(props) {
         this.setState(prevState => {
             const active =
@@ -54,7 +59,7 @@ export default class Modal extends Component {
             };
         });
     }
-    render(props, state) {
+    renderModal(props, state) {
         const backdropClass = [
             backdrop,
             state.active === true ? backdropVisible : backdropHidden,
@@ -77,6 +82,9 @@ export default class Modal extends Component {
             this.renderContainer,
             this.renderContainer.firstElementChild
         );
+    }
+    render(props, state) {
+        this.renderModal(props, state);
 
         return null;
     }

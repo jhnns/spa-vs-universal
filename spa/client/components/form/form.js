@@ -75,7 +75,7 @@ export default class Form extends Component {
             this.async
                 .add("submit", this.props.onSubmit(mapToObject(formData)))
                 .then(res => {
-                    if (this.props.onSubmitSuccess) {
+                    if (res && this.props.onSubmitSuccess) {
                         this.props.onSubmitSuccess(res);
                     }
                 });
@@ -105,6 +105,7 @@ export default class Form extends Component {
     }
     render(props, state) {
         const formGenerator = props.children[0];
+        const { submit, submitPending, submitError } = this.state;
 
         return (
             <form
@@ -117,9 +118,14 @@ export default class Form extends Component {
                     formGenerator({
                         id: this.id,
                         errors: state.errors,
-                        submitPending: state.submitPending,
-                        submitSuccess: state.submitSuccess,
-                        submitError: state.submitError,
+                        submitPending: submitPending !== undefined &&
+                              submitPending !== null,
+                        submitSuccess: submit !== undefined &&
+                              submit !== null,
+                        submitError: submitError === null ||
+                              submitError === undefined ?
+                            null :
+                            submitError,
                     }) :
                     null}
             </form>
