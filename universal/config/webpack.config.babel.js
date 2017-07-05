@@ -1,30 +1,32 @@
 import path from "path";
-import HtmlPlugin from "html-webpack-plugin";
+// import HtmlPlugin from "html-webpack-plugin";
 import CleanPlugin from "clean-webpack-plugin";
-import CopyPlugin from "copy-webpack-plugin";
-import ExtractTextPlugin from "extract-text-webpack-plugin";
+// import CopyPlugin from "copy-webpack-plugin";
+// import ExtractTextPlugin from "extract-text-webpack-plugin";
 import CompressionPlugin from "compression-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 import reg from "readable-regex";
 import serverConfig from "./server";
-import InlinePreStylesPlugin from "../tools/webpack/InlinePreStylesPlugin";
+// import InlinePreStylesPlugin from "../tools/webpack/InlinePreStylesPlugin";
 
 const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
+const target = process.env.WEBPACK_TARGET || "browser";
+const isBrowser = target === "browser";
+const isNode = target === "node";
 const isAnalysis = env === "analysis";
 const isProd = isAnalysis || env === "production";
 const isDev = isProd === false;
-const cssJsModules = /\.css\.js$/;
 const modulesWithDebugAssertions = ["nanorouter", "nanohref", "nanohistory", "wayfarer"];
 
 export default {
     bail: isProd,
     entry: {
-        app: require.resolve(projectRoot + "/client"),
+        app: isNode ? require.resolve(projectRoot + "/app/server") : require.resolve(projectRoot + "/app/client"),
     },
     output: {
-        path: path.resolve(projectRoot, "public"),
+        path: isNode ? require.resolve(projectRoot + "/dist/bundle") : require.resolve(projectRoot + "/public"),
         filename: "[name].[chunkhash].js",
         chunkFilename: "[name].[chunkhash].js",
     },
@@ -34,53 +36,14 @@ export default {
         rules: clean([
             {
                 test: /\.js$/,
-                exclude: clean([path.resolve(projectRoot, "node_modules"), isProd && cssJsModules]),
+                exclude: clean([path.resolve(projectRoot, "node_modules")]),
                 use: [
                     {
                         loader: "babel-loader",
                         options: {
                             cacheDirectory: true,
-                            forceEnv: "browser",
+                            forceEnv: isNode ? "development" : "browser",
                         },
-                    },
-                ],
-            },
-            isProd && {
-                test: cssJsModules,
-                use: ExtractTextPlugin.extract([
-                    {
-                        loader: "babel-loader",
-                        options: {
-                            cacheDirectory: true,
-                            forceEnv: "development",
-                            sourceMaps: false,
-                        },
-                    },
-                    {
-                        loader: require.resolve("../tools/webpack/exportCssLoader"),
-                    },
-                ]),
-            },
-            {
-                test: /\.css$/,
-                // prettier-ignore
-                // Prettier adds unnecessary escapes
-                include: [
-                    path.resolve(projectRoot, "client", "styles", "type", "fonts"),
-                    path.resolve(projectRoot, "client", "styles", "pre"),
-                ],
-                use: [
-                    {
-                        loader: "file-loader",
-                        options: {
-                            name: "[name].[hash].pre.css",
-                        },
-                    },
-                    {
-                        loader: "extract-loader",
-                    },
-                    {
-                        loader: "css-loader",
                     },
                 ],
             },
@@ -91,11 +54,13 @@ export default {
                         loader: "url-loader",
                         options: {
                             limit: 8192,
+                            emitFile: isBrowser,
                         },
                     },
                 ],
             },
-            isProd && {
+            isProd &&
+            isBrowser && {
                 test: /\.(jpe?g|gif|png|svg)$/,
                 use: [
                     {
@@ -123,33 +88,12 @@ export default {
         ]),
     },
     plugins: clean([
-        new HtmlPlugin({
-            inject: "head",
-            template: require.resolve(projectRoot + "/client/index.html"),
-            minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-                removeEmptyAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: isProd,
-                minifyCSS: isProd,
-                minifyURLs: isProd,
-            },
-        }),
-        new InlinePreStylesPlugin(),
-        new ExtractTextPlugin({
-            filename: "[name].[contenthash].css",
-            allChunks: true,
-            disable: isDev,
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "app",
-            async: "common",
-            minChunks: 3,
-        }),
+        isBrowser &&
+            new webpack.optimize.CommonsChunkPlugin({
+                name: "app",
+                async: "common",
+                minChunks: 3,
+            }),
         new webpack.DefinePlugin({
             "process.env": {
                 NODE_ENV: JSON.stringify(env),
@@ -164,25 +108,27 @@ export default {
                 NODE_ENV: JSON.stringify(env),
             },
         }),
-        new CopyPlugin([
-            {
-                from: path.resolve(projectRoot, "client", "assets", "public"),
-                to: path.resolve(projectRoot, "public"),
-            },
-        ]),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        // isBrowser && new CopyPlugin([
+        //     {
+        //         from: path.resolve(projectRoot, "client", "assets", "public"),
+        //         to: path.resolve(projectRoot, "public"),
+        //     },
+        // ]),
         isAnalysis &&
+            isBrowser &&
             new BundleAnalyzerPlugin({
                 analyzerHost: "127.0.0.1",
                 analyzerPort: 8081,
                 openAnalyzer: false,
             }),
         isProd &&
+            isBrowser &&
             new CleanPlugin(["public/*.*"], {
                 root: projectRoot,
                 verbose: false,
             }),
         isProd &&
+            isBrowser &&
             new webpack.optimize.UglifyJsPlugin({
                 /* eslint-disable camelcase */
                 beautify: false,
@@ -197,6 +143,7 @@ export default {
                 /* eslint-enable camelcase */
             }),
         isProd &&
+            isBrowser &&
             isAnalysis === false &&
             new CompressionPlugin({
                 test: {
@@ -207,16 +154,18 @@ export default {
                 },
                 deleteOriginalAssets: true,
             }),
-        isProd && new webpack.optimize.ModuleConcatenationPlugin(),
-        isProd && new webpack.HashedModuleIdsPlugin(),
+        isProd && isBrowser && new webpack.optimize.ModuleConcatenationPlugin(),
+        isProd && isBrowser && new webpack.HashedModuleIdsPlugin(),
     ]),
-    node: {
-        fs: "empty",
-        net: "empty",
-        tls: "empty",
-    },
+    node: isBrowser ?
+        {
+            fs: "empty",
+            net: "empty",
+            tls: "empty",
+        } :
+        {},
     performance: {
-        hints: isProd ? "warning" : false,
+        hints: isProd && isBrowser ? "warning" : false,
     },
     devtool: `${ isDev ? "eval-" : "" }source-map`,
     devServer: {

@@ -1,0 +1,24 @@
+{
+  "plugins": ["jsx-a11y"],
+  "extends": ["peerigon/react", "plugin:jsx-a11y/recommended"],
+  "env": {
+    "browser": false,
+    "node": false
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "config/webpack.config.babel.js"
+      }
+    }
+  },
+  "rules": {
+    "class-methods-use-this": "off",
+    "react/no-unknown-property": [
+      "error",
+      {
+        "ignore": ["class"]
+      }
+    ]
+  }
+}
