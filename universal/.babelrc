@@ -1,48 +1,41 @@
 {
-    "env": {
-        "development": {
-            "presets": [
-                [
-                    "env",
-                    {
-                        "targets": "current"
-                    }
-                ]
-            ],
-            "plugins": [
-                "dynamic-import-node"
-            ],
-            "sourceMaps": "inline"
-        },
-        "browser": {
-            "presets": [
-                [
-                    "env",
-                    {
-                        "targets": {
-                            "browsers": [
-                                "last 2 versions"
-                            ]
-                        },
-                        "modules": false
-                    }
-                ]
-            ],
-            "plugins": [
-                [
-                    "transform-react-jsx",
-                    {
-                        "pragma": "h"
-                    }
-                ],
-                "transform-react-constant-elements"
-            ]
-        }
+  "env": {
+    "development": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": "current"
+          }
+        ]
+      ],
+      "sourceMaps": "inline"
     },
-    "plugins": [
-        "syntax-dynamic-import",
-        "transform-runtime",
-        "transform-object-rest-spread"
+    "browser": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 2 versions"]
+            },
+            "modules": false
+          }
+        ]
+      ]
+    }
+  },
+  "plugins": [
+    [
+      "transform-react-jsx",
+      {
+        "pragma": "h"
+      }
     ],
-    "retainLines": true
+    "transform-react-constant-elements",
+    "syntax-dynamic-import",
+    "transform-runtime",
+    "transform-object-rest-spread"
+  ],
+  "retainLines": true
 }

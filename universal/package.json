@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "app:client:dev": "cross-env WEBPACK_ENV=development WEBPACK_TARGET=browser nodemon -w config --exec \"webpack-dev-server --config config/webpack.config.babel.js\"",
-    "app:server:dev": "cross-env WEBPACK_ENV=development WEBPACK_TARGET=node nodemon -w config --exec \"webpack --config config/webpack.config.babel.js\"",
+    "app:server:dev": "cross-env WEBPACK_ENV=development WEBPACK_TARGET=node nodemon -w config --exec \"webpack --config config/webpack.config.babel.js --watch\"",
     "app:dev": "run-p app:client:dev app:server:dev",
     "server:dev": "cross-env NODE_ENV=development nodemon -w server --exec \"babel-node server\"",
     "dev": "run-p server:dev app:dev",
-    "app:client:build": "cross-env WEBPACK_TARGET=browser webpack --config config/webpack.config.babel.js\"",
-    "app:server:build": "cross-env WEBPACK_TARGET=node webpack --config config/webpack.config.babel.js\"",
+    "app:client:build": "cross-env WEBPACK_TARGET=browser webpack --config config/webpack.config.babel.js",
+    "app:server:build": "cross-env WEBPACK_TARGET=node webpack --config config/webpack.config.babel.js",
     "app:build": "run-p app:client:build app:server:build",
     "server:build": "babel server -s -D -d dist",
     "build": "run-p app:build server:build",
@@ -34,6 +34,7 @@
     "compression-webpack-plugin": "^0.4.0",
     "connect-gzip-static": "^2.0.1",
     "cors": "^2.8.3",
+    "cross-env": "^5.0.1",
     "express": "^4.15.3",
     "helmet": "^3.6.1",
     "jsonwebtoken": "^7.4.1",
@@ -44,6 +45,7 @@
     "preact": "^8.1.0",
     "preact-render-to-string": "^3.6.3",
     "readable-regex": "^1.0.0",
+    "run-p": "0.0.0",
     "webpack": "^3.0.0",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-node-externals": "^1.6.0"
@@ -56,6 +58,7 @@
     "eslint-plugin-import": "^2.5.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^7.1.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "webpack-dev-server": "^2.5.0"
   }
 }

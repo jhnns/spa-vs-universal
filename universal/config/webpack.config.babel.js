@@ -27,7 +27,7 @@ export default {
         app: isNode ? require.resolve(projectRoot + "/app/server") : require.resolve(projectRoot + "/app/client"),
     },
     output: {
-        path: isNode ? require.resolve(projectRoot + "/dist/bundle") : require.resolve(projectRoot + "/public"),
+        path: isNode ? path.resolve(projectRoot + "/dist/bundle") : path.resolve(projectRoot + "/public"),
         filename: "[name].[chunkhash].js",
         chunkFilename: "[name].[chunkhash].js",
     },
