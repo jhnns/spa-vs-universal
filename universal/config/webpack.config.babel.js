@@ -7,6 +7,7 @@ import CompressionPlugin from "compression-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 import reg from "readable-regex";
+import nodeExternals from "webpack-node-externals";
 import serverConfig from "./server";
 // import InlinePreStylesPlugin from "../tools/webpack/InlinePreStylesPlugin";
 
@@ -68,7 +69,7 @@ export default {
                     },
                 ],
             },
-            {
+            isProd && {
                 test: /\.js$/,
                 include: modulesWithDebugAssertions.map(moduleName =>
                     reg([
@@ -164,6 +165,7 @@ export default {
             tls: "empty",
         } :
         {},
+    externals: clean([isNode && nodeExternals()]),
     performance: {
         hints: isProd && isBrowser ? "warning" : false,
     },
