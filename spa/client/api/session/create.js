@@ -1,5 +1,5 @@
 import fetch from "unfetch";
-import localSession from "./local";
+import { update as updateLocalSession } from "./local";
 import config from "../config";
 
 const defaultOptions = {
@@ -17,8 +17,7 @@ export default function create(payload) {
         .then(res => res.json())
         .then(res => {
             if (res.status === "success") {
-                localSession.token = res.data.token;
-                localSession.user = res.data.user;
+                updateLocalSession(res.data);
 
                 return res.data;
             }
