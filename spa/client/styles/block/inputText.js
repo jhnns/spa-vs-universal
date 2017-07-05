@@ -5,7 +5,7 @@ import latoLight from "../../styles/type/latoLight";
 import { regular } from "../borders";
 
 const mobileSafariStyleFixes = {
-    "-webkit-appearance": "none",
+    WebkitAppearance: "none",
     borderRadius: 0,
 };
 

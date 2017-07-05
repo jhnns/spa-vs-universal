@@ -17,7 +17,7 @@ const stripeAnimation = css.keyframes({
 });
 // Mobile safari adds weird styles
 const mobileSafariStyleFixes = {
-    "-webkit-appearance": "none",
+    WebkitAppearance: "none",
     borderRadius: 0,
 };
 
