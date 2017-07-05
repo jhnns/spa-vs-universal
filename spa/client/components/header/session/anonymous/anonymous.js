@@ -3,7 +3,7 @@ import URLSearchParams from "url-search-params";
 import Link from "../../../router/link";
 import Modal from "../../../modal/modal";
 import Placeholder from "../../../util/placeholder";
-import headerLink from "../../link.css";
+import { link } from "../../link.css";
 import useDefault from "../../../../util/useDefault";
 import RoutingContext from "../../../router/util/routingContext";
 
@@ -35,7 +35,7 @@ export default class Anonymous extends Component {
 
         return (
             <div>
-                <Link params={paramsAndShowLogin} class={headerLink}>
+                <Link params={paramsAndShowLogin} class={link}>
                     Log in
                 </Link>
                 <Modal activationParam={"showLogin"}>

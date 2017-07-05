@@ -1,7 +1,7 @@
 import { Component } from "preact";
 import destroySession from "../../../../api/session/destroy";
 import { root, userName, userImage } from "./personal.css";
-import headerLink from "../../link.css";
+import { link } from "../../link.css";
 
 export default class Personal extends Component {
     constructor() {
@@ -25,7 +25,7 @@ export default class Personal extends Component {
                     {user.name}
                 </span>
                 <span>
-                    <a href={window.location.href} class={headerLink} onClick={this.handleLogout}>
+                    <a href={window.location.href} class={link} onClick={this.handleLogout}>
                         Log out
                     </a>
                 </span>
