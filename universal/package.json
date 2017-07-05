@@ -1,0 +1,29 @@
+{
+  "name": "universal",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "compression": "^1.6.2",
+    "connect-gzip-static": "^2.0.1",
+    "cors": "^2.8.3",
+    "express": "^4.15.3",
+    "helmet": "^3.6.1",
+    "jsonwebtoken": "^7.4.1",
+    "mock-rest-middleware": "^2.3.0",
+    "morgan": "^1.8.2",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.0.0",
+    "eslint-config-peerigon": "^11.3.1",
+    "eslint-import-resolver-webpack": "^0.8.3",
+    "eslint-plugin-flowtype": "^2.34.0",
+    "eslint-plugin-import": "^2.5.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-react": "^7.1.0",
+    "nodemon": "^1.11.0"
+  }
+}

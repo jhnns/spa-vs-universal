@@ -1,0 +1,12 @@
+{
+    "extends": [
+        "peerigon"
+    ],
+    "env": {
+        "node": true
+    },
+    "root": true,
+    "rules": {
+        "no-mixed-operators": "off"
+    }
+}
