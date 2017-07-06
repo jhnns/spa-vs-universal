@@ -78,6 +78,14 @@ export default {
             //         },
             //     ]),
             // },
+            isNode && {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: "css-loader",
+                    },
+                ],
+            },
             isProd &&
             isBrowser && {
                 test: /\.(jpe?g|gif|png|svg)$/,

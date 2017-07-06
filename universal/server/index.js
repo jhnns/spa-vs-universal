@@ -7,10 +7,10 @@ import connectGzipStatic from "connect-gzip-static";
 import helmet from "helmet";
 import config from "./config";
 import api from "./api";
-import universalApp from "../app/server";
 
 const app = express();
 const pathToPublic = path.resolve(process.cwd(), "dist", "public");
+const universalApp = require(path.resolve(process.cwd(), "dist", "app", "server")).default;
 
 app.server = http.createServer(app);
 

@@ -37,5 +37,6 @@
     "transform-runtime",
     "transform-object-rest-spread"
   ],
+  "ignore": ["dist/**", "node_modules/**"],
   "retainLines": true
 }
