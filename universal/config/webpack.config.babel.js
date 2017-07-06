@@ -6,7 +6,7 @@ import webpack from "webpack";
 import reg from "readable-regex";
 import nodeExternals from "webpack-node-externals";
 import CopyPlugin from "copy-webpack-plugin";
-import WriteStatsPlugin from "../tools/webpack/WriteStatsPlugin";
+import WriteAssetsJsonPlugin from "../tools/webpack/WriteAssetsJsonPlugin";
 import serverConfig from "./server";
 
 const projectRoot = path.resolve(__dirname, "..");
@@ -62,6 +62,22 @@ export default {
                     },
                 ],
             },
+            // isProd && {
+            //     test: cssJsModules,
+            //     use: ExtractTextPlugin.extract([
+            //         {
+            //             loader: "babel-loader",
+            //             options: {
+            //                 cacheDirectory: true,
+            //                 forceEnv: "development",
+            //                 sourceMaps: false,
+            //             },
+            //         },
+            //         {
+            //             loader: require.resolve("../tools/webpack/exportCssLoader"),
+            //         },
+            //     ]),
+            // },
             isProd &&
             isBrowser && {
                 test: /\.(jpe?g|gif|png|svg)$/,
@@ -111,7 +127,7 @@ export default {
                     to: path.resolve(projectRoot, "dist", "public"),
                 },
             ]),
-        isBrowser && new WriteStatsPlugin(),
+        isBrowser && new WriteAssetsJsonPlugin(),
         // isBrowser &&
         //     new ExtractTextPlugin({
         //         filename: "[name].[contenthash].css",
@@ -120,7 +136,7 @@ export default {
         //     }),
         isBrowser &&
             new webpack.optimize.CommonsChunkPlugin({
-                name: "app",
+                name: "client",
                 async: "common",
                 minChunks: 3,
             }),

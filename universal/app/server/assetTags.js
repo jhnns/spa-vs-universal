@@ -1,28 +1,26 @@
 import fs from "fs";
 import path from "path";
 import { isProd } from "../env";
+import { assetsJson as pathToAssetsJson } from "./paths";
 
-const pathToStatsJson = path.resolve(process.cwd(), "dist", "public", "stats.json");
-const cachedStats = readStats();
+const assetTags = isProd === true ? prepareAssetTags() : null;
 
-function readStats() {
-    return JSON.parse(fs.readFileSync(pathToStatsJson, "utf8"));
-}
-
-export default function getAssetsTags() {
-    const stats = isProd === true ? cachedStats : readStats();
-    const assets = [].concat(stats.assetsByChunkName.client); // ensure Array
-
-    return assets
+function prepareAssetTags() {
+    return JSON.parse(fs.readFileSync(pathToAssetsJson, "utf8"))
+        .map(asset => asset.replace(/\.gz$/, ""))
         .map(asset => {
-            if (/\.js(\.gz)?$/.test(asset) === true) {
+            if (/\.js$/.test(asset) === true) {
                 return `<script src=${ asset } defer></script>`;
             }
-            if (/\.css(\.gz)?$/.test(asset) === true) {
+            if (/\.css$/.test(asset) === true) {
                 return `<link href=${ asset } type="text/css" rel="stylesheet" />`;
             }
 
             return "";
         })
         .reduce((str, tag) => str + tag, "");
+}
+
+export default function get() {
+    return assetTags === null ? prepareAssetTags() : assetTags;
 }
