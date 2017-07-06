@@ -5,7 +5,7 @@ import compression from "compression";
 import jwt from "jsonwebtoken";
 import bodyParser from "body-parser";
 import { isProd } from "./env";
-import config from "../config/server";
+import config from "./config";
 import dummyPosts from "./dummyData/posts";
 import dummyUsers from "./dummyData/users";
 

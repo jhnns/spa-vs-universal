@@ -5,7 +5,7 @@ import cors from "cors";
 import morgan from "morgan";
 import connectGzipStatic from "connect-gzip-static";
 import helmet from "helmet";
-import config from "../config/server";
+import config from "./config";
 import api from "./api";
 
 const app = express();

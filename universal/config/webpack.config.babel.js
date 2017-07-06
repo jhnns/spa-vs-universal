@@ -1,6 +1,5 @@
 import path from "path";
 // import HtmlPlugin from "html-webpack-plugin";
-import CleanPlugin from "clean-webpack-plugin";
 // import CopyPlugin from "copy-webpack-plugin";
 // import ExtractTextPlugin from "extract-text-webpack-plugin";
 import CompressionPlugin from "compression-webpack-plugin";
@@ -20,6 +19,7 @@ const isAnalysis = env === "analysis";
 const isProd = isAnalysis || env === "production";
 const isDev = isProd === false;
 const modulesWithDebugAssertions = ["nanorouter", "nanohref", "nanohistory", "wayfarer"];
+const outputFilenamePattern = `[name].${ isBrowser ? "[chunkhash]." : "" }js`;
 
 export default {
     bail: isProd,
@@ -27,9 +27,9 @@ export default {
         app: isNode ? require.resolve(projectRoot + "/app/server") : require.resolve(projectRoot + "/app/client"),
     },
     output: {
-        path: isNode ? path.resolve(projectRoot + "/dist/bundle") : path.resolve(projectRoot + "/public"),
-        filename: "[name].[chunkhash].js",
-        chunkFilename: "[name].[chunkhash].js",
+        path: isNode ? path.resolve(projectRoot + "/dist/app") : path.resolve(projectRoot + "/dist/public"),
+        filename: outputFilenamePattern,
+        chunkFilename: outputFilenamePattern,
     },
     module: {
         // See https://github.com/webpack/webpack/pull/4348
@@ -124,12 +124,6 @@ export default {
             }),
         isProd &&
             isBrowser &&
-            new CleanPlugin(["public/*.*"], {
-                root: projectRoot,
-                verbose: false,
-            }),
-        isProd &&
-            isBrowser &&
             new webpack.optimize.UglifyJsPlugin({
                 /* eslint-disable camelcase */
                 beautify: false,
@@ -175,7 +169,7 @@ export default {
         inline: true,
         historyApiFallback: true,
         proxy: {
-            "/api": `http://${ serverConfig.hostname }:${ serverConfig.port }/`,
+            "/": `http://${ serverConfig.hostname }:${ serverConfig.port }/`,
         },
     },
 };
