@@ -5,6 +5,7 @@ import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 import reg from "readable-regex";
 import nodeExternals from "webpack-node-externals";
+import CopyPlugin from "copy-webpack-plugin";
 import WriteStatsPlugin from "../tools/webpack/WriteStatsPlugin";
 import serverConfig from "./server";
 
@@ -103,6 +104,13 @@ export default {
             minimize: isProd,
             debug: isDev,
         }),
+        isBrowser &&
+            new CopyPlugin([
+                {
+                    from: path.resolve(projectRoot, "app", "assets", "public"),
+                    to: path.resolve(projectRoot, "dist", "public"),
+                },
+            ]),
         isBrowser && new WriteStatsPlugin(),
         // isBrowser &&
         //     new ExtractTextPlugin({
