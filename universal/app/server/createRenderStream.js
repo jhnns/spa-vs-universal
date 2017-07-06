@@ -1,13 +1,20 @@
 import renderToString from "preact-render-to-string";
 import streamTemplate from "stream-template";
+import { renderStatic } from "glamor-server";
 import assetTags from "./assetTags";
 import preStyles from "./preStyles";
+
+function renderApp(app) {
+    return renderStatic(() => renderToString(app));
+}
 
 export default function createRenderStream({ title, headerTags, app }) {
     const renderedHeaderTags = Promise.resolve(headerTags).then(nodes =>
         nodes.map(renderToString).reduce((str, tag) => str + tag, "")
     );
-    const renderedApp = Promise.resolve(app).then(app => renderToString(app));
+    const renderPromise = Promise.resolve(app).then(renderApp);
+    const renderedCss = renderPromise.then(({ css }) => css);
+    const renderedHtml = renderPromise.then(({ html }) => html);
 
     return streamTemplate`<!doctype html>
 <html lang="en">
@@ -21,10 +28,13 @@ export default function createRenderStream({ title, headerTags, app }) {
   <title>${ title }</title>
   ${ assetTags() }
   ${ renderedHeaderTags }
-  ${ preStyles }
+  <style>
+    ${ preStyles }
+    ${ renderedCss }
+  </style>
 </head>
 <body>
-  ${ renderedApp }
+  ${ renderedHtml }
 </body>
 </html>
 `;

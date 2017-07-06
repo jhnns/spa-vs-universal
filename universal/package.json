@@ -44,6 +44,7 @@
     "express": "^4.15.3",
     "extract-text-webpack-plugin": "^2.1.2",
     "glamor": "^3.0.0-2",
+    "glamor-server": "^3.0.0-2",
     "helmet": "^3.6.1",
     "jsonwebtoken": "^7.4.1",
     "kewler": "^1.0.8",
