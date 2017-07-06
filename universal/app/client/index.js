@@ -1,11 +1,9 @@
-/* eslint-env browser */
-
 import { h, render as preactRender } from "preact";
 
 window.h = h;
 
 function render() {
-    const createApp = require("./createApp");
+    const createApp = require("../createApp").default;
     const { app } = createApp();
 
     preactRender(app, document.body);

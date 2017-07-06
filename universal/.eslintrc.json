@@ -1,12 +1,11 @@
 {
-    "extends": [
-        "peerigon"
-    ],
-    "env": {
-        "node": true
-    },
-    "root": true,
-    "rules": {
-        "no-mixed-operators": "off"
-    }
+  "extends": ["peerigon"],
+  "env": {
+    "node": true,
+    "browser": false
+  },
+  "root": true,
+  "rules": {
+    "no-mixed-operators": "off"
+  }
 }

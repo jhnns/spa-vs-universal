@@ -1,10 +1,6 @@
 {
   "plugins": ["jsx-a11y"],
   "extends": ["peerigon/react", "plugin:jsx-a11y/recommended"],
-  "env": {
-    "browser": false,
-    "node": false
-  },
   "settings": {
     "import/resolver": {
       "webpack": {

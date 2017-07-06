@@ -1,12 +1,10 @@
-/* eslint-env node */
-
 import { h } from "preact";
 import preactRender from "preact-render-to-string";
 
 global.h = h;
 
 export default function handleRequest(req, res) {
-    const createApp = require("./createApp").default;
+    const createApp = require("../createApp").default;
     const { app } = createApp();
     const statusCode = 200;
 
