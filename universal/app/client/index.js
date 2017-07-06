@@ -1,12 +1,12 @@
-import { h, render as preactRender } from "preact";
+import { h, render } from "preact";
 
 window.h = h;
 
-function render() {
+function startApp() {
     const createApp = require("../createApp").default;
     const { app } = createApp();
 
-    preactRender(app, document.body);
+    render(app, document.body);
 }
 
-document.addEventListener("DOMContentLoaded", render);
+document.addEventListener("DOMContentLoaded", startApp);

@@ -1,5 +1,5 @@
 import { h } from "preact";
-import preactRender from "preact-render-to-string";
+import render from "preact-render-to-string";
 
 global.h = h;
 
@@ -9,5 +9,5 @@ export default function handleRequest(req, res) {
     const statusCode = 200;
 
     res.header("Content-Type", "text/html");
-    res.status(statusCode).end(preactRender(app));
+    res.status(statusCode).end(render(app));
 }
