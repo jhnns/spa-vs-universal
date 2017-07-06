@@ -1,5 +1,5 @@
 import path from "path";
-// import ExtractTextPlugin from "extract-text-webpack-plugin";
+import ExtractTextPlugin from "extract-text-webpack-plugin";
 import CompressionPlugin from "compression-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
@@ -17,6 +17,7 @@ const isNode = target === "node";
 const isAnalysis = env === "analysis";
 const isProd = isAnalysis || env === "production";
 const isDev = isProd === false;
+const cssJsModules = /\.css\.js$/;
 const modulesWithDebugAssertions = ["nanorouter", "nanohref", "nanohistory", "wayfarer"];
 const outputFilenamePattern = `[name].${ isBrowser ? "[chunkhash]." : "" }js`;
 
@@ -62,29 +63,21 @@ export default {
                     },
                 ],
             },
-            // isProd && {
-            //     test: cssJsModules,
-            //     use: ExtractTextPlugin.extract([
-            //         {
-            //             loader: "babel-loader",
-            //             options: {
-            //                 cacheDirectory: true,
-            //                 forceEnv: "development",
-            //                 sourceMaps: false,
-            //             },
-            //         },
-            //         {
-            //             loader: require.resolve("../tools/webpack/exportCssLoader"),
-            //         },
-            //     ]),
-            // },
-            isNode && {
-                test: /\.css$/,
-                use: [
+            isBrowser && {
+                test: cssJsModules,
+                use: ExtractTextPlugin.extract([
                     {
-                        loader: "css-loader",
+                        loader: "babel-loader",
+                        options: {
+                            cacheDirectory: true,
+                            forceEnv: "development",
+                            sourceMaps: false,
+                        },
                     },
-                ],
+                    {
+                        loader: require.resolve("../tools/webpack/exportCssLoader"),
+                    },
+                ]),
             },
             isProd &&
             isBrowser && {
@@ -112,10 +105,6 @@ export default {
                     },
                 ],
             },
-            isNode && {
-                test: path.resolve(projectRoot, "app", "index.html"),
-                loader: "ejs-compiled-loader",
-            },
         ]),
     },
     plugins: clean([
@@ -136,12 +125,11 @@ export default {
                 },
             ]),
         isBrowser && new WriteAssetsJsonPlugin(),
-        // isBrowser &&
-        //     new ExtractTextPlugin({
-        //         filename: "[name].[contenthash].css",
-        //         allChunks: true,
-        //         disable: isDev,
-        //     }),
+        isBrowser &&
+            new ExtractTextPlugin({
+                filename: "[name].[contenthash].css",
+                allChunks: true,
+            }),
         isBrowser &&
             new webpack.optimize.CommonsChunkPlugin({
                 name: "client",

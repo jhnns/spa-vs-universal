@@ -1,9 +1,0 @@
-@font-face {
-    font-family: "Nexa";
-    src: local("Nexa Heavy"),
-       url("../../../assets/fonts/nexaHeavyWebfont.woff2") format("woff2"),
-       url("../../../assets/fonts/nexaHeavyWebfont.woff") format("woff"),
-       url("../../../assets/fonts/nexaHeavyWebfont.ttf") format("truetype");
-    font-weight: 900;
-    font-style: normal;
-}

@@ -18,7 +18,7 @@ const exportCss = `module.exports = (({ renderStatic }, oldExports) => {
     newExports.locals = locals;
 
     return newExports;
-})(require("glamor/server"), module.exports);`;
+})(require("glamor-server"), module.exports);`;
 
 module.exports = function (source, sourceMaps) {
     this.callback(null, source + ";" + exportCss, sourceMaps);

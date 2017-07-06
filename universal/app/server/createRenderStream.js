@@ -2,7 +2,6 @@ import renderToString from "preact-render-to-string";
 import streamTemplate from "stream-template";
 import { renderStatic } from "glamor-server";
 import assetTags from "./assetTags";
-import preStyles from "./preStyles";
 
 function renderApp(app) {
     return renderStatic(() => renderToString(app));
@@ -29,7 +28,6 @@ export default function createRenderStream({ title, headerTags, app }) {
   ${ assetTags() }
   ${ renderedHeaderTags }
   <style>
-    ${ preStyles }
     ${ renderedCss }
   </style>
 </head>

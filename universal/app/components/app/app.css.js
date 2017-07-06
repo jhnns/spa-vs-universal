@@ -4,6 +4,8 @@ import { linear } from "../../styles/gradients";
 import { maxContentWidth } from "../../styles/layout";
 import { paddingRegular } from "../../styles/paddings";
 
+import "../../styles/reset"; // eslint-disable-line import/no-unassigned-import
+
 export const root = css({
     margin: 0,
     color: black(),
