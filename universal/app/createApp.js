@@ -1,9 +1,7 @@
-import { h } from "preact";
-
-global.h = h;
+import App from "./components/app/app";
 
 export default function createApp() {
     return {
-        app: <h1>Hello World</h1>,
+        app: <App />,
     };
 }
