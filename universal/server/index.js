@@ -10,6 +10,7 @@ import api from "./api";
 import universalApp from "../app/server";
 
 const app = express();
+const pathToPublic = path.resolve(process.cwd(), "dist", "public");
 
 app.server = http.createServer(app);
 
@@ -21,7 +22,7 @@ app.use(
     })
 );
 api(app);
-app.use(connectGzipStatic(path.resolve(__dirname, "..", "public")));
+app.use(connectGzipStatic(pathToPublic));
 app.use(universalApp);
 
 app.server.listen(process.env.PORT || config.port, config.hostname || "localhost", () => {

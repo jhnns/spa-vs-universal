@@ -1,14 +1,12 @@
 import path from "path";
-// import HtmlPlugin from "html-webpack-plugin";
-// import CopyPlugin from "copy-webpack-plugin";
 // import ExtractTextPlugin from "extract-text-webpack-plugin";
 import CompressionPlugin from "compression-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
 import reg from "readable-regex";
 import nodeExternals from "webpack-node-externals";
+import WriteStatsPlugin from "../tools/webpack/WriteStatsPlugin";
 import serverConfig from "./server";
-// import InlinePreStylesPlugin from "../tools/webpack/InlinePreStylesPlugin";
 
 const projectRoot = path.resolve(__dirname, "..");
 const env = process.env.WEBPACK_ENV || "development";
@@ -88,15 +86,13 @@ export default {
                     },
                 ],
             },
+            isNode && {
+                test: path.resolve(projectRoot, "app", "index.html"),
+                loader: "ejs-compiled-loader",
+            },
         ]),
     },
     plugins: clean([
-        isBrowser &&
-            new webpack.optimize.CommonsChunkPlugin({
-                name: "app",
-                async: "common",
-                minChunks: 3,
-            }),
         new webpack.DefinePlugin({
             "process.env": {
                 NODE_ENV: JSON.stringify(env),
@@ -106,17 +102,19 @@ export default {
             minimize: isProd,
             debug: isDev,
         }),
-        new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify(env),
-            },
-        }),
-        // isBrowser && new CopyPlugin([
-        //     {
-        //         from: path.resolve(projectRoot, "client", "assets", "public"),
-        //         to: path.resolve(projectRoot, "public"),
-        //     },
-        // ]),
+        isBrowser && new WriteStatsPlugin(),
+        // isBrowser &&
+        //     new ExtractTextPlugin({
+        //         filename: "[name].[contenthash].css",
+        //         allChunks: true,
+        //         disable: isDev,
+        //     }),
+        isBrowser &&
+            new webpack.optimize.CommonsChunkPlugin({
+                name: "app",
+                async: "common",
+                minChunks: 3,
+            }),
         isAnalysis &&
             isBrowser &&
             new BundleAnalyzerPlugin({

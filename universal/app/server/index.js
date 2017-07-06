@@ -1,5 +1,5 @@
 import { h } from "preact";
-import render from "preact-render-to-string";
+import createRenderStream from "./createRenderStream";
 
 global.h = h;
 
@@ -9,5 +9,10 @@ export default function handleRequest(req, res) {
     const statusCode = 200;
 
     res.header("Content-Type", "text/html");
-    res.status(statusCode).end(render(app));
+    res.status(statusCode);
+    createRenderStream({
+        title: "Hello World",
+        headerTags: Promise.resolve([]),
+        app: Promise.resolve(app),
+    }).pipe(res);
 }
