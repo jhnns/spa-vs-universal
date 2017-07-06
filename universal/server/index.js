@@ -7,9 +7,9 @@ import connectGzipStatic from "connect-gzip-static";
 import helmet from "helmet";
 import config from "./config";
 import api from "./api";
+import universalApp from "../app/server";
 
 const app = express();
-const pathToIndexHtml = path.resolve(__dirname, "..", "public", "index.html");
 
 app.server = http.createServer(app);
 
@@ -22,9 +22,7 @@ app.use(
 );
 api(app);
 app.use(connectGzipStatic(path.resolve(__dirname, "..", "public")));
-app.use((req, res, next) => {
-    res.sendFile(pathToIndexHtml);
-});
+app.use(universalApp);
 
 app.server.listen(process.env.PORT || config.port, config.hostname || "localhost", () => {
     console.log(`Started on port ${ app.server.address().port }`);

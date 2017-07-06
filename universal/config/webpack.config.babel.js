@@ -23,14 +23,16 @@ const outputFilenamePattern = `[name].${ isBrowser ? "[chunkhash]." : "" }js`;
 
 export default {
     bail: isProd,
-    entry: {
-        app: isNode ? require.resolve(projectRoot + "/app/server") : require.resolve(projectRoot + "/app/client"),
-    },
-    output: {
+    entry: clean({
+        client: isBrowser ? require.resolve(projectRoot + "/app/client") : null,
+        server: isNode ? require.resolve(projectRoot + "/app/server") : null,
+    }),
+    output: clean({
         path: isNode ? path.resolve(projectRoot + "/dist/app") : path.resolve(projectRoot + "/dist/public"),
         filename: outputFilenamePattern,
         chunkFilename: outputFilenamePattern,
-    },
+        libraryTarget: isNode ? "commonjs2" : null,
+    }),
     module: {
         // See https://github.com/webpack/webpack/pull/4348
         strictExportPresence: isProd,
@@ -164,6 +166,9 @@ export default {
         hints: isProd && isBrowser ? "warning" : false,
     },
     devtool: `${ isDev ? "eval-" : "" }source-map`,
+    watchOptions: {
+        aggregateTimeout: isNode ? 300 : 1000,
+    },
     devServer: {
         contentBase: path.join(projectRoot, "public"),
         inline: true,

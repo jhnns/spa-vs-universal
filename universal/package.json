@@ -6,7 +6,7 @@
     "app:client:dev": "cross-env WEBPACK_ENV=development WEBPACK_TARGET=browser nodemon -w config --exec \"webpack-dev-server --config config/webpack.config.babel.js\"",
     "app:server:dev": "cross-env WEBPACK_ENV=development WEBPACK_TARGET=node nodemon -w config --exec \"webpack --config config/webpack.config.babel.js --watch\"",
     "app:dev": "run-p app:client:dev app:server:dev",
-    "server:dev": "cross-env NODE_ENV=development nodemon -w server --exec \"babel-node server\"",
+    "server:dev": "cross-env NODE_ENV=development nodemon -w server -w dist/app --exec \"babel-node server\"",
     "dev": "run-p server:dev app:dev",
     "app:client:cleanup": "rimraf dist/public/**",
     "app:server:cleanup": "rimraf dist/app/**",
