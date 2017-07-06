@@ -18,8 +18,6 @@ passport.use(
     new passportJwt.Strategy(jwtOptions, (jwtPayload, next) => {
         const user = dummyUsers.find(user => user.id === jwtPayload.id);
 
-        console.log(jwtPayload, user);
-
         next(null, user === undefined ? false : user);
     })
 );
