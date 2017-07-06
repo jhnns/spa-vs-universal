@@ -1,5 +1,6 @@
 import renderToString from "preact-render-to-string";
 import streamTemplate from "stream-template";
+import assetTags from "./assetTags";
 
 export default function createRenderStream({ title, headerTags, app }) {
     const renderedHeaderTags = Promise.resolve(headerTags).then(nodes =>
@@ -17,6 +18,7 @@ export default function createRenderStream({ title, headerTags, app }) {
   <link rel="manifest" href="/manifest.json" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <title>${ title }</title>
+  ${ assetTags() }
   ${ renderedHeaderTags }
 </head>
 <body>

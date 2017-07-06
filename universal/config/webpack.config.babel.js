@@ -21,6 +21,7 @@ const outputFilenamePattern = `[name].${ isBrowser ? "[chunkhash]." : "" }js`;
 
 export default {
     bail: isProd,
+    target: isNode ? "node" : "web",
     entry: clean({
         client: isBrowser ? require.resolve(projectRoot + "/app/client") : null,
         server: isNode ? require.resolve(projectRoot + "/app/server") : null,
