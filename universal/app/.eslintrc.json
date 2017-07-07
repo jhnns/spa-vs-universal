@@ -10,6 +10,11 @@
   },
   "rules": {
     "class-methods-use-this": "off",
+    // Prettier has issues with this.
+    // Remove this rule once https://github.com/prettier/prettier/issues/1565 is resolved
+    "newline-per-chained-call": "off",
+    // We don't do proptype validation in this example
+    "react/prop-types": "off",
     "react/no-unknown-property": [
       "error",
       {
