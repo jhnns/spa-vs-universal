@@ -6,7 +6,7 @@ const exportCss = `module.exports = (({ renderStatic }, oldExports) => {
             const exportValue = oldExports[key];
 
             if (exportValue !== undefined && exportValue !== null) {
-                locals[key] = exportValue.toString();
+                locals[key] = exportValue;
             }
         });
 
