@@ -8,12 +8,12 @@ import { root, content, logo, nav, headline, session, offscreen } from "./header
 
 export default function Header() {
     return (
-        <header class={root}>
-            <div class={content}>
-                <Link route={routes.top5} class={logo}>
+        <header {...root}>
+            <div {...content}>
+                <Link route={routes.top5} {...logo}>
                     <Logo />
-                    <h1 class={headline}>
-                        <span class={offscreen}>Peerigon</span> News
+                    <h1 {...headline}>
+                        <span {...offscreen}>Peerigon</span> News
                     </h1>
                 </Link>
                 {/* <Nav class={nav} /> */}

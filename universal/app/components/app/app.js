@@ -6,9 +6,9 @@ import RoutePlaceholder from "../router/routePlaceholder";
 export default function App() {
     return (
         <Router>
-            <div class={root}>
+            <div {...root}>
                 <Header />
-                <main class={main}>
+                <main {...main}>
                     <RoutePlaceholder />
                 </main>
             </div>
