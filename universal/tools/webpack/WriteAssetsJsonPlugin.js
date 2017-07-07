@@ -5,9 +5,8 @@ export default class WriteAssetsJsonPlugin {
     apply(compiler) {
         compiler.plugin("after-emit", (compilation, done) => {
             const stats = compilation.getStats().toJson();
-            const assets = stats.assets.map(asset => asset.name);
 
-            fs.writeFile(pathToAssetJson, JSON.stringify(assets), done);
+            fs.writeFile(pathToAssetJson, JSON.stringify(stats.entrypoints.client.assets), done);
         });
     }
 }
