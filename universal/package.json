@@ -58,6 +58,8 @@
     "preact": "^8.1.0",
     "preact-render-to-string": "^3.6.3",
     "readable-regex": "^1.0.0",
+    "redux": "^3.7.1",
+    "redux-promise": "^0.5.3",
     "rimraf": "^2.6.1",
     "stats-webpack-plugin": "^0.6.1",
     "stream-template": "0.0.4",

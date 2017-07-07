@@ -1,17 +1,57 @@
 import { root, main } from "./app.css";
 import Header from "../header/header";
-import Router from "../router/router";
+import WithContext from "../util/withContext";
 import RoutePlaceholder from "../router/routePlaceholder";
+import Namespace from "../util/namespace";
+import defineState from "../util/defineState";
 
-export default function App() {
+const moduleNs = new Namespace(module.id);
+
+export const state = defineState(moduleNs.get("app"), {
+    initial: {
+        reducers: [],
+    },
+    actions: {
+        addReducer: (state, reducer) => ({
+            ...state,
+            reducers: [...state.reducers, reducer],
+        }),
+        removeReducer: (state, reducer) => ({
+            ...state,
+            reducers: state.reducers.filter(r => reducer === r),
+        }),
+    },
+});
+
+// export function replaceReducersMiddleware(store) {
+//     return next => action => {
+//         if (action.type === state.actions.addReducer) {
+//             store.dispatch(state.actions.addReducer());
+//         } else if (action.type === state.actions.removeReducer) {
+//             store.dispatch(state.actions.removeReducer());
+//         }
+
+//         const payload = action.payload;
+//         const isPromise = typeof action.payload.then === "function";
+
+//         if (isPromise === true) {
+//             store.dispatch(state.actions.increasePending());
+//             payload.then(() => store.dispatch(state.actions.decreasePending));
+//         }
+//     };
+// }
+
+export default function App(props) {
+    const { store } = props;
+
     return (
-        <Router>
+        <WithContext context={{ store }}>
             <div {...root}>
                 <Header />
                 <main {...main}>
                     <RoutePlaceholder />
                 </main>
             </div>
-        </Router>
+        </WithContext>
     );
 }

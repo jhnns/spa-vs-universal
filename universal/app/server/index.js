@@ -1,18 +1,19 @@
-import { h } from "preact";
+import "../util/initPreact";
 import createRenderStream from "./createRenderStream";
-
-global.h = h;
+import { state as routeState } from "../components/router/route";
+import promiseState from "../util/promiseState";
+import createApp from "../createApp";
 
 export default function handleRequest(req, res) {
-    const createApp = require("../createApp").default;
-    const { app } = createApp();
-    const statusCode = 200;
+    const { app, store } = createApp();
 
     res.header("Content-Type", "text/html");
-    res.status(statusCode);
-    createRenderStream({
-        title: "Hello World",
-        headerTags: Promise.resolve([]),
-        app: Promise.resolve(app),
-    }).pipe(res);
+    promiseState(store, routeState.selector, "statusCode").then(statusCode => {
+        res.status(statusCode);
+        createRenderStream({
+            title: promiseState(store, routeState.selector, "title"),
+            headerTags: promiseState(store, routeState.selector, "headerTags"),
+            app: promiseState(store, routeState.selector, "finished").then(() => app),
+        }).pipe(res);
+    });
 }

@@ -1,8 +1,9 @@
 import perviousEventHandler from "../util/perviousEventHandler";
 import routeToHref from "../../util/routeToHref";
-import namespace from "../util/namespace";
+import Namespace from "../util/namespace";
+import defineComponent from "../util/defineComponent";
 
-const define = namespace(module.id);
+const moduleNs = new Namespace(module.id);
 
 function preloadNextComponent(route) {
     const component = route && route.component;
@@ -29,7 +30,7 @@ function splitProps(props, context) {
     props.own = own;
 }
 
-export default define.component("Link", {
+export default defineComponent(moduleNs.get("Link"), {
     handlers: {
         handleMouseOver: perviousEventHandler("onMouseOver", (e, self) => {
             preloadNextComponent(self.props.own.route);

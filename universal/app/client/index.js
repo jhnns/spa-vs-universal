@@ -1,6 +1,5 @@
-import { h, render } from "preact";
-
-window.h = h;
+import { render } from "preact";
+import "../util/initPreact";
 
 function startApp() {
     const createApp = require("../createApp").default;
