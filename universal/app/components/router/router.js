@@ -1,3 +1,5 @@
-import renderChild from "../util/renderChild";
+import namespace from "../util/namespace";
 
-export default renderChild;
+const define = namespace(module.id);
+
+export default define.component("Router", {});

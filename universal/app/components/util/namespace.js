@@ -1,7 +1,7 @@
 import { Component as PreactComponent } from "preact";
 import renderChild from "./renderChild";
 
-export default function defineComponent(name, descriptor) {
+function createComponent(displayName, descriptor) {
     const { render = renderChild } = descriptor;
 
     return class Component extends PreactComponent {
@@ -15,10 +15,18 @@ export default function defineComponent(name, descriptor) {
                     this.handlers[key] = e => handler(e, this);
                 });
             }
-            this.displayName = name;
+            this.displayName = displayName;
         }
         render() {
             return render(this);
         }
+    };
+}
+
+export default function namespace(moduleId) {
+    return {
+        component(name, descriptor) {
+            return createComponent(`${ name } (${ moduleId })`, descriptor);
+        },
     };
 }
