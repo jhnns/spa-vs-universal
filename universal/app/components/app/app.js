@@ -2,22 +2,6 @@ import { root, main } from "./app.css";
 import Header from "../header/header";
 import WithContext from "../util/withContext";
 import RoutePlaceholder from "../router/routePlaceholder";
-import Namespace from "../util/namespace";
-import defineState from "../util/defineState";
-
-const moduleNs = new Namespace(module.id);
-
-export const state = defineState(moduleNs.get("app"), {
-    initial: {
-        hasPendingActions: false,
-    },
-    actions: {
-        hasPendingActions: (state, payload) => ({
-            ...state,
-            hasPendingActions: payload,
-        }),
-    },
-});
 
 // export function replaceReducersMiddleware(store) {
 //     return next => action => {

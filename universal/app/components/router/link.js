@@ -1,6 +1,6 @@
 import perviousEventHandler from "../util/perviousEventHandler";
 import routeToHref from "../../util/routeToHref";
-import Namespace from "../util/namespace";
+import Namespace from "../../util/namespace";
 import defineComponent from "../util/defineComponent";
 
 const moduleNs = new Namespace(module.id);

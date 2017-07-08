@@ -2,11 +2,8 @@ import path from "path";
 
 const pathToEffects = path.resolve(__dirname, "..", "..", "app", "effects");
 
-export default class ResolveEffectPlugin {
+class ResolverPlugin {
     constructor(options) {
-        if (options.target === undefined) {
-            throw new Error("No target given");
-        }
         this.options = options;
     }
     rewritePath([all, partial]) {
@@ -14,15 +11,42 @@ export default class ResolveEffectPlugin {
             return all;
         }
 
-        return path.resolve(pathToEffects, this.options.target, partial);
+        return require.resolve(path.resolve(pathToEffects, this.options.target, partial));
     }
-    apply(compiler) {
-        compiler.plugin("normal-module-factory", nmf => {
-            nmf.plugin("after-resolve", (result, callback) => {
-                const pathMatch = /app[/\\]effects[/\\]registry[/\\](.*)/.exec(result.resource);
+    apply(resolver) {
+        resolver.plugin("described-resolve", (request, callback) => {
+            const requestPath = request.request;
+            const pathMatch = /[/\\]effects[/\\]registry[/\\](.*)/.exec(requestPath);
 
-                return callback(null, pathMatch === null ? result : this.rewritePath(pathMatch));
-            });
+            if (pathMatch === null) {
+                callback();
+
+                return;
+            }
+
+            resolver.doResolve(
+                "resolve",
+                Object.assign({}, request, {
+                    request: this.rewritePath(pathMatch),
+                }),
+                "resolved effect",
+                callback
+            );
+        });
+    }
+}
+
+export default class ResolveEffectPlugin {
+    constructor(options) {
+        if (options.target === undefined) {
+            throw new Error("No target given");
+        }
+        this.options = options;
+    }
+
+    apply(compiler) {
+        compiler.plugin("after-resolvers", () => {
+            compiler.resolvers.normal.apply(new ResolverPlugin(this.options));
         });
     }
 }

@@ -35,13 +35,6 @@ export default {
         chunkFilename: outputFilenamePattern,
         libraryTarget: isNode ? "commonjs2" : null,
     }),
-    resolve: {
-        alias: clean({
-            "app/native$": isNode ?
-                require.resolve(projectRoot + "/app/server") :
-                require.resolve(projectRoot + "/app/client"),
-        }),
-    },
     module: {
         // See https://github.com/webpack/webpack/pull/4348
         strictExportPresence: isProd,
