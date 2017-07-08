@@ -11,6 +11,8 @@ export default function handleRequest(req, res) {
 
     store.dispatch(routerState.actions.init(req.url));
 
+    console.log(store.getState());
+
     // promiseState(store, routeState.selector, "statusCode").then(statusCode => {
     //     res.status(statusCode);
     //     createRenderStream({

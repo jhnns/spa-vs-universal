@@ -1,11 +1,11 @@
 export default class Namespace {
-    constructor(id) {
+    constructor(id = "") {
         this.id = id;
         this.subs = new Map();
     }
-    get(id) {
+    claim(id) {
         if (this.subs.has(id) === true) {
-            return this.subs.get(id);
+            throw new Error(`${ id } is already taken in namespace ${ this.id }`);
         }
 
         const sub = new Namespace(this.id + "/" + id);
@@ -13,5 +13,8 @@ export default class Namespace {
         this.subs.set(id, sub);
 
         return sub;
+    }
+    get(id) {
+        return this.subs.get(id);
     }
 }

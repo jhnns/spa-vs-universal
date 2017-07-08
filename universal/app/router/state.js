@@ -1,8 +1,7 @@
-import Namespace from "../util/namespace";
 import defineState from "../util/defineState";
 import handleUserNavigation from "../effects/registry/handleUserNavigation";
+import namespace from "../store/namespace";
 
-const namespace = new Namespace(module.id).get("router");
 const initialState = {
     entryUrl: "",
     route: null,
@@ -11,7 +10,7 @@ const initialState = {
     previousParams: null,
 };
 
-export default defineState(namespace, {
+export default defineState(namespace.claim("router"), {
     actions: {
         init: entryUrl => (getState, updateState, exec) => {
             updateState({

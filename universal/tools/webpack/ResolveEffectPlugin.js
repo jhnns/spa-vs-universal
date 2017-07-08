@@ -11,7 +11,7 @@ class ResolverPlugin {
             return all;
         }
 
-        return require.resolve(path.resolve(pathToEffects, this.options.target, partial));
+        return path.resolve(pathToEffects, this.options.target, partial);
     }
     apply(resolver) {
         resolver.plugin("described-resolve", (request, callback) => {

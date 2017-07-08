@@ -11,7 +11,7 @@ export default function effectsMiddleware() {
                 store.dispatch({
                     type: action.scope + "/update",
                     scope: action.scope,
-                    payload: action.payload,
+                    payload: newState,
                 });
             }
 
