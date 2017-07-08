@@ -45,6 +45,6 @@ class Context {
     }
 }
 
-export default function createContext() {
-    return new Context();
+export default function createContext(store) {
+    return new Context(store);
 }

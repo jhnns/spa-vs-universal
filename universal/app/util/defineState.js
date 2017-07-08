@@ -1,12 +1,21 @@
-import { add as addReducer } from "../store/reducers";
+export default function defineState(namespace, { actions, initialState }) {
+    const id = namespace.id;
+    const wrappedActions = Object.keys(actions).reduce((wrappedActions, actionName) => {
+        const executor = actions[actionName];
 
-export default function defineState(namespace, { actions, reducer }) {
-    addReducer(namespace.id, reducer);
+        wrappedActions[actionName] = (...args) => ({
+            scope: id,
+            executor,
+            args,
+        });
+
+        return wrappedActions;
+    }, {});
 
     return {
-        actions,
+        actions: wrappedActions,
         selector(state) {
-            return state[namespace.id];
+            return state[id];
         },
     };
 }
