@@ -1,5 +1,4 @@
 import { Component as PreactComponent } from "preact";
-
 import renderChild from "./renderChild";
 
 export default function createComponent(namespace, descriptor) {

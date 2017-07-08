@@ -7,6 +7,7 @@ import reg from "readable-regex";
 import nodeExternals from "webpack-node-externals";
 import CopyPlugin from "copy-webpack-plugin";
 import WriteAssetsJsonPlugin from "../tools/webpack/WriteAssetsJsonPlugin";
+import ResolveEffectPlugin from "../tools/webpack/ResolveEffectPlugin";
 import serverConfig from "./server";
 
 const projectRoot = path.resolve(__dirname, "..");
@@ -34,6 +35,13 @@ export default {
         chunkFilename: outputFilenamePattern,
         libraryTarget: isNode ? "commonjs2" : null,
     }),
+    resolve: {
+        alias: clean({
+            "app/native$": isNode ?
+                require.resolve(projectRoot + "/app/server") :
+                require.resolve(projectRoot + "/app/client"),
+        }),
+    },
     module: {
         // See https://github.com/webpack/webpack/pull/4348
         strictExportPresence: isProd,
@@ -116,6 +124,9 @@ export default {
         new webpack.LoaderOptionsPlugin({
             minimize: isProd,
             debug: isDev,
+        }),
+        new ResolveEffectPlugin({
+            target,
         }),
         isBrowser &&
             new CopyPlugin([

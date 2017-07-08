@@ -5,7 +5,7 @@ import promiseState from "../util/promiseState";
 import createApp from "../createApp";
 
 export default function handleRequest(req, res) {
-    const { app, store } = createApp();
+    const { app, store } = createApp({});
 
     res.header("Content-Type", "text/html");
     promiseState(store, routeState.selector, "statusCode").then(statusCode => {

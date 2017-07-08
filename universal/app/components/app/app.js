@@ -9,16 +9,12 @@ const moduleNs = new Namespace(module.id);
 
 export const state = defineState(moduleNs.get("app"), {
     initial: {
-        reducers: [],
+        hasPendingActions: false,
     },
     actions: {
-        addReducer: (state, reducer) => ({
+        hasPendingActions: (state, payload) => ({
             ...state,
-            reducers: [...state.reducers, reducer],
-        }),
-        removeReducer: (state, reducer) => ({
-            ...state,
-            reducers: state.reducers.filter(r => reducer === r),
+            hasPendingActions: payload,
         }),
     },
 });
