@@ -68,6 +68,7 @@
     "stats-webpack-plugin": "^0.6.1",
     "stream-template": "0.0.4",
     "url-loader": "^0.5.9",
+    "url-search-params": "^0.9.0",
     "webpack": "^3.0.0",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-node-externals": "^1.6.0"

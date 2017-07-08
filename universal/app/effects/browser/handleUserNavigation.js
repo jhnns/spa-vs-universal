@@ -1,12 +1,12 @@
 import onLinkClick from "nanohref";
 import onHistoryPop from "nanohistory";
 import handleUserNavigation from "../registry/handleUserNavigation";
-import navigate from "../registry/navigate";
 import defineEffect from "../../util/defineEffect";
 
-export default defineEffect(handleUserNavigation, (context, router) => {
+export default defineEffect(handleUserNavigation, store => () => {
     onHistoryPop(location => {
-        router(location.pathname);
+        void 0;
+        // router(location.pathname);
     });
     onLinkClick(node => {
         const href = node.href;
@@ -17,8 +17,10 @@ export default defineEffect(handleUserNavigation, (context, router) => {
             return;
         }
 
-        context.exec(navigate, router, node.href, {
-            replaceRoute: node.hasAttribute("data-replace-url") === true,
-        });
+        void 0;
+
+        // context.exec(navigate, router, node.href, {
+        //     replaceRoute: node.hasAttribute("data-replace-url") === true,
+        // });
     });
 });

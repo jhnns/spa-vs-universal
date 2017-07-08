@@ -29,12 +29,13 @@ function addPendingEffect(pending, executor, args, promise) {
 }
 
 class Context {
-    constructor() {
+    constructor(store) {
+        this.store = store;
         this.pending = [];
     }
     exec(name, ...args) {
         const effect = registry.get(name);
-        const result = effect(this, ...args);
+        const result = effect(this.store)(...args);
 
         if (isPromise(result) === true) {
             addPendingEffect(effect, args, result);

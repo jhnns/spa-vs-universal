@@ -5,36 +5,10 @@ function combineAppReducers() {
     return combineReducers(getReducers());
 }
 
-// function trackPendingMiddleware(store) {
-//     let pendingActions = 0;
-
-//     function decreasePendingActions() {
-//         pendingActions--;
-//         if (pendingActions === 0) {
-//             store.dispatch(appState.actions.hasPendingActions(false));
-//         }
-//     }
-
-//     return next => action => {
-//         const payload = action.payload;
-//         const isPromise = typeof action.payload.then === "function";
-
-//         if (isPromise === true) {
-//             if (pendingActions === 0) {
-//                 store.dispatch(appState.actions.hasPendingActions(true));
-//             }
-//             pendingActions++;
-//             payload.then(decreasePendingActions);
-//         }
-
-//         return next(action);
-//     };
-// }
-
-function replaceReducersMiddleware(store) {
+function replaceReducersMiddleware() {
     let knownReducers = getReducers();
 
-    return next => action => {
+    return store => next => action => {
         if (knownReducers !== getReducers()) {
             store.replaceReducer(combineAppReducers());
             knownReducers = getReducers();
@@ -44,6 +18,25 @@ function replaceReducersMiddleware(store) {
     };
 }
 
+function effectsMiddleware(effectContext) {
+    return store => {
+        function exec(effect, ...args) {
+            args.push(store);
+            effectContext.exec(effect);
+        }
+
+        return next => action => {
+            if (typeof action !== "function") {
+                next(action);
+
+                return;
+            }
+
+            console.log("bla");
+        };
+    };
+}
+
 export default function createStore(initialState) {
-    return reduxCreateStore(combineAppReducers(), initialState, compose(applyMiddleware(replaceReducersMiddleware)));
+    return reduxCreateStore(combineAppReducers(), initialState, compose(applyMiddleware(replaceReducersMiddleware())));
 }
