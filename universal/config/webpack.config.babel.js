@@ -118,6 +118,9 @@ export default {
             minimize: isProd,
             debug: isDev,
         }),
+        new ResolveEffectPlugin({
+            target,
+        }),
         isBrowser &&
             new CopyPlugin([
                 {

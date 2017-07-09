@@ -1,9 +1,11 @@
 import onLinkClick from "nanohref";
 import onHistoryPop from "nanohistory";
+import { actions as routerAction } from "../../router/state";
 
 export default function handleUserNavigation(store) {
     return () => {
         onHistoryPop(location => {
+            store.dispatch(routerAction);
             void 0;
             // router(location.pathname);
         });

@@ -6,17 +6,13 @@ class ResolverPlugin {
     constructor(options) {
         this.options = options;
     }
-    rewritePath([all, partial]) {
-        if (partial === "index.js") {
-            return all;
-        }
-
-        return path.resolve(pathToEffects, this.options.target, partial);
+    rewritePath([all, effectName]) {
+        return path.resolve(pathToEffects, effectName, effectName + "." + this.options.target);
     }
     apply(resolver) {
         resolver.plugin("described-resolve", (request, callback) => {
             const requestPath = request.request;
-            const pathMatch = /[/\\]effects[/\\]registry[/\\](.*)/.exec(requestPath);
+            const pathMatch = /[/\\]effects[/\\]([^/\\]+)$/.exec(requestPath);
 
             if (pathMatch === null) {
                 callback();

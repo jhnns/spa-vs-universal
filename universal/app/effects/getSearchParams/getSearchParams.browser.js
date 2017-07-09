@@ -1,5 +1,5 @@
 import URLSearchParams from "url-search-params";
-import getSearchParams from "../registry/getSearchParams";
-import defineEffect from "../../util/defineEffect";
 
-export default defineEffect(getSearchParams, store => () => new URLSearchParams(window.location.search));
+export default function getSearchParams(store) {
+    return () => new URLSearchParams(window.location.search);
+}
