@@ -1,11 +1,15 @@
 import nanorouter from "nanorouter";
+import { actions as routerAction } from "./state";
+import routes from "../routes";
 
-export default function createRouter(routes, handleRoute) {
+export default function createRouter(store) {
     const router = nanorouter({ default: "/404" });
 
-    Object.values(routes).forEach(route => {
+    Object.keys(routes).forEach(routeName => {
+        const route = routes[routeName];
+
         router.on(route.match, urlParams => {
-            handleRoute(route, urlParams);
+            store.dispatch(routerAction.handleRouteMatch(routeName, urlParams));
         });
     });
 
