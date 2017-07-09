@@ -1,6 +1,7 @@
-import defineState from "../util/defineState";
-import handleUserNavigation from "../effects/registry/handleUserNavigation";
-import namespace from "../store/namespace";
+import handleUserNavigation from "../effects/handleUserNavigation";
+import createActions from "../store/createActions";
+
+export const scope = "router";
 
 const initialState = {
     entryUrl: "",
@@ -10,15 +11,13 @@ const initialState = {
     previousParams: null,
 };
 
-export default defineState(namespace.claim("router"), {
-    actions: {
-        init: entryUrl => (getState, updateState, exec) => {
-            updateState({
-                ...initialState,
-                entryUrl,
-            });
-            exec(handleUserNavigation);
-        },
-        handleChange: url => (getState, updateState, exec) => {},
+export const actions = createActions(scope, {
+    init: entryUrl => (getState, updateState, exec) => {
+        updateState({
+            ...initialState,
+            entryUrl,
+        });
+        exec(handleUserNavigation);
     },
+    handleChange: url => (getState, updateState, exec) => {},
 });

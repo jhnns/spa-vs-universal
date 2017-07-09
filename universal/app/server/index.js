@@ -2,14 +2,14 @@ import "../util/initPreact";
 import createRenderStream from "./createRenderStream";
 import promiseState from "../util/promiseState";
 import createApp from "../createApp";
-import routerState from "../router/state";
+import { actions as routerAction } from "../router/state";
 
 export default function handleRequest(req, res) {
     const { app, store } = createApp({});
 
     res.header("Content-Type", "text/html");
 
-    store.dispatch(routerState.actions.init(req.url));
+    store.dispatch(routerAction.init(req.url));
 
     console.log(store.getState());
 

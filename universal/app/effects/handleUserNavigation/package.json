@@ -1,0 +1,4 @@
+{
+  "main": "./handleUserNavigation.node.js",
+  "browser": "./handleUserNavigation.browser.js"
+}
