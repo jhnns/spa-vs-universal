@@ -9,9 +9,9 @@ const scope = "router";
 const initialState = {
     entryUrl: "",
     router: null,
-    route: null,
+    routeName: null,
     params: null,
-    previousRoute: null,
+    previousRouteName: null,
     previousParams: null,
 };
 
@@ -44,4 +44,16 @@ export const actions = createActions(scope, {
 
 export function getEntryUrl(state) {
     return state[scope].entryUrl;
+}
+
+export function getCurrentRoute(state) {
+    const routeName = state[scope].routeName;
+
+    return routeName === null ? "" : routes[routeName];
+}
+
+export function getPreviousRoute(state) {
+    const routeName = state[scope].previousRouteName;
+
+    return routeName === null ? "" : routes[routeName];
 }
