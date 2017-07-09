@@ -1,9 +1,15 @@
 import onLinkClick from "nanohref";
 import onHistoryPop from "nanohistory";
-import { actions as routerAction } from "../../router/state";
+import { parse } from "querystring";
+import createRouter from "../../router/createRouter";
+import { actions as routeAction } from "../../router/state";
 
-export default function handleUserNavigation(store) {
-    return () => {
+export default function initRouter(store) {
+    return entryUrl => {
+        const router = createRouter((routeName, urlParams) => {
+            store.dispatch(routeAction.handleRouteMatch(routeName, urlParams, parse(window.location.search.slice(1))));
+        });
+
         onHistoryPop(location => {
             store.dispatch(routerAction);
             void 0;
