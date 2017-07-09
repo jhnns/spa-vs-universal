@@ -1,11 +1,6 @@
-import URLSearchParams from "url-search-params";
+import { parse } from "url";
 import { getEntryUrl } from "../../router/state";
 
 export default function getSearchParams(store) {
-    return () => {
-        const entryUrl = getEntryUrl(store.getState());
-        const i = entryUrl.indexOf("?");
-
-        return new URLSearchParams(i === -1 ? "" : entryUrl.slice(i));
-    };
+    return () => parse(getEntryUrl(store.getState()), true).query;
 }

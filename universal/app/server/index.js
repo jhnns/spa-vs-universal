@@ -10,6 +10,7 @@ export default function handleRequest(req, res) {
     res.header("Content-Type", "text/html");
 
     store.dispatch(routerAction.init(req.url));
+    store.dispatch(routerAction.handleChange(req.url));
 
     console.log(store.getState());
 

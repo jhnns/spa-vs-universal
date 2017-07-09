@@ -1,5 +1,5 @@
-import URLSearchParams from "url-search-params";
+import { parse } from "querystring";
 
 export default function getSearchParams(store) {
-    return () => new URLSearchParams(window.location.search);
+    return () => parse(window.location.search.slice(1));
 }

@@ -19,9 +19,7 @@ function createRouteHandler(dispatchAction, execEffect) {
     return (route, urlParams) => {
         const params = execEffect(getSearchParams);
 
-        for (const key of Object.keys(urlParams)) {
-            params.set(key, urlParams[key]);
-        }
+        Object.assign(params, urlParams, params);
 
         dispatchAction(actions.handleRoute(route, params));
     };
@@ -35,10 +33,9 @@ export const actions = createActions(scope, {
             router: createRouter(routes, createRouteHandler(dispatchAction, execEffect)),
         });
         execEffect(handleUserNavigation);
-        dispatchAction(actions.handleChange(entryUrl));
     },
-    handleChange: url => (getState, updateState, dispatchAction, execEffect) => {
-        getState().router(url);
+    handleChange: pathname => (getState, updateState, dispatchAction, execEffect) => {
+        getState().router(pathname);
     },
     handleRoute: (route, params) => (getState, updateState, dispatchAction, execEffect) => {
         console.log("handleRoute", route, params);
