@@ -8,8 +8,7 @@
             "targets": "current"
           }
         ]
-      ],
-      "sourceMaps": "inline"
+      ]
     },
     "browser": {
       "presets": [
