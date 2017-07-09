@@ -8,8 +8,7 @@ export default function effectsMiddleware(store) {
     return next => action => {
         function dispatchUpdateAction(newState) {
             store.dispatch({
-                type: action.scope + "/update",
-                scope: action.scope,
+                type: action.scope + "/" + action.actionName + "/update",
                 payload: newState,
             });
         }

@@ -1,10 +1,16 @@
+const actionTypePattern = /^([a-z]+)\/([a-z]+)\/([a-z]+)$/gi;
+
 export default function (state = {}, updateAction) {
-    if (updateAction.scope === undefined) {
+    const typeMatch = actionTypePattern.exec(updateAction.type);
+
+    if (typeMatch === null) {
         return state;
     }
 
+    const scope = typeMatch[1];
+
     return {
         ...state,
-        [updateAction.scope]: updateAction.payload,
+        [scope]: updateAction.payload,
     };
 }

@@ -4,6 +4,7 @@ export default function createActions(scope, actions) {
 
         wrappedActions[actionName] = (...args) => ({
             scope,
+            actionName,
             executor,
             args,
         });
