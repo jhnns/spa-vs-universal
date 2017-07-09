@@ -12,12 +12,12 @@ const initialState = {
 };
 
 export const actions = createActions(scope, {
-    init: entryUrl => (getState, updateState, exec) => {
+    init: entryUrl => (getState, updateState, dispatchAction, execEffect) => {
         updateState({
             ...initialState,
             entryUrl,
         });
-        exec(handleUserNavigation);
+        execEffect(handleUserNavigation);
     },
-    handleChange: url => (getState, updateState, exec) => {},
+    handleChange: url => (getState, updateState, dispatchAction, execEffect) => {},
 });
