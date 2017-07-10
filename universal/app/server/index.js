@@ -9,11 +9,15 @@ function selectStatusCode() {
 }
 
 export default function handleRequest(req, res) {
-    const { app, store } = createApp({});
+    const { app, store } = createApp({
+        router: {
+            entryUrl: req.url,
+        },
+    });
 
     res.header("Content-Type", "text/html");
 
-    store.dispatch(routerState.actions.init(req.url));
+    store.dispatch(routerState.actions.init());
 
     console.log(store.getState());
 
