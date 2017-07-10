@@ -10,9 +10,7 @@ export const state = defineState({
     hydrate() {
         return {
             pendingActions: [],
-            toJSON() {
-                return undefined;
-            },
+            toJSON: () => undefined,
         };
     },
     actions: {

@@ -23,7 +23,7 @@ export default function defineState(descriptor) {
 
         const hydratedState = hydrate(state);
 
-        if (isDehydratable(state) === false) {
+        if (isDehydratable(hydratedState) === false) {
             hydratedState.toJSON = returnThis;
         }
 

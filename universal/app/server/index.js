@@ -12,11 +12,14 @@ export default function handleRequest(req, res) {
 
     store.dispatch(routerState.actions.init(req.url));
     store.when(documentState.select.statusCode).then(statusCode => {
+        const whenNoPendingAction = store.when(storeState.select.pendingActions, pending => pending.length === 0);
+
         res.status(statusCode);
         createRenderStream({
             title: store.when(documentState.select.title),
             headerTags: store.when(documentState.select.headerTags),
-            app: store.when(storeState.select.pendingActions, pending => pending.length === 0).then(() => app),
+            state: whenNoPendingAction.then(() => store.getState()),
+            app: whenNoPendingAction.then(() => app),
         }).pipe(res);
     });
 }

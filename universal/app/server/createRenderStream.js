@@ -1,19 +1,21 @@
 import renderToString from "preact-render-to-string";
 import streamTemplate from "stream-template";
 import { renderStatic } from "glamor-server";
+import serializeJavascript from "serialize-javascript";
 import assetTags from "./assetTags";
 
 function renderApp(app) {
     return renderStatic(() => renderToString(app));
 }
 
-export default function createRenderStream({ title, headerTags, app }) {
+export default function createRenderStream({ title, headerTags, app, state }) {
     const renderedHeaderTags = Promise.resolve(headerTags).then(nodes =>
         nodes.map(renderToString).reduce((str, tag) => str + tag, "")
     );
     const renderPromise = Promise.resolve(app).then(renderApp);
     const renderedCss = renderPromise.then(({ css }) => css);
     const renderedHtml = renderPromise.then(({ html }) => html);
+    const renderedState = state.then(state => serializeJavascript(state, { isJSON: true, space: 0 }));
 
     return streamTemplate`<!doctype html>
 <html lang="en">
@@ -34,6 +36,9 @@ export default function createRenderStream({ title, headerTags, app }) {
 <body>
   ${ renderedHtml }
 </body>
+<script>
+  window.__PRELOADED_STATE__ = ${ renderedState };
+</script>
 </html>
 `;
 }
