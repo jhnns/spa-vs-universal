@@ -1,6 +1,18 @@
 import defineState from "../../store/defineState";
 import renderChild from "../util/renderChild";
 
+function statusCode(state) {
+    return state.statusCode;
+}
+
+function title(state) {
+    return state.title;
+}
+
+function headerTags(state) {
+    return state.headerTags;
+}
+
 export const state = defineState({
     scope: "document",
     hydrate(dehydratedState) {
@@ -17,15 +29,9 @@ export const state = defineState({
         },
     },
     select: {
-        statusCode(state) {
-            return state.statusCode;
-        },
-        title(state) {
-            return state.title;
-        },
-        headerTags(state) {
-            return state.headerTags;
-        },
+        statusCode,
+        title,
+        headerTags,
     },
 });
 

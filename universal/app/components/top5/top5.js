@@ -10,7 +10,7 @@ export const state = defineState({
         };
     },
     actions: {
-        enter: newState => (getState, patchState, dispatchAction, execEffect) => {
+        enter: () => (getState, patchState, dispatchAction, execEffect) => {
             dispatchAction(
                 documentState.actions.update({
                     statusCode: 200,
@@ -18,7 +18,6 @@ export const state = defineState({
                     headerTags: [],
                 })
             );
-            patchState(newState);
         },
     },
 });
