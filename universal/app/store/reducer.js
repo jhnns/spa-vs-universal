@@ -1,4 +1,4 @@
-const actionTypePattern = /^([a-z]+)\/([a-z]+)\/([a-z]+)$/gi;
+const actionTypePattern = /^([a-z]+)\/([a-z]+)\/([a-z]+)$/i;
 
 export default function (state = {}, updateAction) {
     const typeMatch = actionTypePattern.exec(updateAction.type);

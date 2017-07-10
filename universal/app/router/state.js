@@ -31,7 +31,7 @@ export default defineState({
             const newState = {
                 routeName,
                 params,
-                previousRouteName: state.routName,
+                previousRouteName: state.routeName,
                 previousParams: state.params,
             };
 

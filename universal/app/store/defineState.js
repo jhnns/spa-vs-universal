@@ -1,6 +1,6 @@
 const emptyObj = {};
 
-function actionCreator(selectState, type, exec) {
+function actionCreator(selectState, type, execAction) {
     return (...args) => {
         function wrappedExec(store, execEffect) {
             function getState() {
@@ -10,7 +10,10 @@ function actionCreator(selectState, type, exec) {
             function patchState(patch) {
                 dispatchAction({
                     type: type + "/patch",
-                    payload: Object.assign(patch, getState(), patch),
+                    payload: {
+                        ...getState(),
+                        ...patch,
+                    },
                 });
             }
 
@@ -18,7 +21,7 @@ function actionCreator(selectState, type, exec) {
                 store.dispatch(newAction);
             }
 
-            return exec(...args)(getState, patchState, dispatchAction, execEffect);
+            return execAction(...args)(getState, patchState, dispatchAction, execEffect);
         }
 
         return {
