@@ -2,7 +2,7 @@ import "../util/initPreact";
 import createRenderStream from "./createRenderStream";
 import promiseState from "../util/promiseState";
 import createApp from "../createApp";
-import routerState from "../components/router/state";
+import { state as routerState } from "../components/router/router";
 import { state as documentState } from "../components/document/document";
 
 export default function handleRequest(req, res) {

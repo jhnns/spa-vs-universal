@@ -1,8 +1,9 @@
 import defineState from "../../store/defineState";
 import initRouter from "../../effects/initRouter";
 import routes from "../../routes";
+import renderChild from "../util/renderChild";
 
-export default defineState({
+export const state = defineState({
     scope: "router",
     hydrate(dehydratedState) {
         return {
@@ -63,3 +64,5 @@ export default defineState({
         },
     },
 });
+
+export default renderChild;
