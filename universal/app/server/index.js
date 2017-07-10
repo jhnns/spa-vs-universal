@@ -1,11 +1,13 @@
-import "../util/initPreact";
+import { h } from "preact";
 import createRenderStream from "./createRenderStream";
-import createApp from "../createApp";
-import { state as routerState } from "../components/router/router";
-import { state as documentState } from "../components/document/document";
-import { state as storeState } from "../components/store/store";
+
+global.h = h;
 
 export default function handleRequest(req, res) {
+    const createApp = require("../createApp").default;
+    const routerState = require("../components/router/router").state;
+    const documentState = require("../components/document/document").state;
+    const storeState = require("../components/store/store").state;
     const { app, store } = createApp({});
 
     res.header("Content-Type", "text/html");

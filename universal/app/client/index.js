@@ -1,9 +1,10 @@
-import { render } from "preact";
-import "../util/initPreact";
-import createApp from "../createApp";
+import { render, h } from "preact";
+
+window.h = h;
 
 function startApp() {
-    const { app, store } = createApp(window.__PRELOADED_STATE__ || {});
+    const createApp = require("../createApp").default;
+    const { app } = createApp(window.__PRELOADED_STATE__ || {});
 
     render(app, document.body, document.body.firstElementChild);
 }
