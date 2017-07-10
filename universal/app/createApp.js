@@ -1,5 +1,5 @@
 import App from "./components/app/app";
-import createStore from "./store/createStore";
+import createStore from "./components/store/createStore";
 
 export default function createApp(initialState) {
     const app = <App />;

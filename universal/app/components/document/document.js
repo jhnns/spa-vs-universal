@@ -1,4 +1,4 @@
-import defineState from "../../store/defineState";
+import defineState from "../store/defineState";
 import renderChild from "../util/renderChild";
 
 function statusCode(state) {

@@ -1,4 +1,4 @@
-import defineState from "../../store/defineState";
+import defineState from "../store/defineState";
 import initRouter from "../../effects/initRouter";
 import routes from "../../routes";
 import renderChild from "../util/renderChild";
@@ -38,11 +38,13 @@ export const state = defineState({
         };
     },
     actions: {
-        init: entryUrl => (getState, patchState, dispatchAction, execEffect) => {
+        init: entryUrl => (getState, patchState, dispatchAction) => {
             patchState({
                 entryUrl,
             });
-            execEffect(initRouter, entryUrl);
+            initRouter(entryUrl, (routeName, urlParams, searchParams) => {
+                dispatchAction(state.actions.handleRouteMatch(routeName, urlParams, searchParams));
+            });
         },
         handleRouteMatch: (routeName, urlParams, searchParams) => async (
             getState,

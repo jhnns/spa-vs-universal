@@ -1,14 +1,11 @@
 import { parse } from "url";
 import createRouter from "./createRouter";
-import { state as routerState } from "../../components/router/router";
 
-export default function initRouter(store) {
-    return entryUrl => {
-        const parsedUrl = parse(entryUrl, true);
-        const router = createRouter((routeName, urlParams) => {
-            store.dispatch(routerState.actions.handleRouteMatch(routeName, urlParams, parsedUrl.query));
-        });
+export default function initRouter(entryUrl, handleRouteMatch) {
+    const parsedUrl = parse(entryUrl, true);
+    const router = createRouter((routeName, urlParams) => {
+        handleRouteMatch(routeName, urlParams, parsedUrl.query);
+    });
 
-        router(parsedUrl.pathname);
-    };
+    router(parsedUrl.pathname);
 }

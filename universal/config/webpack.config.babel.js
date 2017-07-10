@@ -188,7 +188,7 @@ export default {
     performance: {
         hints: isProd && isBrowser ? "warning" : false,
     },
-    devtool: `${ isDev && isBrowser ? "eval-" : "" }source-map`,
+    devtool: `${ isDev ? "inline-" : "" }source-map`,
     watchOptions: {
         aggregateTimeout: isNode ? 300 : 1000,
     },

@@ -1,6 +1,7 @@
-import effectExecutor from "../effects/executor";
+import isPromise from "is-promise";
+import { state as storeState } from "./store";
 
-function executeAction(store, execEffect, action) {
+function executeAction(store, action) {
     function getState() {
         return action.scope(store.getState());
     }
@@ -19,7 +20,26 @@ function executeAction(store, execEffect, action) {
         store.dispatch(newAction);
     }
 
-    return action.exec(getState, patchState, dispatchAction, execEffect);
+    const result = action.exec(getState, patchState, dispatchAction);
+
+    return isPromise(result) === true ? handleAsyncAction(store, action, result) : result;
+}
+
+function handleAsyncAction(store, action, promise) {
+    store.dispatch(storeState.actions.addPendingAction(action));
+
+    return promise.then(
+        res => {
+            store.dispatch(storeState.actions.removePendingAction(action));
+
+            return res;
+        },
+        err => {
+            store.dispatch(storeState.actions.removePendingAction(action));
+
+            throw err;
+        }
+    );
 }
 
 export default function enhanceStore(createStore) {
@@ -31,13 +51,12 @@ export default function enhanceStore(createStore) {
             ...store,
             dispatch(action) {
                 if (typeof action.scope === "function" && typeof action.exec === "function") {
-                    return executeAction(store, execEffect, action);
+                    return executeAction(store, action);
                 }
 
                 return originalDispatch.call(this, action);
             },
         };
-        const execEffect = effectExecutor(enhancedStore);
 
         return enhancedStore;
     };
