@@ -4,23 +4,28 @@ function returnThis() {
     return this; // eslint-disable-line no-invalid-this
 }
 
+function isDehydratable(state) {
+    return typeof state.toJSON === "function";
+}
+
 export default function defineState(descriptor) {
     const scope = descriptor.scope;
     const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : returnThis;
-    const dehydrate = typeof descriptor.dehydrate === "function" ? descriptor.dehydrate : returnThis;
 
     function selectState(globalState) {
         return ensureHydrated(scope in globalState ? globalState[scope] : emptyObj);
     }
 
     function ensureHydrated(state) {
-        if (typeof state.toJSON === "function") {
+        if (isDehydratable(state) === true) {
             return state;
         }
 
         const hydratedState = hydrate(state);
 
-        hydratedState.toJSON = dehydrate;
+        if (isDehydratable(state) === false) {
+            hydratedState.toJSON = returnThis;
+        }
 
         return hydratedState;
     }
