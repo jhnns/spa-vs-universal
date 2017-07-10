@@ -1,10 +1,10 @@
 const emptyObj = {};
 
-function actionCreator(state, type, executor) {
+function actionCreator(selectState, type, exec) {
     return (...args) => {
-        function wrappedExecutor(store, execEffect) {
+        function wrappedExec(store, execEffect) {
             function getState() {
-                return state.select(store.getState());
+                return selectState(store.getState());
             }
 
             function patchState(patch) {
@@ -18,12 +18,12 @@ function actionCreator(state, type, executor) {
                 store.dispatch(newAction);
             }
 
-            return executor(getState, patchState, dispatchAction, execEffect);
+            return exec(...args)(getState, patchState, dispatchAction, execEffect);
         }
 
         return {
             type,
-            executor: wrappedExecutor,
+            exec: wrappedExec,
         };
     };
 }
@@ -43,19 +43,19 @@ export default function defineState(descriptor) {
     const selectDescriptor = "select" in descriptor === true ? descriptor.select : emptyObj;
     const actionDescriptor = "actions" in descriptor === true ? descriptor.actions : emptyObj;
     const state = {
+        actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
+            const exec = actionDescriptor[actionName];
+            const type = scope + "/" + actionName;
+
+            actions[actionName] = actionCreator(selectState, type, exec);
+
+            return actions;
+        }, {}),
         select: Object.keys(selectDescriptor).reduce((select, selectorName) => {
             const selector = selectDescriptor[selectorName];
 
             return globalState => selector(selectState(globalState));
-        }),
-        actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
-            const executor = actionDescriptor[actionName];
-            const type = scope + "/" + actionName;
-
-            actions[actionName] = actionCreator(state, type, executor);
-
-            return actions;
-        }),
+        }, {}),
     };
 
     return state;

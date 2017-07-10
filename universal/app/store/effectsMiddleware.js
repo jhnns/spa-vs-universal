@@ -5,8 +5,8 @@ export default function effectsMiddleware(store) {
     const execEffect = effectContext.exec.bind(effectContext);
 
     return next => action => {
-        if (typeof action.executor === "function") {
-            return action.executor(store, execEffect);
+        if (typeof action.exec === "function") {
+            return action.exec(store, execEffect);
         }
 
         return next(action);

@@ -14,7 +14,6 @@ export default defineState({
     actions: {
         init: entryUrl => (getState, updateState, dispatchAction, execEffect) => {
             updateState({
-                ...getState(),
                 entryUrl,
             });
             execEffect(initRouter, entryUrl);
@@ -30,7 +29,6 @@ export default defineState({
             const params = searchParams;
             const state = getState();
             const newState = {
-                ...state,
                 routeName,
                 params,
                 previousRouteName: state.routName,
@@ -41,32 +39,24 @@ export default defineState({
         },
     },
     select: {
-        entryUrl() {
+        entryUrl(state) {
+            return state.entryUrl;
+        },
+        currentLocation(state) {
+            const routeName = state.routeName;
 
+            return {
+                route: routeName === null ? null : routes[routeName],
+                params: state.params,
+            };
+        },
+        previousLocation(state) {
+            const routeName = state.previousRouteName;
+
+            return {
+                route: routeName === null ? null : routes[routeName],
+                params: state.previousParams,
+            };
         },
     },
 });
-
-export default state;
-
-export function getEntryUrl(state) {
-    return getRouterState(state).entryUrl;
-}
-
-export function getCurrentLocation(state) {
-    const routeName = getRouterState(state).routeName;
-
-    return {
-        route: routeName === null ? null : routes[routeName],
-        params: getRouterState(state).params,
-    };
-}
-
-export function getPreviousLocation(state) {
-    const routeName = getRouterState(state).previousRouteName;
-
-    return {
-        route: routeName === null ? null : routes[routeName],
-        params: getRouterState(state).previousParams,
-    };
-}
