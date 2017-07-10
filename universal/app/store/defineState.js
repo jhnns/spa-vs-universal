@@ -47,7 +47,9 @@ export default function defineState(descriptor) {
         select: Object.keys(selectDescriptor).reduce((select, selectorName) => {
             const selector = selectDescriptor[selectorName];
 
-            return globalState => selector(selectState(globalState));
+            select[selectorName] = globalState => selector(selectState(globalState));
+
+            return select;
         }, {}),
     };
 

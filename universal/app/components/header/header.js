@@ -1,7 +1,7 @@
 import { Component } from "preact";
 import Logo from "./logo/logo";
 // import Nav from "./nav/nav";
-import Link from "../router/link";
+import Link from "../router2/link";
 import routes from "../../routes";
 import { root, content, logo, nav, headline, session, offscreen } from "./header.css";
 // import Session from "./session/session";

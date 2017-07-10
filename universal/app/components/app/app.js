@@ -1,7 +1,5 @@
 import { root, main } from "./app.css";
 import Header from "../header/header";
-import WithContext from "../util/withContext";
-import RoutePlaceholder from "../router/routePlaceholder";
 
 // export function replaceReducersMiddleware(store) {
 //     return next => action => {
@@ -22,16 +20,10 @@ import RoutePlaceholder from "../router/routePlaceholder";
 // }
 
 export default function App(props) {
-    const { store } = props;
-
     return (
-        <WithContext context={{ store }}>
-            <div {...root}>
-                <Header />
-                <main {...main}>
-                    <RoutePlaceholder />
-                </main>
-            </div>
-        </WithContext>
+        <div {...root}>
+            <Header />
+            <main {...main} />
+        </div>
     );
 }
