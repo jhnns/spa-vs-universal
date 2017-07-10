@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from "path";
 import { isProd } from "../env";
 import { assetsJson as pathToAssetsJson } from "./paths";
 
