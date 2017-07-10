@@ -1,11 +1,14 @@
 import defineState from "../store/defineState";
 
-export const scope = "effects";
-
 export default defineState({
     scope: "effects",
-    initialState: {
-        pendingEffects: [],
+    hydrateState() {
+        return {
+            pendingEffects: [],
+        };
+    },
+    dehydrate() {
+        return undefined;
     },
     actions: {
         addPendingEffect: (effect, args, promise) => (getState, patchState, exec) => {

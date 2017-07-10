@@ -4,18 +4,18 @@ import routes from "../routes";
 
 export default defineState({
     scope: "router",
-    initialState: {
-        entryUrl: "",
-        routeName: null,
-        params: null,
-        previousRouteName: null,
-        previousParams: null,
+    hydrate(dehydratedState) {
+        return {
+            entryUrl: "",
+            routeName: null,
+            params: null,
+            previousRouteName: null,
+            previousParams: null,
+            ...dehydratedState,
+        };
     },
     actions: {
         init: entryUrl => (getState, updateState, dispatchAction, execEffect) => {
-            updateState({
-                entryUrl,
-            });
             execEffect(initRouter, entryUrl);
         },
         handleRouteMatch: (routeName, urlParams, searchParams) => (

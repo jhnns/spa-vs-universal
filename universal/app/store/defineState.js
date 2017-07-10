@@ -1,10 +1,10 @@
 const emptyObj = {};
 
-function actionCreator(selectState, type, execAction) {
+function actionCreator(scope, type, selectHydratedState, execAction) {
     return (...args) => {
         function wrappedExec(store, execEffect) {
             function getState() {
-                return selectState(store.getState());
+                return selectHydratedState(store);
             }
 
             function patchState(patch) {
@@ -31,26 +31,51 @@ function actionCreator(selectState, type, execAction) {
     };
 }
 
+function enhanceStore(store) {
+    if ("dehydrators" in store === false) {
+        store.dehydrators = new Map();
+    }
+}
+
 export default function defineState(descriptor) {
     const scope = descriptor.scope;
 
     function selectState(globalState) {
-        return scope in globalState ? globalState[scope] : initialState;
+        return scope in globalState ? globalState[scope] : emptyObj;
     }
 
-    if (!scope) {
+    function selectHydratedState(store) {
+        const hydrate = descriptor.hydrate;
+        let state = selectState(store.getState());
+
+        if (store.dehydrators.has(scope) === false) {
+            if (typeof hydrate === "function") {
+                state = hydrate(state);
+            }
+            store.dehydrators.set(scope, dehydrateState);
+        }
+
+        return state;
+    }
+
+    function dehydrateState(hydratedState) {
+        const dehydrate = descriptor.dehydrate;
+
+        return typeof dehydrate === "function" ? dehydrate(hydratedState) : hydratedState;
+    }
+
+    if (typeof scope !== "string") {
         throw new Error("Missing scope");
     }
 
-    const initialState = "initialState" in descriptor === true ? descriptor.initialState : emptyObj;
     const selectDescriptor = "select" in descriptor === true ? descriptor.select : emptyObj;
     const actionDescriptor = "actions" in descriptor === true ? descriptor.actions : emptyObj;
     const state = {
         actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
-            const exec = actionDescriptor[actionName];
+            const execAction = actionDescriptor[actionName];
             const type = scope + "/" + actionName;
 
-            actions[actionName] = actionCreator(selectState, type, exec);
+            actions[actionName] = actionCreator(scope, type, selectHydratedState, execAction);
 
             return actions;
         }, {}),
