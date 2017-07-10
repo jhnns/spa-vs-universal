@@ -1,9 +1,9 @@
 import "../util/initPreact";
 import createRenderStream from "./createRenderStream";
-import promiseState from "../util/promiseState";
 import createApp from "../createApp";
 import { state as routerState } from "../components/router/router";
 import { state as documentState } from "../components/document/document";
+import { state as storeState } from "../components/store/store";
 
 export default function handleRequest(req, res) {
     const { app, store } = createApp({});
@@ -11,13 +11,12 @@ export default function handleRequest(req, res) {
     res.header("Content-Type", "text/html");
 
     store.dispatch(routerState.actions.init(req.url));
-
-    promiseState(store, documentState.select.statusCode).then(statusCode => {
+    store.when(documentState.select.statusCode).then(statusCode => {
         res.status(statusCode);
         createRenderStream({
-            title: promiseState(store, documentState.select.title),
-            headerTags: promiseState(store, documentState.select.headerTags),
-            app,
+            title: store.when(documentState.select.title),
+            headerTags: store.when(documentState.select.headerTags),
+            app: store.when(storeState.select.pendingActions, pending => pending.length === 0).then(() => app),
         }).pipe(res);
     });
 }

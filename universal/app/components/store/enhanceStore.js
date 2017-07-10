@@ -42,6 +42,10 @@ function handleAsyncAction(store, action, promise) {
     );
 }
 
+function isDefined(result) {
+    return result !== null && result !== undefined;
+}
+
 export default function enhanceStore(createStore) {
     return (reducers, initialState, enhancers) => {
         const store = createStore(reducers, initialState, enhancers);
@@ -55,6 +59,18 @@ export default function enhanceStore(createStore) {
                 }
 
                 return originalDispatch.call(this, action);
+            },
+            when(select, condition = isDefined) {
+                return new Promise((resolve, reject) => {
+                    const unsubscribe = this.subscribe(() => {
+                        const result = select(this.getState());
+
+                        if (condition(result) === true) {
+                            unsubscribe();
+                            resolve(result);
+                        }
+                    });
+                });
             },
         };
 
