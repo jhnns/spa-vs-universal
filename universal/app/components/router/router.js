@@ -46,12 +46,7 @@ export const state = defineState({
                 dispatchAction(state.actions.handleRouteMatch(routeName, urlParams, searchParams));
             });
         },
-        handleRouteMatch: (routeName, urlParams, searchParams) => async (
-            getState,
-            updateState,
-            dispatchAction,
-            execEffect
-        ) => {
+        handleRouteMatch: (routeName, urlParams, searchParams) => async (getState, updateState, dispatchAction) => {
             const params = {
                 ...searchParams,
                 ...urlParams,
@@ -69,7 +64,9 @@ export const state = defineState({
 
             const component = await route.component();
 
-            dispatchAction(component.state.actions.enter(route, params));
+            if ("state" in component === true && typeof component.state.actions.enter === "function") {
+                dispatchAction(component.state.actions.enter(route, params));
+            }
         },
     },
     select: {

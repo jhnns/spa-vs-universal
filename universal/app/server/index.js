@@ -15,8 +15,8 @@ export default function handleRequest(req, res) {
     promiseState(store, documentState.select.statusCode).then(statusCode => {
         res.status(statusCode);
         createRenderStream({
-            title: promiseState(store, documentState.select.title, "title"),
-            headerTags: promiseState(store, documentState.select.headerTags, "headerTags"),
+            title: promiseState(store, documentState.select.title),
+            headerTags: promiseState(store, documentState.select.headerTags),
             app,
         }).pipe(res);
     });

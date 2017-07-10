@@ -51,7 +51,7 @@ export default function enhanceStore(createStore) {
             ...store,
             dispatch(action) {
                 if (typeof action.scope === "function" && typeof action.exec === "function") {
-                    return executeAction(store, action);
+                    return executeAction(enhancedStore, action);
                 }
 
                 return originalDispatch.call(this, action);
