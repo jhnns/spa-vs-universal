@@ -10,10 +10,10 @@ function prepareAssetTags() {
         .map(asset => asset.replace(/\.gz$/, ""))
         .map(asset => {
             if (/\.js$/.test(asset) === true) {
-                return `<script src=${ asset } defer></script>`;
+                return `<script src="${ asset }" defer></script>`;
             }
             if (/\.css$/.test(asset) === true) {
-                return `<link href=${ asset } type="text/css" rel="stylesheet" />`;
+                return `<link href="${ asset }" type="text/css" rel="stylesheet" />`;
             }
 
             return "";
