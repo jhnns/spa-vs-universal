@@ -16,6 +16,7 @@ export default defineState({
     },
     actions: {
         init: entryUrl => (getState, updateState, dispatchAction, execEffect) => {
+            console.log("init", entryUrl);
             execEffect(initRouter, entryUrl);
         },
         handleRouteMatch: (routeName, urlParams, searchParams) => (
@@ -24,6 +25,7 @@ export default defineState({
             dispatchAction,
             execEffect
         ) => {
+            console.log("route match");
             Object.assign(searchParams, urlParams);
 
             const params = searchParams;

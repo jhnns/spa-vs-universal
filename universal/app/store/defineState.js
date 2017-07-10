@@ -1,67 +1,28 @@
 const emptyObj = {};
 
-function actionCreator(scope, type, selectHydratedState, execAction) {
-    return (...args) => {
-        function wrappedExec(store, execEffect) {
-            function getState() {
-                return selectHydratedState(store);
-            }
-
-            function patchState(patch) {
-                dispatchAction({
-                    type: type + "/patch",
-                    payload: {
-                        ...getState(),
-                        ...patch,
-                    },
-                });
-            }
-
-            function dispatchAction(newAction) {
-                store.dispatch(newAction);
-            }
-
-            return execAction(...args)(getState, patchState, dispatchAction, execEffect);
-        }
-
-        return {
-            type,
-            exec: wrappedExec,
-        };
-    };
-}
-
-function enhanceStore(store) {
-    if ("dehydrators" in store === false) {
-        store.dehydrators = new Map();
-    }
+function returnThis() {
+    return this; // eslint-disable-line no-invalid-this
 }
 
 export default function defineState(descriptor) {
     const scope = descriptor.scope;
+    const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : returnThis;
+    const dehydrate = typeof descriptor.dehydrate === "function" ? descriptor.dehydrate : returnThis;
 
     function selectState(globalState) {
-        return scope in globalState ? globalState[scope] : emptyObj;
+        return ensureHydrated(scope in globalState ? globalState[scope] : emptyObj);
     }
 
-    function selectHydratedState(store) {
-        const hydrate = descriptor.hydrate;
-        let state = selectState(store.getState());
-
-        if (store.dehydrators.has(scope) === false) {
-            if (typeof hydrate === "function") {
-                state = hydrate(state);
-            }
-            store.dehydrators.set(scope, dehydrateState);
+    function ensureHydrated(state) {
+        if (typeof state.toJSON === "function") {
+            return state;
         }
 
-        return state;
-    }
+        const hydratedState = hydrate(state);
 
-    function dehydrateState(hydratedState) {
-        const dehydrate = descriptor.dehydrate;
+        hydratedState.toJSON = dehydrate;
 
-        return typeof dehydrate === "function" ? dehydrate(hydratedState) : hydratedState;
+        return hydratedState;
     }
 
     if (typeof scope !== "string") {
@@ -72,10 +33,14 @@ export default function defineState(descriptor) {
     const actionDescriptor = "actions" in descriptor === true ? descriptor.actions : emptyObj;
     const state = {
         actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
-            const execAction = actionDescriptor[actionName];
+            const prepareAction = actionDescriptor[actionName];
             const type = scope + "/" + actionName;
 
-            actions[actionName] = actionCreator(scope, type, selectHydratedState, execAction);
+            actions[actionName] = (...args) => ({
+                type,
+                scope: selectState,
+                exec: prepareAction(...args),
+            });
 
             return actions;
         }, {}),
