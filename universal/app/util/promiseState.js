@@ -1,14 +1,14 @@
-export default function promiseState(store, selector, property) {
+function defaultFilter(result) {
+    return result !== null && result !== undefined;
+}
+
+export default function promiseState(store, selector, filter = defaultFilter) {
     return new Promise((resolve, reject) => {
         store.subscribe(() => {
-            const state = selector(store.getState());
-            const result = state[property];
-            const error = state[property + "Error"];
+            const result = selector(store.getState());
 
-            if (result !== null) {
+            if (filter(result) === true) {
                 resolve(result);
-            } else if (error !== null) {
-                reject(error);
             }
         });
     });

@@ -1,36 +1,30 @@
-import createActions from "../store/createActions";
+import defineState from "../store/defineState";
 
 export const scope = "effects";
 
-const initialState = {
-    pendingEffects: [],
-};
-
-export const actions = createActions(scope, {
-    init: (effect, args, promise) => (getState, updateState, exec) => {
-        updateState(initialState);
+export default defineState({
+    scope: "effects",
+    initialState: {
+        pendingEffects: [],
     },
-    addPendingEffect: (effect, args, promise) => (getState, updateState, exec) => {
-        const state = getState();
-        const effectHandle = {
-            effect,
-            args,
-            promise,
-        };
+    actions: {
+        addPendingEffect: (effect, args, promise) => (getState, patchState, exec) => {
+            const effectHandle = {
+                effect,
+                args,
+                promise,
+            };
 
-        updateState({
-            ...state,
-            pendingEffects: state.pendingEffects.concat(effectHandle),
-        });
-    },
-    removePendingEffect: (effect, args, promise) => (getState, updateState, exec) => {
-        const state = getState();
-
-        updateState({
-            ...state,
-            pendingEffects: state.pendingEffects.filter(
-                e => e.effect !== effect && e.args !== args && e.promise !== promise
-            ),
-        });
+            patchState({
+                pendingEffects: getState().pendingEffects.concat(effectHandle),
+            });
+        },
+        removePendingEffect: (effect, args, promise) => (getState, patchState, exec) => {
+            patchState({
+                pendingEffects: getState().pendingEffects.filter(
+                    e => e.effect !== effect && e.args !== args && e.promise !== promise
+                ),
+            });
+        },
     },
 });

@@ -2,7 +2,11 @@ import "../util/initPreact";
 import createRenderStream from "./createRenderStream";
 import promiseState from "../util/promiseState";
 import createApp from "../createApp";
-import { actions as routerAction } from "../router/state";
+import { actions as routerAction, getCurrentLocation } from "../router/state";
+
+function selectStatusCode() {
+    return getCurrentLocation().route.code;
+}
 
 export default function handleRequest(req, res) {
     const { app, store } = createApp({});
@@ -13,12 +17,12 @@ export default function handleRequest(req, res) {
 
     console.log(store.getState());
 
-    // promiseState(store, routeState.selector, "statusCode").then(statusCode => {
-    //     res.status(statusCode);
-    //     createRenderStream({
-    //         title: promiseState(store, routeState.selector, "title"),
-    //         headerTags: promiseState(store, routeState.selector, "headerTags"),
-    //         app: promiseState(store, routeState.selector, "finished").then(() => app),
-    //     }).pipe(res);
-    // });
+    promiseState(store, selectStatusCode).then(statusCode => {
+        res.status(statusCode);
+        createRenderStream({
+            title: promiseState(store, routeState.selector, "title"),
+            headerTags: promiseState(store, routeState.selector, "headerTags"),
+            app: promiseState(store, routeState.selector, "finished").then(() => app),
+        }).pipe(res);
+    });
 }

@@ -1,52 +1,72 @@
-import createActions from "../store/createActions";
-import getSearchParams from "../effects/getSearchParams";
+import defineState from "../store/defineState";
 import initRouter from "../effects/initRouter";
 import routes from "../routes";
 
-const scope = "router";
-const initialState = {
-    entryUrl: "",
-    routeName: null,
-    params: null,
-    previousRouteName: null,
-    previousParams: null,
-};
-
-export const actions = createActions(scope, {
-    init: entryUrl => (getState, updateState, dispatchAction, execEffect) => {
-        updateState({
-            ...initialState,
-            entryUrl,
-        });
-        execEffect(initRouter, entryUrl);
+export default defineState({
+    scope: "router",
+    initialState: {
+        entryUrl: "",
+        routeName: null,
+        params: null,
+        previousRouteName: null,
+        previousParams: null,
     },
-    handleRouteMatch: (routeName, urlParams, searchParams) => (getState, updateState, dispatchAction, execEffect) => {
-        const params = execEffect(getSearchParams);
+    actions: {
+        init: entryUrl => (getState, updateState, dispatchAction, execEffect) => {
+            updateState({
+                ...getState(),
+                entryUrl,
+            });
+            execEffect(initRouter, entryUrl);
+        },
+        handleRouteMatch: (routeName, urlParams, searchParams) => (
+            getState,
+            updateState,
+            dispatchAction,
+            execEffect
+        ) => {
+            Object.assign(searchParams, urlParams);
 
-        console.log(params);
+            const params = searchParams;
+            const state = getState();
+            const newState = {
+                ...state,
+                routeName,
+                params,
+                previousRouteName: state.routName,
+                previousParams: state.params,
+            };
 
-        Object.assign(params, urlParams, params);
+            updateState(newState);
+        },
+    },
+    select: {
+        entryUrl() {
 
-        console.log("handleRoute", routeName, params);
+        },
     },
 });
 
-export function getRouterState(state) {
-    return state[scope];
-}
+export default state;
 
 export function getEntryUrl(state) {
     return getRouterState(state).entryUrl;
 }
 
-export function getCurrentRoute(state) {
+export function getCurrentLocation(state) {
     const routeName = getRouterState(state).routeName;
 
-    return routeName === null ? "" : routes[routeName];
+    return {
+        route: routeName === null ? null : routes[routeName],
+        params: getRouterState(state).params,
+    };
 }
 
-export function getPreviousRoute(state) {
+export function getPreviousLocation(state) {
     const routeName = getRouterState(state).previousRouteName;
 
-    return routeName === null ? "" : routes[routeName];
+    return {
+        route: routeName === null ? null : routes[routeName],
+        params: getRouterState(state).previousParams,
+    };
 }
