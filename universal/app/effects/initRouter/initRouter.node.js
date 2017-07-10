@@ -1,6 +1,6 @@
 import { parse } from "url";
-import createRouter from "../../router/createRouter";
-import routerState from "../../router/state";
+import createRouter from "../../components/router/createRouter";
+import routerState from "../../components/router/state";
 
 export default function initRouter(store) {
     return entryUrl => {

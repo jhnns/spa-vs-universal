@@ -1,8 +1,8 @@
 import onLinkClick from "nanohref";
 import onHistoryPop from "nanohistory";
 import { parse } from "querystring";
-import createRouter from "../../router/createRouter";
-import { actions as routeAction } from "../../router/state";
+import createRouter from "../../components/router/createRouter";
+import { actions as routeAction } from "../../components/router/state";
 
 export default function initRouter(store) {
     return entryUrl => {

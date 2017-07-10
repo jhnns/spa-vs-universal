@@ -1,6 +1,6 @@
-import defineState from "../store/defineState";
-import initRouter from "../effects/initRouter";
-import routes from "../routes";
+import defineState from "../../store/defineState";
+import initRouter from "../../effects/initRouter";
+import routes from "../../routes";
 
 export default defineState({
     scope: "router",
@@ -15,8 +15,11 @@ export default defineState({
         };
     },
     actions: {
-        init: () => (getState, updateState, dispatchAction, execEffect) => {
-            execEffect(initRouter, getState().entryUrl);
+        init: entryUrl => (getState, patchState, dispatchAction, execEffect) => {
+            patchState({
+                entryUrl,
+            });
+            execEffect(initRouter, entryUrl);
         },
         handleRouteMatch: (routeName, urlParams, searchParams) => (
             getState,

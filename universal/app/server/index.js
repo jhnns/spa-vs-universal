@@ -2,31 +2,22 @@ import "../util/initPreact";
 import createRenderStream from "./createRenderStream";
 import promiseState from "../util/promiseState";
 import createApp from "../createApp";
-import routerState from "../router/state";
-
-function selectStatusCode() {
-    return getCurrentLocation().route.code;
-}
+import routerState from "../components/router/state";
+import { state as documentState } from "../components/document/document";
 
 export default function handleRequest(req, res) {
-    const { app, store } = createApp({
-        router: {
-            entryUrl: req.url,
-        },
-    });
+    const { app, store } = createApp({});
 
     res.header("Content-Type", "text/html");
 
-    store.dispatch(routerState.actions.init());
+    store.dispatch(routerState.actions.init(req.url));
 
-    console.log(store.getState());
-
-    // promiseState(store, selectStatusCode).then(statusCode => {
-    //     res.status(statusCode);
-    //     createRenderStream({
-    //         title: promiseState(store, routeState.selector, "title"),
-    //         headerTags: promiseState(store, routeState.selector, "headerTags"),
-    //         app: promiseState(store, routeState.selector, "finished").then(() => app),
-    //     }).pipe(res);
-    // });
+    promiseState(store, documentState.select.statusCode).then(statusCode => {
+        res.status(statusCode);
+        createRenderStream({
+            title: promiseState(store, documentState.select.title, "title"),
+            headerTags: promiseState(store, documentState.select.headerTags, "headerTags"),
+            app,
+        }).pipe(res);
+    });
 }
