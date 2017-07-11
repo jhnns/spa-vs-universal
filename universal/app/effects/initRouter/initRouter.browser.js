@@ -1,11 +1,14 @@
 import onLinkClick from "nanohref";
 import onHistoryPop from "nanohistory";
-import { parse } from "querystring";
+import URLSearchParams from "url-search-params";
 import createRouter from "./createRouter";
+import mergeParams from "./mergeParams";
 
 export default function initRouter(entryUrl, handleRouteMatch) {
-    const router = createRouter((routeName, urlParams) => {
-        handleRouteMatch(routeName, urlParams, parse(window.location.search.slice(1)));
+    const router = createRouter((route, urlParams) => {
+        const searchParams = new URLSearchParams(window.location.search.slice(1));
+
+        handleRouteMatch(route, mergeParams(urlParams, searchParams));
     });
 
     onHistoryPop(location => {

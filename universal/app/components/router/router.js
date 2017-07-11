@@ -1,3 +1,4 @@
+import URLSearchParams from "url-search-params";
 import defineState from "../store/defineState";
 import initRouter from "../../effects/initRouter";
 import routes from "../../routes";
@@ -8,33 +9,53 @@ function entryUrl(state) {
 }
 
 function currentLocation(state) {
-    const routeName = state.routeName;
-
     return {
-        route: routeName === null ? null : routes[routeName],
+        route: state.route,
         params: state.params,
     };
 }
 
 function previousLocation(state) {
-    const routeName = state.previousRouteName;
-
     return {
-        route: routeName === null ? null : routes[routeName],
+        route: state.previousRoute,
         params: state.previousParams,
     };
 }
 
+function hydrateRoute(route) {
+    return typeof route === "string" ? routes[route] : null;
+}
+
+function dehydrateRoute(route) {
+    return route === null ? null : route.name;
+}
+
+function hydrateParams(params) {
+    return typeof params === "string" ? new URLSearchParams(params) : null;
+}
+
+function dehydrateParams(params) {
+    return params === null ? null : params.toString();
+}
+
 export const state = defineState({
     scope: "router",
-    hydrate(dehydratedState) {
+    hydrate({ entryUrl, route, params, previousRoute, previousParams }) {
         return {
-            entryUrl: "",
-            routeName: null,
-            params: null,
-            previousRouteName: null,
-            previousParams: null,
-            ...dehydratedState,
+            entryUrl: entryUrl === "string" ? entryUrl : "",
+            route: hydrateRoute(route),
+            params: hydrateParams(params),
+            previousRoute: hydrateRoute(previousRoute),
+            previousParams: hydrateParams(previousParams),
+            toJSON() {
+                return {
+                    entryUrl: this.entryUrl,
+                    route: dehydrateRoute(this.route),
+                    params: dehydrateParams(this.params),
+                    previousRoute: dehydrateRoute(this.previousRoute),
+                    previousParams: dehydrateParams(this.previousParams),
+                };
+            },
         };
     },
     actions: {
@@ -42,23 +63,18 @@ export const state = defineState({
             patchState({
                 entryUrl,
             });
-            initRouter(entryUrl, (routeName, urlParams, searchParams) => {
-                dispatchAction(state.actions.handleRouteMatch(routeName, urlParams, searchParams));
+            initRouter(entryUrl, (route, params) => {
+                dispatchAction(state.actions.handleRouteMatch(route, params));
             });
         },
-        handleRouteMatch: (routeName, urlParams, searchParams) => async (getState, updateState, dispatchAction) => {
-            const params = {
-                ...searchParams,
-                ...urlParams,
-            };
+        handleRouteMatch: (route, params) => async (getState, updateState, dispatchAction) => {
             const oldState = getState();
             const newState = {
-                routeName,
+                route,
                 params,
-                previousRouteName: oldState.routeName,
+                previousRoute: oldState.route,
                 previousParams: oldState.params,
             };
-            const route = currentLocation(newState).route;
 
             updateState(newState);
 

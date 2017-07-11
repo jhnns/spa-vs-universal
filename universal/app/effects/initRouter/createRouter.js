@@ -4,10 +4,8 @@ import routes from "../../routes";
 export default function createRouter(handleRouteMatch) {
     const router = nanorouter({ default: "/404" });
 
-    Object.keys(routes).forEach(routeName => {
-        const route = routes[routeName];
-
-        router.on(route.match, urlParams => handleRouteMatch(routeName, urlParams));
+    Object.values(routes).forEach(route => {
+        router.on(route.match, urlParams => handleRouteMatch(route, urlParams));
     });
 
     return router;
