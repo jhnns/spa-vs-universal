@@ -18,7 +18,7 @@
     "server:build": "babel server -s -D -d dist/server",
     "build": "run-p app:build server:build",
     "cleanup-build": "run-s cleanup build",
-    "server:start": "cross-env NODE_ENV=production node dist/server",
+    "server:start": "node dist/server",
     "start": "cross-env WEBPACK_ENV=production run-s cleanup-build server:start"
   },
   "dependencies": {
