@@ -19,7 +19,8 @@
     "build": "run-p app:build server:build",
     "cleanup-build": "run-s cleanup build",
     "server:start": "node dist/server",
-    "start-dev": "run-p dev server:start",
+    "server:start-dev": "cross-env NODE_ENV=development nodemon -w dist/server --exec \"node dist/server\"",
+    "start-dev": "run-p dev server:start-dev",
     "start": "cross-env WEBPACK_ENV=production run-s cleanup-build server:start"
   },
   "dependencies": {
