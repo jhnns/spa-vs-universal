@@ -1,10 +1,6 @@
 import defineState from "./defineState";
 import defineComponent from "../util/defineComponent";
 
-function pendingActions(state) {
-    return state.pendingActions;
-}
-
 export const state = defineState({
     scope: "store",
     hydrate() {
@@ -15,18 +11,19 @@ export const state = defineState({
     },
     actions: {
         addPendingAction: action => (getState, patchState) => {
+            const oldState = getState();
+
             patchState({
-                pendingActions: pendingActions(getState()).concat(action),
+                pendingActions: oldState.pendingActions.concat(action),
             });
         },
         removePendingAction: action => (getState, patchState) => {
+            const oldState = getState();
+
             patchState({
-                pendingActions: pendingActions(getState()).filter(a => a !== action),
+                pendingActions: oldState.pendingActions.filter(a => a !== action),
             });
         },
-    },
-    select: {
-        pendingActions,
     },
 });
 

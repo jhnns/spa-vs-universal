@@ -4,24 +4,6 @@ import initRouter from "../../effects/initRouter";
 import routes from "../../routes";
 import renderChild from "../util/renderChild";
 
-function entryUrl(state) {
-    return state.entryUrl;
-}
-
-function currentLocation(state) {
-    return {
-        route: state.route,
-        params: state.params,
-    };
-}
-
-function previousLocation(state) {
-    return {
-        route: state.previousRoute,
-        params: state.previousParams,
-    };
-}
-
 function hydrateRoute(route) {
     return typeof route === "string" ? routes[route] : null;
 }
@@ -84,11 +66,6 @@ export const state = defineState({
                 dispatchAction(component.state.actions.enter(route, params));
             }
         },
-    },
-    select: {
-        entryUrl,
-        currentLocation,
-        previousLocation,
     },
 });
 

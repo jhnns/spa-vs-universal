@@ -1,18 +1,6 @@
 import defineState from "../store/defineState";
 import renderChild from "../util/renderChild";
 
-function statusCode(state) {
-    return state.statusCode;
-}
-
-function title(state) {
-    return state.title;
-}
-
-function headerTags(state) {
-    return state.headerTags;
-}
-
 export const state = defineState({
     scope: "document",
     hydrate(dehydratedState) {
@@ -27,11 +15,6 @@ export const state = defineState({
         update: newState => (getState, patchState, dispatchAction, execEffect) => {
             patchState(newState);
         },
-    },
-    select: {
-        statusCode,
-        title,
-        headerTags,
     },
 });
 

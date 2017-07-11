@@ -34,10 +34,8 @@ export default function defineState(descriptor) {
         throw new Error("Missing scope");
     }
 
-    const selectDescriptor = "select" in descriptor === true ? descriptor.select : emptyObj;
     const actionDescriptor = "actions" in descriptor === true ? descriptor.actions : emptyObj;
     const state = {
-        scope,
         actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
             const prepareAction = actionDescriptor[actionName];
             const type = scope + "/" + actionName;
@@ -50,13 +48,7 @@ export default function defineState(descriptor) {
 
             return actions;
         }, {}),
-        select: Object.keys(selectDescriptor).reduce((select, selectorName) => {
-            const selector = selectDescriptor[selectorName];
-
-            select[selectorName] = globalState => selector(selectState(globalState));
-
-            return select;
-        }, {}),
+        select: selectState,
     };
 
     return state;

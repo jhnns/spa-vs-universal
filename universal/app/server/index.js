@@ -13,13 +13,16 @@ export default function handleRequest(req, res) {
     res.header("Content-Type", "text/html");
 
     store.dispatch(routerState.actions.init(req.url));
-    store.when(documentState.select.statusCode).then(statusCode => {
-        const whenNoPendingAction = store.when(storeState.select.pendingActions, pending => pending.length === 0);
+    store.when(s => documentState.select(s).statusCode).then(statusCode => {
+        const whenNoPendingAction = store.when(
+            s => storeState.select(s).pendingActions,
+            pending => pending.length === 0
+        );
 
         res.status(statusCode);
         createRenderStream({
-            title: store.when(documentState.select.title),
-            headerTags: store.when(documentState.select.headerTags),
+            title: store.when(s => documentState.select(s).title),
+            headerTags: store.when(s => documentState.select(s).headerTags),
             state: whenNoPendingAction.then(() => store.getState()),
             app: whenNoPendingAction.then(() => app),
         }).pipe(res);

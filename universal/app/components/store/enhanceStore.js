@@ -74,7 +74,7 @@ export default function enhanceStore(createStore) {
             },
             when(select, condition = isDefined) {
                 return new Promise((resolve, reject) => {
-                    const unsubscribe = this.watch(value => {
+                    const unsubscribe = this.watch(select, value => {
                         if (condition(value) === true) {
                             unsubscribe();
                             resolve(value);
