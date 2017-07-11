@@ -60,14 +60,24 @@ export default function enhanceStore(createStore) {
 
                 return originalDispatch.call(this, action);
             },
+            watch(select, onChange) {
+                let oldValue;
+
+                return this.subscribe(() => {
+                    const newValue = select(this.getState());
+
+                    if (oldValue !== newValue) {
+                        onChange(newValue, oldValue);
+                        oldValue = newValue;
+                    }
+                });
+            },
             when(select, condition = isDefined) {
                 return new Promise((resolve, reject) => {
-                    const unsubscribe = this.subscribe(() => {
-                        const result = select(this.getState());
-
-                        if (condition(result) === true) {
+                    const unsubscribe = this.watch(value => {
+                        if (condition(value) === true) {
                             unsubscribe();
-                            resolve(result);
+                            resolve(value);
                         }
                     });
                 });
