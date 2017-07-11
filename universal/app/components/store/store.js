@@ -1,6 +1,5 @@
 import defineState from "./defineState";
 import defineComponent from "../util/defineComponent";
-import renderChild from "../util/renderChild";
 
 function pendingActions(state) {
     return state.pendingActions;
