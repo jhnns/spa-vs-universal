@@ -1,4 +1,4 @@
-export default function perviousEventHandler(eventProp, handler) {
+export default function hookIntoEvent(eventProp, handler) {
     return (...args) => {
         const [e, self] = args;
         const originalHandler = self.props[eventProp];

@@ -1,9 +1,9 @@
-import perviousEventHandler from "../util/perviousEventHandler";
+import hookIntoEvent from "../util/hookIntoEvent";
 import routeToHref from "../../util/routeToHref";
 import defineComponent from "../util/defineComponent";
 
 function preloadNextComponent(route) {
-    const component = route && route.component;
+    const component = route !== undefined && route.component;
 
     if (typeof component === "function") {
         component();
@@ -27,28 +27,29 @@ function splitProps(props, context) {
     props.own = own;
 }
 
-export default defineComponent("Link", {
+export default defineComponent({
+    name: "Link",
     handlers: {
-        handleMouseOver: perviousEventHandler("onMouseOver", (e, self) => {
+        handleMouseOver: hookIntoEvent("onMouseOver", (e, self) => {
             preloadNextComponent(self.props.own.route);
         }),
-        handleFocus: perviousEventHandler("onFocus", (e, self) => {
+        handleFocus: hookIntoEvent("onFocus", (e, self) => {
             preloadNextComponent(self.props.own.route);
         }),
     },
-    render(self) {
-        splitProps(self.props);
+    render(props) {
+        splitProps(props);
 
-        const { route, params, children, replaceRoute, activeClass } = self.props.own;
-        const classes = [route === self.context.route ? activeClass : "", self.props.a.class];
+        const { route, params, children, replaceRoute, activeClass } = props.own;
+        const classes = [route === this.context.route ? activeClass : "", props.a.class];
 
         return (
             <a
-                {...self.props.a}
+                {...props.a}
                 href={routeToHref(route, params)}
                 class={classes.join(" ")}
-                onMouseOver={self.handlers.handleMouseOver}
-                onFocus={self.handlers.handleFocus}
+                onMouseOver={this.handlers.handleMouseOver}
+                onFocus={this.handlers.handleFocus}
                 data-route={true}
                 data-replace-url={replaceRoute}
             >
