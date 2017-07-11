@@ -1,4 +1,5 @@
 import defineState from "./defineState";
+import defineComponent from "../util/defineComponent";
 import renderChild from "../util/renderChild";
 
 function pendingActions(state) {
@@ -30,4 +31,12 @@ export const state = defineState({
     },
 });
 
-export default renderChild;
+export default defineComponent({
+    name: "store",
+    getChildContext() {
+        return {
+            ...this.context,
+            store: this.props.store,
+        };
+    },
+});

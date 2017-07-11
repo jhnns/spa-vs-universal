@@ -2,8 +2,8 @@ import App from "./components/app/app";
 import createStore from "./components/store/createStore";
 
 export default function createApp(initialState) {
-    const app = <App />;
     const store = createStore(initialState);
+    const app = <App store={store} />;
 
     return {
         app,
