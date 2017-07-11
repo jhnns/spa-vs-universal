@@ -1,6 +1,7 @@
 import hookIntoEvent from "../util/hookIntoEvent";
 import routeToHref from "../../util/routeToHref";
 import defineComponent from "../util/defineComponent";
+import { state as routerState } from "./router";
 
 function preloadNextComponent(route) {
     const component = route !== undefined && route.component;
@@ -29,6 +30,14 @@ function splitProps(props, context) {
 
 export default defineComponent({
     name: "Link",
+    connectToStore: {
+        watch: [routerState.select],
+        pull({ route }) {
+            return {
+                route,
+            };
+        },
+    },
     handlers: {
         handleMouseOver: hookIntoEvent("onMouseOver", (e, self) => {
             preloadNextComponent(self.props.own.route);
@@ -41,7 +50,7 @@ export default defineComponent({
         splitProps(props);
 
         const { route, params, children, replaceRoute, activeClass } = props.own;
-        const classes = [route === this.context.route ? activeClass : "", props.a.class];
+        const classes = [route === this.state.route ? activeClass : "", props.a.class];
 
         return (
             <a

@@ -9,7 +9,7 @@ export default function createComponent(descriptor) {
     const { render = renderChild } = descriptor;
     const constructor = "constructor" in descriptor === true ? descriptor.constructor : Function.prototype;
     const connectToStore = descriptor.connectToStore;
-    const isConnected = connectToStore !== undefined;
+    const shouldConnect = connectToStore !== undefined;
     const Component = class Component extends PreactComponent {
         constructor(...args) {
             super();
@@ -27,14 +27,17 @@ export default function createComponent(descriptor) {
             return shallowEqual(newProps, this.props) === false || shallowEqual(newState, this.state) === false;
         }
         componentWillMount() {
-            if (isConnected === true) {
+            if (shouldConnect === true) {
                 const store = this.context.store;
-                const pull = connectToStore.pull;
+                const { pull, watch } = connectToStore;
                 const handleChange = () => {
-                    this.setState(() => pull.call(this, this.context.store.getState()));
+                    const globalState = this.context.store.getState();
+
+                    this.setState(() => pull.apply(this, watch.map(select => select(globalState))));
                 };
 
-                this.storeUnsubscribers = connectToStore.watch.map(state => store.watch(state.scope, handleChange));
+                this.storeUnsubscribers = watch.map(state => store.watch(state.scope, handleChange));
+                handleChange();
             }
         }
         componentWillUnmount() {
@@ -48,13 +51,6 @@ export default function createComponent(descriptor) {
     Component.prototype.storeUnsubscribers = emptyArr;
     if ("getChildContext" in descriptor) {
         Component.prototype.getChildContext = descriptor.getChildContext;
-    }
-    if (isConnected === true) {
-        const pull = connectToStore.pull;
-
-        Component.prototype.pullStateFromStore = function () {
-            this.setState(() => pull.call(this, this.context.store.getState()));
-        };
     }
 
     return Component;
