@@ -3,6 +3,8 @@ import routeToHref from "../../util/routeToHref";
 import defineComponent from "../util/defineComponent";
 import { state as routerState } from "./router";
 
+const emptyObj = {};
+
 function preloadNextComponent(route) {
     const component = route !== undefined && route.component;
 
@@ -50,13 +52,12 @@ export default defineComponent({
         splitProps(props);
 
         const { route, params, children, replaceRoute, activeClass } = props.own;
-        const classes = [route === this.state.route ? activeClass : "", props.a.class];
 
         return (
             <a
                 {...props.a}
+                {...(route === this.state.route ? activeClass : emptyObj)}
                 href={routeToHref(route, params)}
-                class={classes.join(" ")}
                 onMouseOver={this.handlers.handleMouseOver}
                 onFocus={this.handlers.handleFocus}
                 data-route={true}
