@@ -63,7 +63,7 @@ export const state = defineState({
             const component = await route.component();
 
             if ("state" in component === true && typeof component.state.actions.enter === "function") {
-                dispatchAction(component.state.actions.enter(route, params));
+                await dispatchAction(component.state.actions.enter(route, params));
             }
         },
     },

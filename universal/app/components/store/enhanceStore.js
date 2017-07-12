@@ -7,7 +7,7 @@ function executeAction(store, action) {
     }
 
     function patchState(patch) {
-        dispatchAction({
+        return dispatchAction({
             type: action.type + "/patch",
             payload: {
                 ...getState(),
@@ -17,7 +17,7 @@ function executeAction(store, action) {
     }
 
     function dispatchAction(newAction) {
-        store.dispatch(newAction);
+        return store.dispatch(newAction);
     }
 
     const result = action.exec(getState, patchState, dispatchAction);
