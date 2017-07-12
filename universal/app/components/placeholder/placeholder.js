@@ -24,9 +24,9 @@ export default defineComponent({
         dispatchAction(promiseCache.actions.executeIfNotCached(props.component));
     },
     render(props, state) {
-        const Component = state.component;
+        if (state.component !== null) {
+            const Component = state.component.default;
 
-        if (Component !== null) {
             return <Component {...props.props} />;
         }
 
