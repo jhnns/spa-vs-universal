@@ -34,7 +34,7 @@ export default defineComponent({
     name: "Link",
     connectToStore: {
         watch: [routerState.select],
-        map(props, state, { route }) {
+        mapToState({ route }) {
             return {
                 route,
             };

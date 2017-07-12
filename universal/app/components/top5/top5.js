@@ -1,9 +1,12 @@
 import defineState from "../store/defineState";
+import defineComponent from "../util/defineComponent";
 import renderChild from "../util/renderChild";
 import { state as documentState } from "../document/document";
 
+const name = "top5";
+
 export const state = defineState({
-    scope: "top5",
+    scope: name,
     hydrate(dehydratedState) {
         return {
             ...dehydratedState,
@@ -22,4 +25,9 @@ export const state = defineState({
     },
 });
 
-export default renderChild;
+export default defineComponent({
+    name,
+    render() {
+        return <span>Top 5</span>;
+    },
+});

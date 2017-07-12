@@ -38,12 +38,15 @@ export default function createComponent(descriptor) {
         componentWillMount() {
             onPropsChange.call(this.context, this.dispatchAction, this.props, this.state);
             if (shouldConnect === true) {
-                const { map, watch } = connectToStore;
+                const { mapToState, watch } = connectToStore;
                 const handleChange = () => {
                     const globalState = this.context.store.getState();
 
                     this.setState(() =>
-                        map.apply(this.context, [this.props, this.state, ...watch.map(select => select(globalState))])
+                        mapToState.apply(
+                            this.context,
+                            watch.map(select => select(globalState)).concat(this.props, this.state)
+                        )
                     );
                 };
 
@@ -53,6 +56,9 @@ export default function createComponent(descriptor) {
         }
         componentWillUnmount() {
             this.storeUnsubscribers.forEach(f => f());
+        }
+        render() {
+            return render.call(this.context, this.props, this.state);
         }
     };
 

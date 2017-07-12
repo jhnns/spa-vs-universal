@@ -11,9 +11,9 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [asyncCache.select],
-        map(cache) {
+        mapToState(cache, props) {
             const newState = {};
-            const promiseFactory = this.props.componet;
+            const promiseFactory = props.component;
 
             applyToState("component", cache, promiseFactory, newState);
 
@@ -21,7 +21,7 @@ export default defineComponent({
         },
     },
     render(props, state) {
-        const Component = state.Component;
+        const Component = state.component;
 
         if (Component !== null) {
             return <Component {...props.props} />;
