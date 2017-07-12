@@ -15,12 +15,13 @@ export default function createComponent(descriptor) {
             super();
             constructor.apply(this, args);
             if (descriptor.handlers !== undefined) {
-                this.handlers = {};
-                Object.keys(descriptor.handlers).forEach((handlers, key) => {
-                    const handler = descriptor[key];
+                this.handlers = Object.keys(descriptor.handlers).reduce((handlers, key) => {
+                    const handler = descriptor.handlers[key];
 
-                    this.handlers[key] = e => handler(e, this);
-                });
+                    handlers[key] = e => handler(e, this);
+
+                    return handlers;
+                }, {});
             }
         }
         shouldComponentUpdate(newProps, newState) {
