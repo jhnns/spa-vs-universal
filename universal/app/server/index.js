@@ -18,6 +18,7 @@ export default function handleRequest(req, res) {
             s => storeState.select(s).pendingActions,
             pending => pending.length === 0
         );
+        // .then(() => new Promise(resolve => setTimeout(resolve, 0)));
 
         res.status(statusCode);
         createRenderStream({

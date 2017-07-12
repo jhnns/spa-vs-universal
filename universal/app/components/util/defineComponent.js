@@ -9,13 +9,15 @@ export default function createComponent(descriptor) {
     const { render = renderChild } = descriptor;
     const connectToStore = descriptor.connectToStore;
     const shouldConnect = connectToStore !== undefined;
-    const onPropsChange =
-        shouldConnect === true && "onPropsChange" in descriptor === true ?
-            descriptor.onPropsChange :
-            Function.prototype;
+    const onPropsChange = "onPropsChange" in descriptor === true ? descriptor.onPropsChange : Function.prototype;
     const Component = class Component extends PreactComponent {
-        constructor() {
+        constructor(props, context) {
             super();
+            this.props = props;
+            this.context = context;
+            this.dispatchAction = action => this.context.store.dispatch(action);
+            this.state = shouldConnect === true ? this.getStateFromStore() : null;
+
             if (descriptor.handlers !== undefined) {
                 this.handlers = Object.keys(descriptor.handlers).reduce((handlers, key) => {
                     const handler = descriptor.handlers[key];
@@ -25,9 +27,8 @@ export default function createComponent(descriptor) {
                     return handlers;
                 }, {});
             }
-            if (shouldConnect === true) {
-                this.dispatchAction = action => this.context.store.dispatch(action);
-            }
+
+            onPropsChange.call(context, this.dispatchAction, props, this.state);
         }
         shouldComponentUpdate(newProps, newState) {
             return shallowEqual(newProps, this.props) === false || shallowEqual(newState, this.state) === false;
@@ -36,22 +37,14 @@ export default function createComponent(descriptor) {
             onPropsChange.call(this.context, this.dispatchAction, newProps, this.state);
         }
         componentWillMount() {
-            onPropsChange.call(this.context, this.dispatchAction, this.props, this.state);
             if (shouldConnect === true) {
-                const { mapToState, watch } = connectToStore;
-                const handleChange = () => {
-                    const globalState = this.context.store.getState();
+                const { watch } = connectToStore;
 
-                    this.setState(() =>
-                        mapToState.apply(
-                            this.context,
-                            watch.map(select => select(globalState)).concat(this.props, this.state)
-                        )
-                    );
-                };
-
-                this.storeUnsubscribers = watch.map(state => this.context.store.watch(state.scope, handleChange));
-                handleChange();
+                this.storeUnsubscribers = watch.map(select =>
+                    this.context.store.watch(select, () => {
+                        this.setState(() => this.getStateFromStore());
+                    })
+                );
             }
         }
         componentWillUnmount() {
@@ -72,8 +65,15 @@ export default function createComponent(descriptor) {
         };
     }
     if (shouldConnect === true) {
-        Component.prototype.dispatchAction = function (action) {
-            return this.context.store.dispatch(action);
+        const { mapToState, watch } = connectToStore;
+
+        Component.prototype.getStateFromStore = function () {
+            const globalState = this.context.store.getState();
+
+            return mapToState.apply(
+                this.context,
+                watch.map(select => select(globalState)).concat(this.props, this.state)
+            );
         };
     }
 

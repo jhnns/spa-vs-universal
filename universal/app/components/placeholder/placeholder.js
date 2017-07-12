@@ -1,6 +1,6 @@
 import Loading from "../loading/loading";
 import defineComponent from "../util/defineComponent";
-import defineAsyncCache, { applyToState } from "../util/defineAsyncCache";
+import defineAsyncCache, { selectResolved, selectError } from "../util/defineAsyncCache";
 
 const name = "placeholder";
 const asyncCache = defineAsyncCache({
@@ -11,14 +11,17 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [asyncCache.select],
-        mapToState(cache, props) {
-            const newState = {};
+        mapToState(asyncCacheState, props) {
             const promiseFactory = props.component;
 
-            applyToState("component", cache, promiseFactory, newState);
-
-            return newState;
+            return {
+                component: selectResolved(asyncCacheState, promiseFactory),
+                error: selectError(asyncCacheState, promiseFactory),
+            };
         },
+    },
+    onPropsChange(dispatchAction, props) {
+        dispatchAction(asyncCache.actions.runIfNotCached(props.component));
     },
     render(props, state) {
         const Component = state.component;

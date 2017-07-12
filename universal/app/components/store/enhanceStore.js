@@ -26,16 +26,20 @@ function executeAction(store, action) {
 }
 
 function handleAsyncAction(store, action, promise) {
+    function dispatchRemove() {
+        store.dispatch(storeState.actions.removePendingAction(action));
+    }
+
     store.dispatch(storeState.actions.addPendingAction(action));
 
     return promise.then(
         res => {
-            store.dispatch(storeState.actions.removePendingAction(action));
+            setTimeout(dispatchRemove, 0);
 
             return res;
         },
         err => {
-            store.dispatch(storeState.actions.removePendingAction(action));
+            setTimeout(dispatchRemove, 0);
 
             throw err;
         }

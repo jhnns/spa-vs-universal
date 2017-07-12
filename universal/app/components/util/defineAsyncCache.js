@@ -6,47 +6,58 @@ const resolvedPromise = new Promise(resolve => resolve());
 
 function patchIfStillCached(patchState, cache, key, value) {
     if (cache.has(key) === true) {
-        patchState(updateMap(cache, key, value));
+        patchState({
+            cache: updateMap(cache, key, value),
+        });
     }
 }
 
-export function applyToState(scope, cache, promiseFactory, state) {
-    const result = cache.has(promiseFactory) === true ? cache.get(promiseFactory) : null;
-    const hasResult = result !== null;
-    const isError = result instanceof Error === true;
-    const resolved = hasResult && isError === false ? result : null;
-    const error = hasResult && isError ? result : null;
+export function selectResult(state, promiseFactory) {
+    const cache = state.cache;
 
-    state[scope + "Pending"] = hasResult === false;
-    state[scope + "Error"] = error;
-    state[scope] = resolved;
+    return cache.has(promiseFactory) === true ? cache.get(promiseFactory) : null;
+}
+
+export function selectResolved(state, promiseFactory) {
+    const result = selectResult(state, promiseFactory);
+
+    return result === null || result instanceof Error === true ? null : result;
+}
+
+export function selectError(state, promiseFactory) {
+    const result = selectResult(state, promiseFactory);
+
+    return result === null || result instanceof Error === false ? null : result;
+}
+
+export function selectPending(state, promiseFactory) {
+    const result = selectResult(state, promiseFactory);
+
+    return result === null;
 }
 
 export default function defineAsyncCache({ scope, sizeLimit = 30 }) {
     function run(promiseFactory) {
         return async (getState, patchState, dispatchAction) => {
-            const cache = getState();
-
-            patchState(addToSizedMap(cache, sizeLimit, promiseFactory, null));
-            patchIfStillCached(patchState, cache, promiseFactory, await promiseFactory().catch(e => e));
+            patchState({
+                cache: addToSizedMap(getState().cache, sizeLimit, promiseFactory, null),
+            });
+            patchIfStillCached(patchState, getState().cache, promiseFactory, await promiseFactory().catch(e => e));
         };
     }
 
     return defineState({
         scope,
         hydrate() {
-            const map = new Map();
-
-            map.toJSON = () => undefined;
-
-            return map;
+            return {
+                cache: new Map(),
+                toJSON: () => undefined,
+            };
         },
         actions: {
             run,
             runIfNotCached: promiseFactory => (getState, patchState, dispatchAction) => {
-                const cache = getState();
-
-                if (cache.has(promiseFactory) === true) {
+                if (getState().cache.has(promiseFactory) === true) {
                     return resolvedPromise;
                 }
 
