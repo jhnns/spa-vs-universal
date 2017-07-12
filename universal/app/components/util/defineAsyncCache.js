@@ -4,24 +4,28 @@ import addToSizedMap from "../../util/addToSizedMap";
 
 const resolvedPromise = new Promise(resolve => resolve());
 
-function patchIfStillCached(patchState, cache, key, value) {
-    if (cache.has(key) === true) {
+function patchIfStillCached(state, patchState, promiseFactory, value) {
+    if (isInCache(state, promiseFactory)) {
         patchState({
-            cache: updateMap(cache, key, value),
+            cache: updateMap(state.cache, promiseFactory, value),
         });
     }
+}
+
+export function isInCache(state, promiseFactory) {
+    return state.cache.has(promiseFactory);
 }
 
 export function selectResult(state, promiseFactory) {
     const cache = state.cache;
 
-    return cache.has(promiseFactory) === true ? cache.get(promiseFactory) : null;
+    return isInCache(state, promiseFactory) ? cache.get(promiseFactory) : null;
 }
 
 export function selectResolved(state, promiseFactory) {
     const result = selectResult(state, promiseFactory);
 
-    return result === null || result instanceof Error === true ? null : result;
+    return result === null || result instanceof Error ? null : result;
 }
 
 export function selectError(state, promiseFactory) {
@@ -42,7 +46,7 @@ export default function defineAsyncCache({ scope, sizeLimit = 30 }) {
             patchState({
                 cache: addToSizedMap(getState().cache, sizeLimit, promiseFactory, null),
             });
-            patchIfStillCached(patchState, getState().cache, promiseFactory, await promiseFactory().catch(e => e));
+            patchIfStillCached(getState(), patchState, promiseFactory, await promiseFactory().catch(e => e));
         };
     }
 
@@ -57,7 +61,7 @@ export default function defineAsyncCache({ scope, sizeLimit = 30 }) {
         actions: {
             run,
             runIfNotCached: promiseFactory => (getState, patchState, dispatchAction) => {
-                if (getState().cache.has(promiseFactory) === true) {
+                if (isInCache(getState(), promiseFactory)) {
                     return resolvedPromise;
                 }
 
