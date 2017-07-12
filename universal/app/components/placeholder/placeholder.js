@@ -1,27 +1,27 @@
 import Loading from "../loading/loading";
 import defineComponent from "../util/defineComponent";
-import defineAsyncCache, { selectResolved, selectError } from "../util/defineAsyncCache";
+import definePromiseCache, { selectResolved, selectError } from "../util/definePromiseCache";
 
 const name = "placeholder";
-const asyncCache = defineAsyncCache({
+const promiseCache = definePromiseCache({
     scope: name + "Cache",
 });
 
 export default defineComponent({
     name,
     connectToStore: {
-        watch: [asyncCache.select],
-        mapToState(asyncCacheState, props) {
+        watch: [promiseCache.select],
+        mapToState(promiseCacheState, props) {
             const promiseFactory = props.component;
 
             return {
-                component: selectResolved(asyncCacheState, promiseFactory),
-                error: selectError(asyncCacheState, promiseFactory),
+                component: selectResolved(promiseCacheState, promiseFactory),
+                error: selectError(promiseCacheState, promiseFactory),
             };
         },
     },
     onPropsChange(dispatchAction, props) {
-        dispatchAction(asyncCache.actions.runIfNotCached(props.component));
+        dispatchAction(promiseCache.actions.executeIfNotCached(props.component));
     },
     render(props, state) {
         const Component = state.component;

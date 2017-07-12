@@ -40,8 +40,8 @@ export function selectPending(state, promiseFactory) {
     return result === null;
 }
 
-export default function defineAsyncCache({ scope, sizeLimit = 30 }) {
-    function run(promiseFactory) {
+export default function definePromiseCache({ scope, sizeLimit = 30 }) {
+    function execute(promiseFactory) {
         return async (getState, patchState, dispatchAction) => {
             patchState({
                 cache: addToSizedMap(getState().cache, sizeLimit, promiseFactory, null),
@@ -59,13 +59,13 @@ export default function defineAsyncCache({ scope, sizeLimit = 30 }) {
             };
         },
         actions: {
-            run,
-            runIfNotCached: promiseFactory => (getState, patchState, dispatchAction) => {
+            execute,
+            executeIfNotCached: promiseFactory => (getState, patchState, dispatchAction) => {
                 if (isInCache(getState(), promiseFactory)) {
                     return resolvedPromise;
                 }
 
-                return run(promiseFactory)(getState, patchState, dispatchAction);
+                return execute(promiseFactory)(getState, patchState, dispatchAction);
             },
         },
     });
