@@ -34,18 +34,18 @@ export default defineComponent({
     name: "Link",
     connectToStore: {
         watch: [routerState.select],
-        pull({ route }) {
+        map(props, state, { route }) {
             return {
                 route,
             };
         },
     },
     handlers: {
-        handleMouseOver: hookIntoEvent("onMouseOver", (e, self) => {
-            preloadNextComponent(self.props.own.route);
+        handleMouseOver: hookIntoEvent("onMouseOver", (dispatchAction, event, props) => {
+            preloadNextComponent(props.own.route);
         }),
-        handleFocus: hookIntoEvent("onFocus", (e, self) => {
-            preloadNextComponent(self.props.own.route);
+        handleFocus: hookIntoEvent("onFocus", (dispatchAction, event, props) => {
+            preloadNextComponent(props.own.route);
         }),
     },
     render(props) {

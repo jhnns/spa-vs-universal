@@ -1,7 +1,8 @@
 export default function hookIntoEvent(eventProp, handler) {
     return (...args) => {
-        const [e, self] = args;
-        const originalHandler = self.props[eventProp];
+        const e = args[1];
+        const props = args[2];
+        const originalHandler = props[eventProp];
 
         handler(...args);
 

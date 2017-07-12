@@ -1,17 +1,33 @@
-import namespace from "../util/namespace";
 import Loading from "../loading/loading";
+import defineComponent from "../util/defineComponent";
+import defineAsyncCache, { applyToState } from "../util/defineAsyncCache";
 
-const define = namespace(module.id);
+const name = "placeholder";
+const asyncCache = defineAsyncCache({
+    scope: name + "Cache",
+});
 
-export default define.component("Placeholder", {
-    render(self) {
-        const Component = self.state.component;
+export default defineComponent({
+    name,
+    connectToStore: {
+        watch: [asyncCache.select],
+        map(cache) {
+            const newState = {};
+            const promiseFactory = this.props.componet;
+
+            applyToState("component", cache, promiseFactory, newState);
+
+            return newState;
+        },
+    },
+    render(props, state) {
+        const Component = state.Component;
 
         if (Component !== null) {
-            return <Component {...self.props.props} />;
+            return <Component {...props.props} />;
         }
 
-        const children = self.props.children;
+        const children = props.children;
 
         if (children.length === 0) {
             return <Loading />;
@@ -19,6 +35,6 @@ export default define.component("Placeholder", {
 
         const childGenerator = children[0];
 
-        return childGenerator(self.state.componentError);
+        return childGenerator(state.componentError);
     },
 });

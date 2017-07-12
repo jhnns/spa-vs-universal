@@ -28,11 +28,11 @@ export const state = defineState({
 });
 
 export default defineComponent({
-    name: "store",
-    getChildContext() {
+    name: "Store",
+    getChildContext(props) {
         return {
-            ...this.context,
-            store: this.props.store,
+            ...this,
+            store: props.store,
         };
     },
 });
