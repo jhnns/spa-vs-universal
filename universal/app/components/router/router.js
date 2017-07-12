@@ -3,6 +3,7 @@ import defineState from "../store/defineState";
 import initRouter from "../../effects/initRouter";
 import routes from "../../routes";
 import renderChild from "../util/renderChild";
+import { placeholderCache } from "../placeholder/placeholder";
 
 function hydrateRoute(route) {
     return typeof route === "string" ? routes[route] : null;
@@ -59,6 +60,7 @@ export const state = defineState({
             };
 
             updateState(newState);
+            dispatchAction(placeholderCache.actions.executeIfNotCached(route.component));
 
             const component = await route.component();
 

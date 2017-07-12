@@ -3,14 +3,15 @@ import defineComponent from "../util/defineComponent";
 import definePromiseCache, { selectResolved, selectError } from "../util/definePromiseCache";
 
 const name = "placeholder";
-const promiseCache = definePromiseCache({
+
+export const placeholderCache = definePromiseCache({
     scope: name + "Cache",
 });
 
 export default defineComponent({
     name,
     connectToStore: {
-        watch: [promiseCache.select],
+        watch: [placeholderCache.select],
         mapToState(promiseCacheState, props) {
             const promiseFactory = props.component;
 
@@ -21,7 +22,7 @@ export default defineComponent({
         },
     },
     onPropsChange(dispatchAction, props) {
-        dispatchAction(promiseCache.actions.executeIfNotCached(props.component));
+        dispatchAction(placeholderCache.actions.executeIfNotCached(props.component));
     },
     render(props, state) {
         if (state.component !== null) {
