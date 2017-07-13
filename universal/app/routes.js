@@ -6,17 +6,17 @@ import about from "./components/about";
 export default defineRoutes({
     top5: {
         match: "/",
-        action: top5.loadAction,
+        action: top5.load,
         Placeholder: top5.Placeholder,
     },
     allPosts: {
         match: "/all",
-        action: allPosts.loadAction,
+        action: allPosts.load,
         Placeholder: allPosts.Placeholder,
     },
     about: {
         match: "/about",
-        action: about.loadAction,
+        action: about.load,
         Placeholder: about.Placeholder,
     },
     // notFound: {

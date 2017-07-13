@@ -50,7 +50,7 @@ export default function defineChunkEntry(chunkEntry) {
     chunkEntries[chunkEntry.name] = chunkEntry;
 
     return {
-        loadAction: chunkState.actions.ensure(chunkEntry),
+        load: chunkState.actions.ensure(chunkEntry),
         Placeholder: ChunkEntryPlaceholder,
     };
 }
