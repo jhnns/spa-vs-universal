@@ -14,13 +14,13 @@ export default function defineChunkEntry(chunkEntry) {
             watch: [chunkState.select],
             mapToState() {
                 return {
-                    result: chunkModule === null ? error : chunkModule.default,
+                    Component: chunkModule === null ? error : chunkModule.default,
                 };
             },
         },
         render(props, state) {
             return (
-                <Placeholder result={state.result} props={props.props}>
+                <Placeholder Component={state.Component} props={props.props}>
                     {childGenerator}
                 </Placeholder>
             );

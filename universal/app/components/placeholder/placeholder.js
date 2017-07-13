@@ -5,27 +5,28 @@ const name = "placeholder";
 
 export default defineComponent({
     name,
-    render({ children, result = null, props = {} }) {
+    render({ children, Component = null, props = {} }) {
         const noChildren = children.length === 0;
 
-        if (result === null && noChildren) {
+        if (Component === null && noChildren) {
             return <Loading />;
         }
-        if (result !== null && result instanceof Error === false) {
-            const Component = result;
-
+        if (Component !== null && Component instanceof Error === false) {
             return <Component {...props} />;
         }
-        if (result instanceof Error && noChildren) {
+
+        const err = Component;
+
+        if (err !== null && noChildren) {
             return (
                 <div>
-                    {result.message}
+                    {Component.message}
                 </div>
             );
         }
 
         const childGenerator = children[0];
 
-        return childGenerator(result);
+        return childGenerator(err);
     },
 });
