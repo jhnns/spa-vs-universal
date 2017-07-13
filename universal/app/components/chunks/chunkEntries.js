@@ -1,3 +1,3 @@
-const chunkEntries = new Map();
+const chunkEntries = Object.create(null);
 
 export default chunkEntries;

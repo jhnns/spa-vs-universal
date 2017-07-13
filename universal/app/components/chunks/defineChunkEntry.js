@@ -47,8 +47,7 @@ export default function defineChunkEntry(chunkEntry) {
                 throw e;
             }
         );
-    chunkEntry.get = () => chunkModule;
-    chunkEntries.set(chunkEntry.name, chunkEntry);
+    chunkEntries[chunkEntry.name] = chunkEntry;
 
     return {
         loadAction: chunkState.actions.ensure(chunkEntry),

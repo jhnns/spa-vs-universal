@@ -5,7 +5,7 @@ import renderChild from "../util/renderChild";
 const name = "chunks";
 
 export function selectLoadedChunks(globalState) {
-    return state.select(globalState).loadedEntries.map(entryName => chunkEntries.get(entryName).chunk);
+    return state.select(globalState).loadedEntries.map(entryName => chunkEntries[entryName].chunk);
 }
 
 export const state = defineState({
@@ -15,7 +15,7 @@ export const state = defineState({
     },
     actions: {
         preload: () => (getState, patchState, dispatchAction) =>
-            Promise.all(getState().loadedEntries.map(entryName => chunkEntries.get(entryName).load())),
+            Promise.all(getState().loadedEntries.map(entryName => chunkEntries[entryName].load())),
         ensure: chunkEntry => (getState, patchState, dispatchAction) => {
             const entryName = chunkEntry.name;
 
