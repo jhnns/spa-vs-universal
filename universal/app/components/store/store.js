@@ -3,11 +3,9 @@ import defineComponent from "../util/defineComponent";
 
 export const state = defineState({
     scope: "store",
-    hydrate() {
-        return {
-            pendingActions: [],
-            toJSON: () => undefined,
-        };
+    initialState: {
+        pendingActions: [],
+        toJSON: () => undefined,
     },
     actions: {
         addPendingAction: action => (getState, patchState) => {

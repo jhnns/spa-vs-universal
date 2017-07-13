@@ -7,11 +7,6 @@ const name = "top5";
 
 export const state = defineState({
     scope: name,
-    hydrate(dehydratedState) {
-        return {
-            ...dehydratedState,
-        };
-    },
     actions: {
         enter: () => (getState, patchState, dispatchAction, execEffect) => {
             dispatchAction(

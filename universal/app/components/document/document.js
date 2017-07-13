@@ -3,13 +3,10 @@ import renderChild from "../util/renderChild";
 
 export const state = defineState({
     scope: "document",
-    hydrate(dehydratedState) {
-        return {
-            statusCode: null,
-            title: null,
-            headerTags: null,
-            ...dehydratedState,
-        };
+    initialState: {
+        statusCode: null,
+        title: null,
+        headerTags: null,
     },
     actions: {
         update: newState => (getState, patchState, dispatchAction, execEffect) => {

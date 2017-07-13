@@ -23,9 +23,9 @@ function dehydrateParams(params) {
 
 export const state = defineState({
     scope: "router",
-    hydrate({ entryUrl, route, params, previousRoute, previousParams }) {
+    hydrate({ entryUrl = "", route, params, previousRoute, previousParams }) {
         return {
-            entryUrl: entryUrl === "string" ? entryUrl : "",
+            entryUrl,
             route: hydrateRoute(route),
             params: hydrateParams(params),
             previousRoute: hydrateRoute(previousRoute),
