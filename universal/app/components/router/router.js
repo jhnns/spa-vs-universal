@@ -41,11 +41,11 @@ export const state = defineState({
         };
     },
     actions: {
-        init: entryUrl => (getState, patchState, dispatchAction) => {
+        init: entryUrl => (getState, patchState, dispatchAction, execEffect) => {
             patchState({
                 entryUrl,
             });
-            initRouter(entryUrl, (route, params) => {
+            execEffect(initRouter, entryUrl, (route, params) => {
                 dispatchAction(state.actions.handleRouteMatch(route, params));
             });
         },

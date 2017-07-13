@@ -20,7 +20,11 @@ function executeAction(store, action) {
         return store.dispatch(newAction);
     }
 
-    const result = action.exec(getState, patchState, dispatchAction);
+    function execEffect(effect, ...args) {
+        return effect(...args);
+    }
+
+    const result = action.exec(getState, patchState, dispatchAction, execEffect);
 
     return isPromise(result) === true ? handleAsyncAction(store, action, result) : result;
 }

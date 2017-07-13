@@ -13,7 +13,7 @@ export const state = defineState({
         posts: null,
     },
     actions: {
-        enter: () => (getState, patchState, dispatchAction) => {
+        enter: () => (getState, patchState, dispatchAction, execEffect) => {
             dispatchAction(
                 documentState.actions.update({
                     statusCode: 200,
@@ -22,7 +22,7 @@ export const state = defineState({
                 })
             );
 
-            return getTop5().then(posts => {
+            return execEffect(getTop5).then(posts => {
                 patchState({
                     posts,
                 });
