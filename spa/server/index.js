@@ -21,7 +21,12 @@ app.use(
     })
 );
 api(app);
-app.use(connectGzipStatic(path.resolve(__dirname, "..", "public")));
+app.use(
+    connectGzipStatic(path.resolve(__dirname, "..", "public"), {
+        // We use hashed filenames, a long max age is ok
+        maxAge: 365 * 24 * 60 * 60 * 1000,
+    })
+);
 app.use((req, res, next) => {
     res.sendFile(pathToIndexHtml);
 });

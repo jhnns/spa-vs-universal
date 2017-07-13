@@ -23,7 +23,12 @@ app.use(
     })
 );
 api(app);
-app.use(connectGzipStatic(pathToPublic));
+app.use(
+    connectGzipStatic(pathToPublic, {
+        // We use hashed filenames, a long max age is ok
+        maxAge: 365 * 24 * 60 * 60 * 1000,
+    })
+);
 app.use(universalApp);
 
 app.server.listen(process.env.PORT || config.port, config.hostname || "localhost", () => {
