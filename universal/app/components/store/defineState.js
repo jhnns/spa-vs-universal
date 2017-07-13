@@ -1,3 +1,5 @@
+import has from "../../util/has";
+
 const emptyObj = {};
 
 function returnThis() {
@@ -10,10 +12,11 @@ function isDehydratable(state) {
 
 export default function defineState(descriptor) {
     const scope = descriptor.scope;
-    const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : returnThis;
+    const initialState = has(descriptor, "initialState") ? descriptor.initialState : {};
+    const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : () => initialState;
 
     function selectState(globalState) {
-        return ensureHydrated(scope in globalState ? globalState[scope] : emptyObj);
+        return ensureHydrated(scope in globalState ? globalState[scope] : initialState);
     }
 
     function ensureHydrated(state) {

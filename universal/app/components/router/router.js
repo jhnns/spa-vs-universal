@@ -3,7 +3,7 @@ import defineState from "../store/defineState";
 import initRouter from "../../effects/initRouter";
 import routes from "../../routes";
 import renderChild from "../util/renderChild";
-import { placeholderCache } from "../placeholder/placeholder";
+import has from "../../util/has";
 
 function hydrateRoute(route) {
     return typeof route === "string" ? routes[route] : null;
@@ -50,7 +50,7 @@ export const state = defineState({
                 dispatchAction(state.actions.handleRouteMatch(route, params));
             });
         },
-        handleRouteMatch: (route, params) => async (getState, updateState, dispatchAction) => {
+        handleRouteMatch: (route, params) => (getState, patchState, dispatchAction) => {
             const oldState = getState();
             const newState = {
                 route,
@@ -59,14 +59,15 @@ export const state = defineState({
                 previousParams: oldState.params,
             };
 
-            updateState(newState);
-            dispatchAction(placeholderCache.actions.executeIfNotCached(route.component));
+            patchState(newState);
 
-            const component = await route.component();
-
-            if ("state" in component === true && typeof component.state.actions.enter === "function") {
-                await dispatchAction(component.state.actions.enter(route, params));
-            }
+            return dispatchAction(route.load).then(component =>
+                (getState().route === route &&
+                has(component, "state") === true &&
+                typeof component.state.actions.enter === "function" ?
+                    dispatchAction(component.state.actions.enter(route, params)) :
+                    Promise.resolve()).then(() => component)
+            );
         },
     },
 });
