@@ -8,7 +8,7 @@ function renderApp(app) {
     return renderStatic(() => renderToString(app));
 }
 
-export default function createRenderStream({ title, headerTags, app, state }) {
+export default function createRenderStream({ title, headerTags, loadedChunks, app, state }) {
     const renderedHeaderTags = Promise.resolve(headerTags).then(nodes =>
         nodes.map(renderToString).reduce((str, tag) => str + tag, "")
     );
@@ -27,11 +27,12 @@ export default function createRenderStream({ title, headerTags, app, state }) {
   <link rel="manifest" href="/manifest.json" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <title>${ title }</title>
-  ${ assetTags() }
   ${ renderedHeaderTags }
   <style>
     ${ renderedCss }
   </style>
+  ${ assetTags("client") }
+  ${ loadedChunks.then(chunkNames => chunkNames.map(assetTags).join("")) }
 </head>
 <body>
   ${ renderedHtml }

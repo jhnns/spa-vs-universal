@@ -4,6 +4,10 @@ import renderChild from "../util/renderChild";
 
 const name = "chunks";
 
+export function selectLoadedChunks(globalState) {
+    return state.select(globalState).loadedEntries.map(entryName => chunkEntries.get(entryName).chunk);
+}
+
 export const state = defineState({
     scope: name,
     initialState: {

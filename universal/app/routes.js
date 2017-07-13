@@ -1,5 +1,6 @@
 import addObjectKeys from "./util/addObjectKeys";
 import top5 from "./components/top5";
+import allPosts from "./components/allPosts";
 
 export default addObjectKeys(
     {
@@ -7,10 +8,10 @@ export default addObjectKeys(
             match: "/",
             load: top5,
         },
-        // allPosts: {
-        //     match: "/all",
-        //     component: () => import("./components/allPosts/allPosts" /* webpackChunkName: "posts" */),
-        // },
+        allPosts: {
+            match: "/all",
+            load: allPosts,
+        },
         // about: {
         //     match: "/about",
         //     component: () => import("./components/about/about" /* webpackChunkName: "about" */),
