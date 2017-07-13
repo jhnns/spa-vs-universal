@@ -8,7 +8,7 @@ const emptyArr = [];
 
 export default function defineChunkEntry(chunkEntry) {
     const load = chunkEntry.load;
-    const childGenerator = has(chunkEntry, "placeholder") ? [chunkEntry.placeholder] : emptyArr;
+    const childGenerator = has(chunkEntry, "Placeholder") ? [chunkEntry.Placeholder] : emptyArr;
     const ChunkEntryPlaceholder = defineComponent({
         connectToStore: {
             watch: [chunkState.select],
