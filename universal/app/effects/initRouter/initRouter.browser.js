@@ -3,6 +3,7 @@ import onHistoryPop from "nanohistory";
 import URLSearchParams from "url-search-params";
 import createRouter from "./createRouter";
 import mergeParams from "./mergeParams";
+import forward from "../forward/forward.browser";
 
 export default function initRouter(entryUrl, handleRouteMatch) {
     const router = createRouter((route, urlParams) => {
@@ -23,10 +24,8 @@ export default function initRouter(entryUrl, handleRouteMatch) {
             return;
         }
 
-        void 0;
-
-        // context.exec(navigate, router, node.href, {
-        //     replaceRoute: node.hasAttribute("data-replace-url") === true,
-        // });
+        forward(router, node.href, {
+            replaceRoute: node.hasAttribute("data-replace-url") === true,
+        });
     });
 }

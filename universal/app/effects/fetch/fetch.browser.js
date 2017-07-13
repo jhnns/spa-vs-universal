@@ -1,4 +1,4 @@
-import unfetch from "isomorphic-unfetch";
+import unfetch from "unfetch";
 
 const root = "/api";
 
