@@ -1,26 +1,26 @@
-import addObjectKeys from "./util/addObjectKeys";
+import defineRoutes from "./util/defineRoutes";
 import top5 from "./components/top5";
 import allPosts from "./components/allPosts";
 import about from "./components/about";
 
-export default addObjectKeys(
-    {
-        top5: {
-            match: "/",
-            chunkEntry: top5,
-        },
-        allPosts: {
-            match: "/all",
-            chunkEntry: allPosts,
-        },
-        about: {
-            match: "/about",
-            chunkEntry: about,
-        },
-        // notFound: {
-        //     match: "/404",
-        //     component: () => import("./components/notFound/notFound" /* webpackChunkName: "notFound" */),
-        // },
+export default defineRoutes({
+    top5: {
+        match: "/",
+        action: top5.loadAction,
+        Placeholder: top5.Placeholder,
     },
-    "name"
-);
+    allPosts: {
+        match: "/all",
+        action: allPosts.loadAction,
+        Placeholder: allPosts.Placeholder,
+    },
+    about: {
+        match: "/about",
+        action: about.loadAction,
+        Placeholder: about.Placeholder,
+    },
+    // notFound: {
+    //     match: "/404",
+    //     component: () => import("./components/notFound/notFound" /* webpackChunkName: "notFound" */),
+    // },
+});

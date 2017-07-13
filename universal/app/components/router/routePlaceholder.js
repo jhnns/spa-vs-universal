@@ -1,6 +1,5 @@
 import defineComponent from "../util/defineComponent";
 import { state as routerState } from "./router";
-import has from "../../util/has";
 
 const name = "routePlaceholder";
 
@@ -10,13 +9,13 @@ export default defineComponent({
         watch: [routerState.select],
         mapToState({ route }) {
             return {
-                Placeholder: route.chunkEntry.Placeholder,
+                Placeholder: route.Placeholder,
                 props: route.params,
             };
         },
     },
     render(props, state) {
-        if (has(state, "Placeholder")) {
+        if (typeof state.Placeholder === "function") {
             const Placeholder = state.Placeholder;
 
             return <Placeholder props={state.params} />;

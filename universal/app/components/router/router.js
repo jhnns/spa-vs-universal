@@ -60,7 +60,7 @@ export const state = defineState({
 
             patchState(newState);
 
-            return dispatchAction(route.chunkEntry.loadAction).then(componentModule => {
+            return dispatchAction(route.action).then(componentModule => {
                 if (getState().route !== route) {
                     // User has already switched the route
                     return componentModule;
