@@ -1,13 +1,12 @@
 import chunkEntries from "./chunkEntries";
 import { state as chunkState } from "./chunks";
-
-const has = Object.prototype.hasOwnProperty;
+import has from "../../util/has";
 
 export default function defineChunkEntry(chunkEntry) {
     const load = chunkEntry.load;
     let result = null;
 
-    if (has.call(chunkEntry, "name") === false) {
+    if (has(chunkEntry, "name") === false) {
         chunkEntry.name = chunkEntry.chunk;
     }
     chunkEntry.load = () => load().then(r => (result = r));

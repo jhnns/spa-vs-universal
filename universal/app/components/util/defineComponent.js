@@ -1,6 +1,7 @@
 import { Component as PreactComponent } from "preact";
 import shallowEqual from "shallowequal";
 import renderChild from "./renderChild";
+import has from "../../util/has";
 
 const emptyObj = {};
 const emptyArr = [];
@@ -9,7 +10,7 @@ export default function createComponent(descriptor) {
     const { render = renderChild } = descriptor;
     const connectToStore = descriptor.connectToStore;
     const shouldConnect = connectToStore !== undefined;
-    const onPropsChange = "onPropsChange" in descriptor === true ? descriptor.onPropsChange : Function.prototype;
+    const onPropsChange = has(descriptor, "onPropsChange") ? descriptor.onPropsChange : Function.prototype;
     const Component = class Component extends PreactComponent {
         constructor(props, context) {
             super();
@@ -59,7 +60,7 @@ export default function createComponent(descriptor) {
     Component.prototype.displayName = descriptor.name;
     Component.prototype.handlers = emptyObj;
     Component.prototype.storeUnsubscribers = emptyArr;
-    if ("getChildContext" in descriptor) {
+    if (has(descriptor, "getChildContext")) {
         Component.prototype.getChildContext = function () {
             return descriptor.getChildContext.call(this.context, this.props, this.state);
         };

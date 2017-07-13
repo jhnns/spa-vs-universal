@@ -16,7 +16,7 @@ export default function defineState(descriptor) {
     const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : s => Object.assign({}, s);
 
     function selectState(globalState) {
-        return ensureHydrated(scope in globalState ? globalState[scope] : initialState);
+        return ensureHydrated(has(globalState, scope) ? globalState[scope] : initialState);
     }
 
     function ensureHydrated(state) {
@@ -37,7 +37,7 @@ export default function defineState(descriptor) {
         throw new Error("Missing scope");
     }
 
-    const actionDescriptor = "actions" in descriptor === true ? descriptor.actions : emptyObj;
+    const actionDescriptor = has(descriptor, "actions") ? descriptor.actions : emptyObj;
     const state = {
         actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
             const prepareAction = actionDescriptor[actionName];

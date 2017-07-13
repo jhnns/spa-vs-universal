@@ -2,6 +2,7 @@ import hookIntoEvent from "../util/hookIntoEvent";
 import routeToHref from "../../util/routeToHref";
 import defineComponent from "../util/defineComponent";
 import { state as routerState } from "./router";
+import has from "../../util/has";
 
 const emptyObj = {};
 
@@ -22,7 +23,7 @@ function splitProps(props, context) {
         activeClass: props.activeClass || "",
     };
 
-    props.a = Object.keys(props).filter(key => key in own === false).reduce((a, key) => {
+    props.a = Object.keys(props).filter(key => has(own, key) === false).reduce((a, key) => {
         a[key] = props[key];
 
         return a;
