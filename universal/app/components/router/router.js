@@ -3,7 +3,6 @@ import defineState from "../store/defineState";
 import initRouter from "../../effects/initRouter";
 import routes from "../../routes";
 import renderChild from "../util/renderChild";
-import has from "../../util/has";
 
 function hydrateRoute(route) {
     return typeof route === "string" ? routes[route] : null;
@@ -61,14 +60,16 @@ export const state = defineState({
 
             patchState(newState);
 
-            return dispatchAction(route.chunkEntry.loadAction).then(componentModule =>
-                Promise.resolve(
-                    getState().route === route &&
-                        has(componentModule, "state") === true &&
-                        typeof componentModule.state.actions.enter === "function" &&
-                        dispatchAction(componentModule.state.actions.enter(route, params))
-                ).then(() => componentModule)
-            );
+            return dispatchAction(route.chunkEntry.loadAction).then(componentModule => {
+                if (getState().route !== route) {
+                    // User has already switched the route
+                    return componentModule;
+                }
+
+                return Promise.resolve(dispatchAction(componentModule.state.actions.enter(route, params))).then(
+                    () => componentModule
+                );
+            });
         },
     },
 });

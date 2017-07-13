@@ -1,6 +1,7 @@
 import addObjectKeys from "./util/addObjectKeys";
 import top5 from "./components/top5";
 import allPosts from "./components/allPosts";
+import about from "./components/about";
 
 export default addObjectKeys(
     {
@@ -12,10 +13,10 @@ export default addObjectKeys(
             match: "/all",
             chunkEntry: allPosts,
         },
-        // about: {
-        //     match: "/about",
-        //     component: () => import("./components/about/about" /* webpackChunkName: "about" */),
-        // },
+        about: {
+            match: "/about",
+            chunkEntry: about,
+        },
         // notFound: {
         //     match: "/404",
         //     component: () => import("./components/notFound/notFound" /* webpackChunkName: "notFound" */),

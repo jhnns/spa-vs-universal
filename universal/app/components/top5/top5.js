@@ -13,11 +13,11 @@ export const state = defineState({
         posts: null,
     },
     actions: {
-        enter: () => (getState, patchState, dispatchAction, execEffect) => {
+        enter: () => (getState, patchState, dispatchAction) => {
             dispatchAction(
                 documentState.actions.update({
                     statusCode: 200,
-                    title: "Top 5 Peerigon News",
+                    title,
                     headerTags: [],
                 })
             );
