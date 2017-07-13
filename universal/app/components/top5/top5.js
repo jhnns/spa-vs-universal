@@ -1,12 +1,17 @@
 import defineState from "../store/defineState";
 import defineComponent from "../util/defineComponent";
-import renderChild from "../util/renderChild";
 import { state as documentState } from "../document/document";
+import getTop5 from "../../api/posts/getTop5";
+import Posts from "../posts/posts";
 
 const name = "top5";
+const title = "Top 5 Peerigon News";
 
 export const state = defineState({
     scope: name,
+    initialState: {
+        posts: null,
+    },
     actions: {
         enter: () => (getState, patchState, dispatchAction, execEffect) => {
             dispatchAction(
@@ -16,13 +21,25 @@ export const state = defineState({
                     headerTags: [],
                 })
             );
+
+            return getTop5().then(posts => {
+                patchState({
+                    posts,
+                });
+            });
         },
     },
 });
 
 export default defineComponent({
     name,
-    render() {
-        return <span>Top 5</span>;
+    connectToStore: {
+        watch: [state.select],
+        mapToState(state) {
+            return state;
+        },
+    },
+    render(props, state) {
+        return <Posts a11yTitle={title} posts={state.posts} />;
     },
 });
