@@ -2,7 +2,7 @@ import defineState from "../store/defineState";
 import { state as documentState } from "../document/document";
 import { aboutSheet, headline, text } from "./about.css";
 
-const name = "allPosts";
+const name = "about";
 const title = "About";
 
 export const state = defineState({

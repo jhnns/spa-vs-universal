@@ -45,9 +45,10 @@ export const state = defineState({
             patchState({
                 entryUrl,
             });
-            execEffect(initRouter, entryUrl, (route, params) => {
-                dispatchAction(state.actions.handleRouteMatch(route, params));
-            });
+
+            return execEffect(initRouter, entryUrl, (route, params) =>
+                dispatchAction(state.actions.handleRouteMatch(route, params))
+            );
         },
         handleRouteMatch: (route, params) => (getState, patchState, dispatchAction) => {
             const oldState = getState();

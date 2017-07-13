@@ -1,6 +1,3 @@
-import isPromise from "is-promise";
-import { state as storeState } from "./store";
-
 function executeAction(store, action) {
     function getState() {
         return action.scope(store.getState());
@@ -24,30 +21,7 @@ function executeAction(store, action) {
         return effect(...args);
     }
 
-    const result = action.exec(getState, patchState, dispatchAction, execEffect);
-
-    return isPromise(result) === true ? handleAsyncAction(store, action, result) : result;
-}
-
-function handleAsyncAction(store, action, promise) {
-    function dispatchRemove() {
-        store.dispatch(storeState.actions.removePendingAction(action));
-    }
-
-    store.dispatch(storeState.actions.addPendingAction(action));
-
-    return promise.then(
-        res => {
-            setTimeout(dispatchRemove, 0);
-
-            return res;
-        },
-        err => {
-            setTimeout(dispatchRemove, 0);
-
-            throw err;
-        }
-    );
+    return action.exec(getState, patchState, dispatchAction, execEffect);
 }
 
 function isDefined(result) {
@@ -82,12 +56,22 @@ export default function enhanceStore(createStore) {
             },
             when(select, condition = isDefined) {
                 return new Promise((resolve, reject) => {
-                    const unsubscribe = this.watch(select, value => {
-                        if (condition(value) === true) {
+                    let unsubscribe = Function.prototype;
+
+                    function check(value) {
+                        const result = condition(value);
+
+                        if (result === true) {
                             unsubscribe();
                             resolve(value);
                         }
-                    });
+
+                        return result;
+                    }
+
+                    if (check(select(this.getState())) === false) {
+                        unsubscribe = this.watch(select, check);
+                    }
                 });
             },
         };

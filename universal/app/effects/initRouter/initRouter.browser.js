@@ -6,26 +6,28 @@ import mergeParams from "./mergeParams";
 import forward from "../forward/forward.browser";
 
 export default function initRouter(entryUrl, handleRouteMatch) {
-    const router = createRouter((route, urlParams) => {
-        const searchParams = new URLSearchParams(window.location.search.slice(1));
+    return new Promise(resolve => {
+        const router = createRouter((route, urlParams) => {
+            const searchParams = new URLSearchParams(window.location.search.slice(1));
 
-        handleRouteMatch(route, mergeParams(urlParams, searchParams));
-    });
+            resolve(handleRouteMatch(route, mergeParams(urlParams, searchParams)));
+        });
 
-    onHistoryPop(location => {
-        router(location.pathname);
-    });
-    onLinkClick(node => {
-        const href = node.href;
+        onHistoryPop(location => {
+            router(location.pathname);
+        });
+        onLinkClick(node => {
+            const href = node.href;
 
-        if (node.hasAttribute("data-route") === false) {
-            window.location = href;
+            if (node.hasAttribute("data-route") === false) {
+                window.location = href;
 
-            return;
-        }
+                return;
+            }
 
-        forward(router, node.href, {
-            replaceRoute: node.hasAttribute("data-replace-url") === true,
+            forward(router, node.href, {
+                replaceRoute: node.hasAttribute("data-replace-url") === true,
+            });
         });
     });
 }
