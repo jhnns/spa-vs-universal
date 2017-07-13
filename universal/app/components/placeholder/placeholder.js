@@ -5,35 +5,27 @@ const name = "placeholder";
 
 export default defineComponent({
     name,
-    connectToStore: {
-        watch: [placeholderCache.select],
-        mapToState(promiseCacheState, props) {
-            const promiseFactory = props.component;
+    render({ children, result = null, props = {} }) {
+        const noChildren = children.length === 0;
 
-            return {
-                component: selectResolved(promiseCacheState, promiseFactory),
-                error: selectError(promiseCacheState, promiseFactory),
-            };
-        },
-    },
-    onPropsChange(dispatchAction, props) {
-        dispatchAction(placeholderCache.actions.executeIfNotCached(props.component));
-    },
-    render(props, state) {
-        if (state.component !== null) {
-            const Component = state.component.default;
-
-            return <Component {...props.props} />;
-        }
-
-        const children = props.children;
-
-        if (children.length === 0) {
+        if (result === null && noChildren) {
             return <Loading />;
+        }
+        if (result !== null && result instanceof Error === false) {
+            const Component = result;
+
+            return <Component {...props} />;
+        }
+        if (result instanceof Error && noChildren) {
+            return (
+                <div>
+                    {result.message}
+                </div>
+            );
         }
 
         const childGenerator = children[0];
 
-        return childGenerator(state.componentError);
+        return childGenerator(result);
     },
 });

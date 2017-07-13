@@ -6,11 +6,11 @@ export default addObjectKeys(
     {
         top5: {
             match: "/",
-            load: top5,
+            chunkEntry: top5,
         },
         allPosts: {
             match: "/all",
-            load: allPosts,
+            chunkEntry: allPosts,
         },
         // about: {
         //     match: "/about",

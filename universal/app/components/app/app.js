@@ -1,6 +1,7 @@
 import { root, main } from "./app.css";
 import Header from "../header/header";
 import Store from "../store/store";
+import RoutePlaceholder from "../router/routePlaceholder";
 
 export default function App(props) {
     return (
@@ -8,7 +9,7 @@ export default function App(props) {
             <div {...root}>
                 <Header />
                 <main {...main}>
-                    {/* <RoutePlaceholder />*/}
+                    <RoutePlaceholder />
                 </main>
             </div>
         </Store>
