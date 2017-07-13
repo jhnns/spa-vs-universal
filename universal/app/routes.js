@@ -2,6 +2,7 @@ import defineRoutes from "./util/defineRoutes";
 import top5 from "./components/top5";
 import allPosts from "./components/allPosts";
 import about from "./components/about";
+import notFound from "./components/notFound";
 
 export default defineRoutes({
     top5: {
@@ -19,8 +20,9 @@ export default defineRoutes({
         action: about.load,
         Placeholder: about.Placeholder,
     },
-    // notFound: {
-    //     match: "/404",
-    //     component: () => import("./components/notFound/notFound" /* webpackChunkName: "notFound" */),
-    // },
+    notFound: {
+        match: "/404",
+        action: notFound.load,
+        Placeholder: notFound.Placeholder,
+    },
 });

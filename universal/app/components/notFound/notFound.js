@@ -1,9 +1,11 @@
 import defineState from "../store/defineState";
-import renderChild from "../util/renderChild";
+import defineComponent from "../util/defineComponent";
 import { state as documentState } from "../document/document";
 
+const name = "notFound";
+
 export const state = defineState({
-    scope: "notFound",
+    scope: name,
     actions: {
         enter: () => (getState, patchState, dispatchAction, execEffect) => {
             dispatchAction(
@@ -17,4 +19,13 @@ export const state = defineState({
     },
 });
 
-export default renderChild;
+export default defineComponent({
+    name,
+    render() {
+        return (
+            <div>
+                <h2>Not Found</h2>
+            </div>
+        );
+    },
+});
