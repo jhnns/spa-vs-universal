@@ -1,7 +1,7 @@
 import defineChunkEntry from "../chunks/defineChunkEntry";
 
 export default defineChunkEntry({
-    entry: "top5",
+    name: "top5",
     chunk: "posts",
     load: () => import("./top5" /* webpackChunkName: "posts" */),
     placeholder: {

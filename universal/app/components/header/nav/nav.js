@@ -16,7 +16,7 @@ export default defineComponent({
                             Top{nbsp}5
                         </Link>
                     </li>
-                    <li {...listItem}>
+                    {/*                    <li {...listItem}>
                         <Link route={routes.allPosts} activeClass={activeLink} {...link}>
                             All
                         </Link>
@@ -25,7 +25,7 @@ export default defineComponent({
                         <Link route={routes.about} activeClass={activeLink} {...link}>
                             About
                         </Link>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
         );

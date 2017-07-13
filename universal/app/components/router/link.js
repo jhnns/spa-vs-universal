@@ -49,7 +49,7 @@ export default defineComponent({
         }),
     },
     render(props) {
-        splitProps(props);
+        splitProps(props, this);
 
         const { route, params, children, replaceRoute, activeClass } = props.own;
 

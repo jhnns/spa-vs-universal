@@ -62,11 +62,12 @@ export const state = defineState({
             patchState(newState);
 
             return dispatchAction(route.load).then(component =>
-                (getState().route === route &&
-                has(component, "state") === true &&
-                typeof component.state.actions.enter === "function" ?
-                    dispatchAction(component.state.actions.enter(route, params)) :
-                    Promise.resolve()).then(() => component)
+                Promise.resolve(
+                    getState().route === route &&
+                        has(component, "state") === true &&
+                        typeof component.state.actions.enter === "function" &&
+                        dispatchAction(component.state.actions.enter(route, params))
+                ).then(() => component)
             );
         },
     },

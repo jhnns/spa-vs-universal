@@ -13,10 +13,10 @@ function isDehydratable(state) {
 export default function defineState(descriptor) {
     const scope = descriptor.scope;
     const initialState = has(descriptor, "initialState") ? descriptor.initialState : {};
-    const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : () => initialState;
+    const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : s => s;
 
     function selectState(globalState) {
-        return ensureHydrated(scope in globalState ? globalState[scope] : initialState);
+        return ensureHydrated(scope in globalState ? globalState[scope] : Object.assign({}, initialState));
     }
 
     function ensureHydrated(state) {
