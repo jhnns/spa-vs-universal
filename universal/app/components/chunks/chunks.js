@@ -1,36 +1,39 @@
 import defineState from "../store/defineState";
 import chunkEntries from "./chunkEntries";
 import renderChild from "../util/renderChild";
-import definePromiseCache, { selectPromise, selectError, isInCache } from "../util/definePromiseCache";
+import PromiseCache from "../../util/promiseCache";
 
 const name = "chunks";
-
-const chunkCache = definePromiseCache({
-    scope: name,
+const chunkCacheOptions = {
     sizeLimit: Infinity,
-});
+};
 
 export const state = defineState({
     scope: name,
     initialState: {
         loadedEntries: [],
     },
+    hydrate(dehydratedState) {
+        dehydratedState.chunkCache = new PromiseCache(chunkCacheOptions);
+
+        return dehydratedState;
+    },
     actions: {
         preload: () => (getState, patchState, dispatchAction) =>
             Promise.all(
                 getState().loadedEntries
                     .map(entryName => chunkEntries.get(entryName).load)
-                    .map(promiseFactory => dispatchAction(chunkCache.actions.run(promiseFactory)))
+                    .map(promiseFactory => getState().chunkCache.execute(promiseFactory))
             ),
         ensure: chunkEntry => (getState, patchState, dispatchAction) => {
             const promiseFactory = chunkEntry.load;
-            const chunkCacheState = chunkCache.select();
+            const chunkCache = getState().chunkCache;
 
-            if (isInCache(chunkCacheState, promiseFactory) && selectError(chunkCacheState, promiseFactory) === null) {
-                return selectPromise(chunkCacheState, promiseFactory);
+            if (chunkCache.has(promiseFactory)) {
+                return chunkCache.getPromise(promiseFactory);
             }
 
-            return dispatchAction(chunkCache.actions.run(chunkEntry.load)).then(result => {
+            return chunkCache.execute(promiseFactory).then(result => {
                 patchState({
                     loadedEntries: getState().loadedEntries.concat(chunkEntry.name),
                 });

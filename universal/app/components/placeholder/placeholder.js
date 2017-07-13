@@ -1,12 +1,7 @@
 import Loading from "../loading/loading";
 import defineComponent from "../util/defineComponent";
-import definePromiseCache, { selectResolved, selectError } from "../util/definePromiseCache";
 
 const name = "placeholder";
-
-export const placeholderCache = definePromiseCache({
-    scope: name + "Cache",
-});
 
 export default defineComponent({
     name,

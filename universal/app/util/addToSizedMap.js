@@ -7,13 +7,10 @@ function removeFirst(map) {
 }
 
 export default function addToSizedMap(sizedMap, sizeLimit, key, value) {
-    const MapClass = Object.getPrototypeOf(sizedMap).constructor;
-    const newMap = new MapClass(sizedMap);
-
-    if (newMap.size === sizeLimit) {
-        removeFirst(newMap);
+    if (sizedMap.size === sizeLimit) {
+        removeFirst(sizedMap);
     }
-    newMap.set(key, value);
+    sizedMap.set(key, value);
 
-    return newMap;
+    return sizedMap;
 }
