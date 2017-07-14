@@ -12,17 +12,16 @@ export default defineComponent({
     connectToStore: {
         watch: [routerState.select],
         mapToState: ({ params }) => ({
-            params: params.toString(),
+            params: {
+                ...params,
+                showLogin: 1,
+            },
         }),
     },
     render(props, state) {
-        const paramsAndShowLogin = new URLSearchParams(state.params);
-
-        paramsAndShowLogin.set("showLogin", 1);
-
         return (
             <div>
-                <Link params={paramsAndShowLogin} {...link}>
+                <Link params={state.params} {...link}>
                     Log{nbsp}in
                 </Link>
             </div>

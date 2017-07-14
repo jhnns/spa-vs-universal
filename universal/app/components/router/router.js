@@ -1,91 +1,114 @@
-import URLSearchParams from "url-search-params";
+import url from "url";
 import defineState from "../store/defineState";
-import initRouter from "../../effects/initRouter";
-import routes from "../../routes";
+import createRouter from "./createRouter";
 import renderChild from "../util/renderChild";
-import routeToUrl from "../../util/routeToUrl";
+import routes from "../../routes";
 import has from "../../util/has";
 
-function hydrateRoute(route) {
-    return typeof route === "string" ? routes[route] : null;
+const name = "router";
+const router = createRouter();
+
+function handleTransition(getState, patchState, dispatchAction) {
+    return new Promise(resolve => {
+        const { route, params } = getState();
+
+        resolve(
+            dispatchAction(route.action).then(componentModule => {
+                const state = getState();
+
+                if (state.route !== route) {
+                    // User has already switched the route
+                    return state;
+                }
+
+                return Promise.resolve(dispatchAction(componentModule.state.actions.enter(route, params))).then(() =>
+                    getState()
+                );
+            })
+        );
+    });
 }
 
-function dehydrateRoute(route) {
-    return route === null ? null : route.name;
+function changeRoute(abortChange, reduceHistory) {
+    return url => (getState, patchState, dispatchAction) =>
+        new Promise(resolve => {
+            const oldState = getState();
+
+            if (abortChange(oldState, url)) {
+                resolve(oldState);
+
+                return;
+            }
+
+            const { route, params } = resolveRouteAndParams(url);
+
+            patchState({
+                url,
+                route,
+                params,
+                history: reduceHistory(oldState.history, url),
+            });
+
+            resolve(handleTransition(getState, patchState, dispatchAction));
+        });
 }
 
-function hydrateParams(params) {
-    return typeof params === "string" ? new URLSearchParams(params) : null;
+function parseUrl(u) {
+    return url.parse(u, true);
 }
 
-function dehydrateParams(params) {
-    return params === null ? null : params.toString();
+function isCurrentUrl(state, url) {
+    return state.url === url;
+}
+
+function returnFalse() {
+    return false;
+}
+
+function resolveRouteAndParams(url) {
+    const parsedUrl = parseUrl(url);
+    const { route, urlParams } = router(parsedUrl.pathname);
+
+    return {
+        route,
+        params: Object.assign(parsedUrl.query, urlParams),
+    };
 }
 
 export const state = defineState({
-    scope: "router",
-    hydrate(dehydratedState) {
-        const entryUrl = has(dehydratedState, "entryUrl") ? dehydratedState.entryUrl : "";
-        const route = hydrateRoute(dehydratedState.route);
-        const params = hydrateParams(dehydratedState.params);
-        const previousRoute = hydrateRoute(dehydratedState.previousRoute);
-        const previousParams = hydrateParams(dehydratedState.previousParams);
+    scope: name,
+    initialState: {
+        entryUrl: null,
+        url: null,
+        route: null,
+        params: null,
+        history: [],
+    },
+    hydrate(dehydrated) {
+        const route = dehydrated.route;
 
         return {
-            entryUrl,
-            url: route === null ? null : routeToUrl(route, params),
-            route,
-            params,
-            previousUrl: previousRoute === null ? null : routeToUrl(previousRoute, previousParams),
-            previousRoute,
-            previousParams,
-            toJSON() {
-                return {
-                    entryUrl: this.entryUrl,
-                    url: this.url,
-                    route: dehydrateRoute(this.route),
-                    params: dehydrateParams(this.params),
-                    previousUrl: this.previousUrl,
-                    previousRoute: dehydrateRoute(this.previousRoute),
-                    previousParams: dehydrateParams(this.previousParams),
-                };
-            },
+            ...dehydrated,
+            route: route !== null && has(routes, route.name) ? routes[route.name] : null,
         };
     },
     actions: {
-        init: entryUrl => (getState, patchState, dispatchAction, execEffect) => {
-            patchState({
-                entryUrl,
-            });
+        push: changeRoute(isCurrentUrl, (history, url) => history.concat(url)),
+        replace: changeRoute(isCurrentUrl, (history, url) => history.slice().splice(-1, 1, url)),
+        pop: () => (getState, patchState, dispatchAction) =>
+            new Promise(resolve => {
+                const oldState = getState();
 
-            return execEffect(initRouter, entryUrl, (route, params) =>
-                dispatchAction(state.actions.handleRouteMatch(route, params))
-            );
-        },
-        handleRouteMatch: (route, params) => (getState, patchState, dispatchAction) => {
-            const oldState = getState();
-            const newState = {
-                url: routeToUrl(route, params),
-                route,
-                params,
-                previousUrl: oldState.url,
-                previousRoute: oldState.route,
-                previousParams: oldState.params,
-            };
-
-            patchState(newState);
-
-            return dispatchAction(route.action).then(componentModule => {
-                if (getState().route !== route) {
-                    // User has already switched the route
-                    return componentModule;
-                }
-
-                return Promise.resolve(dispatchAction(componentModule.state.actions.enter(route, params))).then(
-                    () => componentModule
+                resolve(
+                    oldState.history.length === 1 ?
+                        oldState :
+                        changeRoute(returnFalse, history => history.slice(0, -1))(
+                            getState,
+                            patchState,
+                            dispatchAction
+                        )
                 );
-            });
-        },
+            }),
     },
 });
 

@@ -12,7 +12,7 @@ export default function handleRequest(req, res) {
 
     res.header("Content-Type", "text/html");
 
-    const routingFinished = store.dispatch(routerState.actions.init(req.url));
+    const routingFinished = store.dispatch(routerState.actions.push(req.url));
 
     store.when(s => documentState.select(s).statusCode).then(statusCode => {
         const finalState = routingFinished.then(s => store.getState());
