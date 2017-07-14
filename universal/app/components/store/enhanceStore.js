@@ -8,7 +8,7 @@ export default function enhanceStore(createStore) {
         const enhancedStore = {
             ...store,
             watch(select, onChange) {
-                let oldValue;
+                let oldValue = select(this.getState());
 
                 return this.subscribe(() => {
                     const newValue = select(this.getState());
