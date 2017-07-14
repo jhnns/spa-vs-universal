@@ -3,6 +3,8 @@ import defineState from "../store/defineState";
 import initRouter from "../../effects/initRouter";
 import routes from "../../routes";
 import renderChild from "../util/renderChild";
+import routeToUrl from "../../util/routeToUrl";
+import has from "../../util/has";
 
 function hydrateRoute(route) {
     return typeof route === "string" ? routes[route] : null;
@@ -22,18 +24,28 @@ function dehydrateParams(params) {
 
 export const state = defineState({
     scope: "router",
-    hydrate({ entryUrl = "", route, params, previousRoute, previousParams }) {
+    hydrate(dehydratedState) {
+        const entryUrl = has(dehydratedState, "entryUrl") ? dehydratedState.entryUrl : "";
+        const route = hydrateRoute(dehydratedState.route);
+        const params = hydrateParams(dehydratedState.params);
+        const previousRoute = hydrateRoute(dehydratedState.previousRoute);
+        const previousParams = hydrateParams(dehydratedState.previousParams);
+
         return {
             entryUrl,
-            route: hydrateRoute(route),
-            params: hydrateParams(params),
-            previousRoute: hydrateRoute(previousRoute),
-            previousParams: hydrateParams(previousParams),
+            url: route === null ? null : routeToUrl(route, params),
+            route,
+            params,
+            previousUrl: previousRoute === null ? null : routeToUrl(previousRoute, previousParams),
+            previousRoute,
+            previousParams,
             toJSON() {
                 return {
                     entryUrl: this.entryUrl,
+                    url: this.url,
                     route: dehydrateRoute(this.route),
                     params: dehydrateParams(this.params),
+                    previousUrl: this.previousUrl,
                     previousRoute: dehydrateRoute(this.previousRoute),
                     previousParams: dehydrateParams(this.previousParams),
                 };
@@ -53,8 +65,10 @@ export const state = defineState({
         handleRouteMatch: (route, params) => (getState, patchState, dispatchAction) => {
             const oldState = getState();
             const newState = {
+                url: routeToUrl(route, params),
                 route,
                 params,
+                previousUrl: oldState.url,
                 previousRoute: oldState.route,
                 previousParams: oldState.params,
             };

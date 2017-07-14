@@ -1,5 +1,5 @@
 import hookIntoEvent from "../util/hookIntoEvent";
-import routeToHref from "../../util/routeToHref";
+import routeToUrl from "../../util/routeToUrl";
 import defineComponent from "../util/defineComponent";
 import { state as routerState } from "./router";
 import has from "../../util/has";
@@ -35,11 +35,10 @@ export default defineComponent({
     name: "Link",
     connectToStore: {
         watch: [routerState.select],
-        mapToState({ route }) {
-            return {
-                route,
-            };
-        },
+        mapToState: ({ route, url }) => ({
+            url,
+            route,
+        }),
     },
     handlers: {
         handleMouseOver: hookIntoEvent("onMouseOver", (dispatchAction, event, props) => {
@@ -53,12 +52,13 @@ export default defineComponent({
         splitProps(props, state);
 
         const { route, params, children, replaceRoute, activeClass } = props.own;
+        const targetUrl = routeToUrl(route, params);
 
         return (
             <a
                 {...props.a}
-                {...(route === this.state.route ? activeClass : emptyObj)}
-                href={routeToHref(route, params)}
+                {...(route === state.route ? activeClass : emptyObj)}
+                href={targetUrl}
                 onMouseOver={this.handlers.handleMouseOver}
                 onFocus={this.handlers.handleFocus}
                 data-route={true}
