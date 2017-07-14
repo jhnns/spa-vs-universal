@@ -76,6 +76,12 @@ function resolveRouteAndParams(parsedUrl) {
     };
 }
 
+export function selectPreviousUrl(globalState) {
+    const history = state.select(globalState).history;
+
+    return history.length > 1 ? history[history.length - 2] : null;
+}
+
 export const state = defineState({
     scope: name,
     initialState: {

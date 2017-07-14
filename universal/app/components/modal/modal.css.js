@@ -23,6 +23,13 @@ export const root = css({
     height: "100vh",
 });
 
+export const rootHidden = css({
+    transition: `transform 0s ${ fadeDurationCss }`,
+    transform: "translateX(100%)",
+});
+
+export const rootVisible = css({});
+
 export const backdrop = css({
     position: "fixed",
     top: 0,

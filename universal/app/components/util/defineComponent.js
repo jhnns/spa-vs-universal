@@ -62,7 +62,7 @@ export default function createComponent(descriptor) {
             this.storeUnsubscribers.forEach(f => f());
         }
         render() {
-            return render.call(this.context, this.props, this.state);
+            return render.call(this.context, this.props, this.state, this.handlers);
         }
     };
 

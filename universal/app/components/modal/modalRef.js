@@ -14,7 +14,11 @@ export default defineComponent({
             let modalAction = null;
 
             if (active === true && component !== modalComponent) {
-                modalAction = modalState.actions.show(modalComponent);
+                const backParams = { ...params };
+
+                delete backParams[activationParam];
+
+                modalAction = modalState.actions.show(modalComponent, backParams);
             } else if (active === false && component === modalComponent) {
                 modalAction = modalState.actions.hide();
             }
