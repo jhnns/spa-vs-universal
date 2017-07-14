@@ -42,7 +42,7 @@ function createRouter(routes, component) {
             return;
         }
         trigger(router, node.href, {
-            replaceRoute: node.hasAttribute("data-replace-url") === true,
+            replaceRoute: node.hasAttribute("data-replace-url") ? true : undefined,
         });
     });
 
