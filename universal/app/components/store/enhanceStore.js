@@ -5,17 +5,8 @@ function isDefined(result) {
 export default function enhanceStore(createStore) {
     return (reducers, initialState, enhancers) => {
         const store = createStore(reducers, initialState, enhancers);
-        const originalDispatch = store.dispatch;
-
         const enhancedStore = {
             ...store,
-            dispatch(action) {
-                if (typeof action === "function") {
-                    return action(dispatchAction, getState);
-                }
-
-                return originalDispatch.call(this, action);
-            },
             watch(select, onChange) {
                 let oldValue;
 
@@ -49,8 +40,6 @@ export default function enhanceStore(createStore) {
                 });
             },
         };
-        const dispatchAction = enhancedStore.dispatch.bind(enhancedStore);
-        const getState = enhancedStore.getState.bind(enhancedStore);
 
         return enhancedStore;
     };
