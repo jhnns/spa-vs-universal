@@ -5,9 +5,15 @@ import createRouter from "./createRouter";
 import mergeParams from "./mergeParams";
 import forward from "../forward/forward.browser";
 
+let router;
+
+export function getRouter() {
+    return router;
+}
+
 export default function initRouter(entryUrl, handleRouteMatch) {
     return new Promise(resolve => {
-        const router = createRouter((route, urlParams) => {
+        router = createRouter((route, urlParams) => {
             const searchParams = new URLSearchParams(window.location.search.slice(1));
 
             resolve(handleRouteMatch(route, mergeParams(urlParams, searchParams)));
@@ -25,7 +31,7 @@ export default function initRouter(entryUrl, handleRouteMatch) {
                 return;
             }
 
-            forward(router, node.href, {
+            forward(node.href, {
                 replaceRoute: node.hasAttribute("data-replace-url") ? true : undefined,
             });
         });

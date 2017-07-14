@@ -1,5 +1,6 @@
 import { createStore as reduxCreateStore, compose, applyMiddleware } from "redux";
 import reduxThunk from "redux-thunk";
+import effectMiddleware from "../../effects/effectMiddleware";
 import reducer from "./reducer";
 import enhanceStore from "./enhanceStore";
 
@@ -8,7 +9,7 @@ export default function createStore(initialState) {
         reducer,
         initialState,
         compose(
-            applyMiddleware(reduxThunk),
+            applyMiddleware(reduxThunk, effectMiddleware((effect, args) => effect(...args))),
             enhanceStore,
             // Use redux devtools when installed in the browser
             // @see https://github.com/zalmoxisus/redux-devtools-extension#implementation

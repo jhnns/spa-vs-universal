@@ -59,7 +59,13 @@ export default function defineState(descriptor) {
                 }
 
                 function execEffect(effect, ...args) {
-                    return effect(...args);
+                    return dispatchAction({
+                        type: type + "/effect",
+                        payload: {
+                            effect,
+                            args,
+                        },
+                    });
                 }
 
                 return execute(...args)(getScopedState, patchState, dispatchAction, execEffect);

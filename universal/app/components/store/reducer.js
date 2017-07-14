@@ -1,16 +1,19 @@
 const actionTypePattern = /^(\w+)\/(\w+)\/(\w+)$/i;
 
-export default function (state = {}, updateAction) {
-    const typeMatch = actionTypePattern.exec(updateAction.type);
+export default function (state = {}, action) {
+    const typeMatch = actionTypePattern.exec(action.type);
 
-    if (typeMatch === null) {
-        return state;
+    if (typeMatch !== null) {
+        const scope = typeMatch[1];
+        const actionType = typeMatch[3];
+
+        if (actionType === "patch") {
+            return {
+                ...state,
+                [scope]: action.payload,
+            };
+        }
     }
 
-    const scope = typeMatch[1];
-
-    return {
-        ...state,
-        [scope]: updateAction.payload,
-    };
+    return state;
 }

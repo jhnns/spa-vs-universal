@@ -1,6 +1,8 @@
-export default function forward(router, href, { replaceRoute = href === window.location.href } = {}) {
+import { getRouter } from "../initRouter/initRouter.browser";
+
+export default function forward(href, { replaceRoute = href === window.location.href } = {}) {
     const saveState = replaceRoute === true ? window.history.replaceState : window.history.pushState;
 
     saveState.call(history, {}, "", href);
-    router(location.pathname);
+    getRouter()(location.pathname);
 }
