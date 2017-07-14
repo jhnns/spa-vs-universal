@@ -52,7 +52,7 @@ export default defineComponent({
         splitProps(props, state);
 
         const { route, params, children, replaceRoute, activeClass } = props.own;
-        const targetUrl = ""; // routeToUrl(route, params);
+        const targetUrl = routeToUrl(route, params);
 
         return (
             <a
