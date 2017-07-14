@@ -1,8 +1,12 @@
-import defineRoutes from "./util/defineRoutes";
 import top5 from "./components/top5";
 import allPosts from "./components/allPosts";
 import about from "./components/about";
 import notFound from "./components/notFound";
+import addObjectKeys from "./util/addObjectKeys";
+
+function defineRoutes(routes) {
+    return addObjectKeys(routes, "name");
+}
 
 export default defineRoutes({
     top5: {
