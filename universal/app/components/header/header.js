@@ -4,7 +4,7 @@ import Link from "../router/link";
 import routes from "../../routes";
 import { root, content, logo, nav, headline, session, offscreen } from "./header.css";
 import defineComponent from "../util/defineComponent";
-// import Session from "./session/session";
+import Session from "./session/session";
 
 export default defineComponent({
     name: "Header",
@@ -19,7 +19,7 @@ export default defineComponent({
                         </h1>
                     </Link>
                     <Nav styles={nav} />
-                    {/* <Session class={session} /> */}
+                    <Session styles={session} />
                 </div>
             </header>
         );

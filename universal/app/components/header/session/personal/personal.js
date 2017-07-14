@@ -1,17 +1,11 @@
-import { Component } from "preact";
-import destroySession from "../../../../api/session/destroy";
+import defineComponent from "../../../util/defineComponent";
 import { root, userName, userImage } from "./personal.css";
 import { nbsp } from "../../../../util/htmlEntities";
-import { link } from "../../link.css";
 
-export default class Personal extends Component {
-    constructor() {
-        super();
-        this.handleLogout = this.handleLogout.bind(this);
-    }
-    handleLogout() {
-        destroySession();
-    }
+const name = "headerSessionPersonal";
+
+export default defineComponent({
+    name,
     render(props) {
         const user = props.user;
 
@@ -20,17 +14,15 @@ export default class Personal extends Component {
         }
 
         return (
-            <div class={root}>
-                <img class={userImage} src={user.image} alt={user.name} />
-                <span class={userName}>
+            <div {...root}>
+                <img src={user.image} alt={user.name} {...userImage} />
+                <span {...userName}>
                     {user.name}
                 </span>
                 <span>
-                    <a href={window.location.href} class={link} onClick={this.handleLogout}>
-                        Log{nbsp}out
-                    </a>
+                    Log{nbsp}out
                 </span>
             </div>
         );
-    }
-}
+    },
+});

@@ -1,16 +1,30 @@
-import { Component } from "preact";
+import { state as sessionState } from "../../session/session";
 import Personal from "./personal/personal";
 import Anonymous from "./anonymous/anonymous";
-import localSession from "../../../api/session/local";
+import defineComponent from "../../util/defineComponent";
+import has from "../../../util/has";
 
-export default class Profile extends Component {
-    render(props) {
-        const user = localSession.user;
+const name = "headerSession";
+const emptyObj = {};
+
+export default defineComponent({
+    name,
+    connectToStore: {
+        watch: [sessionState.select],
+        mapToState(state) {
+            return {
+                user: state.user,
+            };
+        },
+    },
+    render(props, state) {
+        const user = state.user;
+        const styles = has(props, "styles") ? props.styles : emptyObj;
 
         return (
-            <div class={props.class}>
+            <div {...styles}>
                 {user === null ? <Anonymous /> : <Personal user={user} />}
             </div>
         );
-    }
-}
+    },
+});

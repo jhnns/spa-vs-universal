@@ -3,7 +3,7 @@ import defineComponent from "../../util/defineComponent";
 import { headline, paragraph, aside } from "./post.css";
 import has from "../../../util/has";
 
-const name = "post";
+const name = "postsPost";
 const lineBreak = /\s*[\r\n]+\s*/g;
 const emptyObj = {};
 

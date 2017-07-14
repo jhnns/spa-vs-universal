@@ -26,7 +26,7 @@ export default function initRouter(entryUrl, handleRouteMatch) {
             }
 
             forward(router, node.href, {
-                replaceRoute: node.hasAttribute("data-replace-url") === true,
+                replaceRoute: node.hasAttribute("data-replace-url") ? true : undefined,
             });
         });
     });

@@ -14,9 +14,9 @@ function preloadNextComponent(route) {
     }
 }
 
-function splitProps(props, context) {
+function splitProps(props, state) {
     const own = {
-        route: props.route || context.route,
+        route: props.route || state.route,
         params: props.params || null,
         children: props.children,
         replaceRoute: Boolean(props.replaceRoute),
@@ -49,8 +49,8 @@ export default defineComponent({
             preloadNextComponent(props.own.route);
         }),
     },
-    render(props) {
-        splitProps(props, this);
+    render(props, state) {
+        splitProps(props, state);
 
         const { route, params, children, replaceRoute, activeClass } = props.own;
 
