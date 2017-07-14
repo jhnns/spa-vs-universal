@@ -4,12 +4,9 @@ import { state as documentState } from "../components/document/document";
 import { state as routerState } from "../components/router/router";
 
 export default function setupSideEffects(store) {
-    store.watch(documentState.select, newDocumentState => {
-        document.title = newDocumentState.title;
-    });
-    store.watch(routerState.select, (newRouterState, oldRouterState) => {
-        const newHistory = newRouterState.history;
-        const oldHistory = oldRouterState.history;
+    let duringPopState = false;
+
+    function synchronizeHistory(newHistory, oldHistory) {
         const lengthDiff = newHistory.length - oldHistory.length;
 
         if (lengthDiff === 0) {
@@ -18,16 +15,23 @@ export default function setupSideEffects(store) {
             for (let i = 0; i < lengthDiff; i++) {
                 history.pushState(null, "", newHistory[oldHistory.length + i]);
             }
-        } else if (lengthDiff < 0) {
-            const lengthDiff = window.history.length - newHistory.length;
-
-            for (let i = 0; i < lengthDiff; i++) {
+        } else if (lengthDiff < 0 && duringPopState === false) {
+            for (let i = 0; i < Math.abs(lengthDiff); i++) {
                 history.back();
             }
         }
+    }
+
+    store.watch(documentState.select, newDocumentState => {
+        document.title = newDocumentState.title;
+    });
+    store.watch(routerState.select, (newRouterState, oldRouterState) => {
+        synchronizeHistory(newRouterState.history, oldRouterState.history);
     });
     onHistoryPop(location => {
+        duringPopState = true;
         store.dispatch(routerState.actions.pop());
+        duringPopState = false;
     });
     onLinkClick(node => {
         const url = node.href;

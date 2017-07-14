@@ -33,15 +33,16 @@ function changeRoute(abortChange, reduceHistory) {
     return url => (getState, patchState, dispatchAction) =>
         new Promise(resolve => {
             const oldState = getState();
+            const parsedUrl = parseUrl(url);
+            const sanitizedUrl = parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : "");
 
-            if (abortChange(oldState, url)) {
+            if (abortChange(oldState, sanitizedUrl)) {
                 resolve(oldState);
 
                 return;
             }
-            const parsedUrl = parseUrl(url);
+
             const { route, params } = resolveRouteAndParams(parsedUrl);
-            const sanitizedUrl = parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : "");
 
             patchState({
                 url: sanitizedUrl,
@@ -98,11 +99,12 @@ export const state = defineState({
         pop: () => (getState, patchState, dispatchAction) =>
             new Promise(resolve => {
                 const oldState = getState();
+                const history = oldState.history;
 
                 resolve(
-                    oldState.history.length === 1 ?
+                    history.length < 2 ?
                         oldState :
-                        changeRoute(returnFalse, history => history.slice(0, -1))(
+                        changeRoute(returnFalse, history => history.slice(0, -1))(history[history.length - 2])(
                             getState,
                             patchState,
                             dispatchAction
