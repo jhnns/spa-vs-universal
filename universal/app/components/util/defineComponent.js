@@ -6,17 +6,25 @@ import has from "../../util/has";
 const emptyObj = {};
 const emptyArr = [];
 
+function throwNoContextError() {
+    throw new Error("No store available in this component context");
+}
+
 export default function createComponent(descriptor) {
     const { render = renderChild } = descriptor;
     const connectToStore = descriptor.connectToStore;
     const shouldConnect = connectToStore !== undefined;
-    const onPropsChange = has(descriptor, "onPropsChange") ? descriptor.onPropsChange : Function.prototype;
+    const willUpdate = has(descriptor, "willUpdate") ? descriptor.willUpdate : Function.prototype;
     const Component = class Component extends PreactComponent {
         constructor(props, context) {
             super();
             this.props = props;
             this.context = context;
-            this.dispatchAction = action => this.context.store.dispatch(action);
+
+            if (has(context, "store")) {
+                this.dispatchAction = action => context.store.dispatch(action);
+            }
+
             // Set state undefined so that the user can use function default values during mapToState()
             this.state = undefined;
             this.state = shouldConnect === true ? this.getStateFromStore() : null;
@@ -31,13 +39,13 @@ export default function createComponent(descriptor) {
                 }, {});
             }
 
-            onPropsChange.call(context, this.dispatchAction, props, this.state);
+            willUpdate.call(context, props, this.state, this.dispatchAction);
         }
         shouldComponentUpdate(newProps, newState) {
             return shallowEqual(newProps, this.props) === false || shallowEqual(newState, this.state) === false;
         }
-        componentWillReceiveProps(newProps) {
-            onPropsChange.call(this.context, this.dispatchAction, newProps, this.state);
+        componentWillUpdate(newProps, newState) {
+            willUpdate.call(this.context, newProps, newState, this.dispatchAction);
         }
         componentWillMount() {
             if (shouldConnect === true) {
@@ -62,6 +70,7 @@ export default function createComponent(descriptor) {
     Component.prototype.displayName = descriptor.name;
     Component.prototype.handlers = emptyObj;
     Component.prototype.storeUnsubscribers = emptyArr;
+    Component.prototype.dispatchAction = throwNoContextError;
     if (has(descriptor, "getChildContext")) {
         Component.prototype.getChildContext = function () {
             return descriptor.getChildContext.call(this.context, this.props, this.state);

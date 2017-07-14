@@ -50,6 +50,7 @@
     "glamor": "^3.0.0-2",
     "glamor-server": "^3.0.0-2",
     "helmet": "^3.6.1",
+    "hex-to-rgba": "^0.2.0",
     "image-webpack-loader": "^3.3.1",
     "is-promise": "^2.1.0",
     "isomorphic-unfetch": "^2.0.0",
