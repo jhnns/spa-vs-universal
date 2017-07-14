@@ -40,14 +40,30 @@ export default function defineState(descriptor) {
     const actionDescriptor = has(descriptor, "actions") ? descriptor.actions : emptyObj;
     const state = {
         actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
-            const prepareAction = actionDescriptor[actionName];
+            const execute = actionDescriptor[actionName];
             const type = scope + "/" + actionName;
 
-            actions[actionName] = (...args) => ({
-                type,
-                scope: selectState,
-                exec: prepareAction(...args),
-            });
+            actions[actionName] = (...args) => (dispatchAction, getState) => {
+                function getScopedState() {
+                    return selectState(getState());
+                }
+
+                function patchState(patch) {
+                    return dispatchAction({
+                        type: type + "/patch",
+                        payload: {
+                            ...getScopedState(),
+                            ...patch,
+                        },
+                    });
+                }
+
+                function execEffect(effect, ...args) {
+                    return effect(...args);
+                }
+
+                return execute(...args)(getScopedState, patchState, dispatchAction, execEffect);
+            };
 
             return actions;
         }, {}),

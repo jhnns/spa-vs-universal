@@ -1,29 +1,3 @@
-function executeAction(store, action) {
-    function getState() {
-        return action.scope(store.getState());
-    }
-
-    function patchState(patch) {
-        return dispatchAction({
-            type: action.type + "/patch",
-            payload: {
-                ...getState(),
-                ...patch,
-            },
-        });
-    }
-
-    function dispatchAction(newAction) {
-        return store.dispatch(newAction);
-    }
-
-    function execEffect(effect, ...args) {
-        return effect(...args);
-    }
-
-    return action.exec(getState, patchState, dispatchAction, execEffect);
-}
-
 function isDefined(result) {
     return result !== null && result !== undefined;
 }
@@ -36,8 +10,8 @@ export default function enhanceStore(createStore) {
         const enhancedStore = {
             ...store,
             dispatch(action) {
-                if (typeof action.scope === "function" && typeof action.exec === "function") {
-                    return executeAction(enhancedStore, action);
+                if (typeof action === "function") {
+                    return action(dispatchAction, getState);
                 }
 
                 return originalDispatch.call(this, action);
@@ -75,6 +49,8 @@ export default function enhanceStore(createStore) {
                 });
             },
         };
+        const dispatchAction = enhancedStore.dispatch.bind(enhancedStore);
+        const getState = enhancedStore.getState.bind(enhancedStore);
 
         return enhancedStore;
     };
