@@ -1,4 +1,3 @@
-import URLSearchParams from "url-search-params";
 import defineComponent from "../../../util/defineComponent";
 import { state as routerState } from "../../../router/router";
 import Link from "../../../router/link";
