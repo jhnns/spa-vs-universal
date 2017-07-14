@@ -8,8 +8,8 @@ export default function setupSideEffects(store) {
         document.title = newDocumentState.title;
     });
     store.watch(routerState.select, (newRouterState, oldRouterState) => {
-        const newHistory = newRouterState.history.length;
-        const oldHistory = oldRouterState.history.length;
+        const newHistory = newRouterState.history;
+        const oldHistory = oldRouterState.history;
         const lengthDiff = newHistory.length - oldHistory.length;
 
         if (lengthDiff === 0) {

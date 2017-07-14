@@ -39,14 +39,15 @@ function changeRoute(abortChange, reduceHistory) {
 
                 return;
             }
-
-            const { route, params } = resolveRouteAndParams(url);
+            const parsedUrl = parseUrl(url);
+            const { route, params } = resolveRouteAndParams(parsedUrl);
+            const sanitizedUrl = parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : "");
 
             patchState({
-                url,
+                url: sanitizedUrl,
                 route,
                 params,
-                history: reduceHistory(oldState.history, url),
+                history: reduceHistory(oldState.history, sanitizedUrl),
             });
 
             resolve(handleTransition(getState, patchState, dispatchAction));
@@ -65,8 +66,7 @@ function returnFalse() {
     return false;
 }
 
-function resolveRouteAndParams(url) {
-    const parsedUrl = parseUrl(url);
+function resolveRouteAndParams(parsedUrl) {
     const { route, urlParams } = router(parsedUrl.pathname);
 
     return {
