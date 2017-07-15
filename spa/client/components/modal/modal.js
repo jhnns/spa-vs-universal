@@ -55,7 +55,7 @@ export default class Modal extends Component {
         preactRender(
             <WithContext context={this.context}>
                 <div class={root}>
-                    <GoBack class={backdropClass.join(" ")} params={getBackParams(props.activationParam)} />
+                    <GoBack class={backdropClass.join(" ")} />
                     {props.render || state.active ?
                         <div class={modalWindow}>
                             {props.children}

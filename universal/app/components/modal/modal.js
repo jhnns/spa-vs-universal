@@ -1,18 +1,17 @@
 import defineComponent from "../util/defineComponent";
 import registries from "../../registries";
 import defineState from "../store/defineState";
+import { selectPreviousUrl } from "../router/router";
 import { root, rootVisible, rootHidden, window, backdrop, backdropVisible, backdropHidden } from "./modal.css";
-import GoBack from "../router/goBack";
+import Link from "../router/link";
 
 const name = "modal";
-const emptyObj = {};
 
 export const state = defineState({
     scope: name,
     context: registries.stateContext,
     initialState: {
         component: null,
-        backParams: emptyObj,
     },
     hydrate(dehydrated) {
         return {
@@ -21,16 +20,14 @@ export const state = defineState({
         };
     },
     actions: {
-        show: (component, backParams = emptyObj) => (getState, patchState, dispatchAction) => {
+        show: component => (getState, patchState, dispatchAction) => {
             patchState({
                 component,
-                backParams,
             });
         },
         hide: () => (getState, patchState, dispatchAction) => {
             patchState({
                 component: null,
-                backParams: emptyObj,
             });
         },
     },
@@ -39,11 +36,11 @@ export const state = defineState({
 export default defineComponent({
     name,
     connectToStore: {
-        watch: [state.select],
-        mapToState: ({ component, backParams }, oldState) => ({
+        watch: [state.select, selectPreviousUrl],
+        mapToState: ({ component }, previousUrl, oldState) => ({
             active: component !== null,
             component: component === null ? oldState.component : component,
-            backParams,
+            previousUrl,
         }),
     },
     render(props, state) {
@@ -58,7 +55,7 @@ export default defineComponent({
 
         return (
             <div {...rootStyles}>
-                <GoBack params={state.backParams} {...backdropStyles} />
+                <Link href={state.previousUrl} {...backdropStyles} />
                 <div {...window}>
                     {state.component}
                 </div>
