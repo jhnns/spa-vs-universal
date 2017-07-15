@@ -1,12 +1,11 @@
 import defineState from "../store/defineState";
 import registries from "../../registries";
-import chunkEntries from "./chunkEntries";
 import renderChild from "../util/renderChild";
 
 const name = "chunks";
 
 export function selectLoadedChunks(globalState) {
-    return state.select(globalState).loadedEntries.map(entryName => chunkEntries[entryName].chunk);
+    return state.select(globalState).loadedEntries.map(entries => entries.chunk);
 }
 
 export const state = defineState({
@@ -15,22 +14,31 @@ export const state = defineState({
     initialState: {
         loadedEntries: [],
     },
+    hydrate(dehydrated) {
+        return {
+            ...dehydrated,
+            loadedEntries: dehydrated.loadedEntries.map(entryName => registries.chunkEntries[entryName]),
+            toJSON() {
+                return {
+                    ...this,
+                    loadedEntries: this.loadedEntries.map(entry => entry.name),
+                };
+            },
+        };
+    },
     actions: {
         preload: () => (getState, patchState, dispatchAction) =>
-            Promise.all(getState().loadedEntries.map(entryName => chunkEntries[entryName].load())),
-        ensure: chunkEntry => (getState, patchState, dispatchAction) => {
-            const entryName = chunkEntry.name;
-
-            return chunkEntry.load().then(result => {
-                if (getState().loadedEntries.indexOf(entryName) === -1) {
+            Promise.all(getState().loadedEntries.map(entry => entry.load())),
+        ensure: chunkEntry => (getState, patchState, dispatchAction) =>
+            chunkEntry.load().then(result => {
+                if (getState().loadedEntries.indexOf(chunkEntry) === -1) {
                     patchState({
-                        loadedEntries: getState().loadedEntries.concat(entryName),
+                        loadedEntries: getState().loadedEntries.concat(chunkEntry),
                     });
                 }
 
                 return result;
-            });
-        },
+            }),
     },
 });
 

@@ -1,5 +1,5 @@
-import chunkEntries from "./chunkEntries";
 import { state as chunkState } from "./chunks";
+import registries from "../../registries";
 import Placeholder from "../placeholder/placeholder";
 import defineComponent from "../util/defineComponent";
 import has from "../../util/has";
@@ -47,7 +47,7 @@ export default function defineChunkEntry(chunkEntry) {
                 throw e;
             }
         );
-    chunkEntries[chunkEntry.name] = chunkEntry;
+    registries.chunkEntries[chunkEntry.name] = chunkEntry;
 
     return {
         load: chunkState.actions.ensure(chunkEntry),
