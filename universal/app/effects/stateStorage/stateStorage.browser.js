@@ -11,14 +11,17 @@ export default {
     SESSION,
     writeTo(storageType, namespace, state) {
         const storage = storages[storageType];
+        const stringifiedState = JSON.stringify(state);
 
         try {
-            storage.setItem(namespace, JSON.stringify(state));
+            storage.setItem(namespace, stringifiedState);
         } catch (err) {
             // If something goes wrong here, the quota has probably exceeded
             console.error(err);
+            console.log("Retrying storage setItem after clearing it");
             try {
                 storage.clear();
+                storage.setItem(namespace, stringifiedState);
             } catch (err) {
                 console.error(err);
             }
