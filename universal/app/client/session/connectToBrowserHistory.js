@@ -27,7 +27,7 @@ export default function connectToBrowserHistory(store) {
     });
     onHistoryPop(location => {
         duringPopState = true;
-        store.dispatch(routerState.actions.pop());
+        store.dispatch(routerState.actions.pop(location.href));
         duringPopState = false;
     });
 }

@@ -69,7 +69,7 @@ function changeRoute(abortChange, reduceHistory) {
 }
 
 function changeBack(request) {
-    return changeRoute(returnFalse, history => history.slice(0, -1))(request);
+    return changeRoute(returnFalse, history => history.slice().splice(-2, 1, request.url))(request);
 }
 
 function parseUrl(u) {
@@ -123,19 +123,24 @@ export const state = defineState({
     actions: {
         push: changeRoute(isCurrentRequest, (history, url) => history.concat(url)),
         replace: changeRoute(isCurrentRequest, (history, url) => history.slice().splice(-1, 1, url)),
-        pop: () => (getState, patchState, dispatchAction) =>
+        pop: url => (getState, patchState, dispatchAction, execEffect) =>
             new Promise(resolve => {
                 const oldState = getState();
                 const history = oldState.history;
 
+                if (url === undefined) {
+                    if (history.length < 2) {
+                        throw new Error("End of routing history. Cannot go back to unknown url.");
+                    }
+                    url = history[history.length - 2];
+                }
+
                 resolve(
-                    history.length < 2 ?
-                        oldState :
-                        changeBack({
-                            // pop actions always result in get methods because all the other methods are not in the history
-                            method: "get",
-                            url: history[history.length - 2],
-                        })(getState, patchState, dispatchAction)
+                    changeBack({
+                        // pop actions always result in get methods because all the other methods are not in the history
+                        method: "get",
+                        url,
+                    })(getState, patchState, dispatchAction, execEffect)
                 );
             }),
     },
