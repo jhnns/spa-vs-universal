@@ -22,16 +22,24 @@ function handleTransition(getState, patchState, dispatchAction) {
                     return state;
                 }
 
-                return Promise.resolve(dispatchAction(componentModule.state.actions.enter(route, params))).then(() =>
-                    getState()
-                );
+                return Promise.resolve(dispatchAction(componentModule.state.actions.enter(route, params))).then(() => {
+                    const state = getState();
+
+                    if (state.request.method !== "get") {
+                        throw new Error(
+                            "Router finished with non-get request. Use the replace action to forward to a get request."
+                        );
+                    }
+
+                    return state;
+                });
             })
         );
     });
 }
 
 function changeRoute(abortChange, reduceHistory) {
-    return req => (getState, patchState, dispatchAction) =>
+    return req => (getState, patchState, dispatchAction, execEffect) =>
         new Promise(resolve => {
             const oldState = getState();
             const parsedUrl = parseUrl(req.url);
@@ -54,9 +62,14 @@ function changeRoute(abortChange, reduceHistory) {
                 params,
                 history: reduceHistory(oldState.history, sanitizedReq.url),
             });
+            execEffect(state.persist.session, getState());
 
             resolve(handleTransition(getState, patchState, dispatchAction));
         });
+}
+
+function changeBack(request) {
+    return changeRoute(returnFalse, history => history.slice(0, -1))(request);
 }
 
 function parseUrl(u) {
@@ -95,11 +108,15 @@ export const state = defineState({
         params: null,
         history: [],
     },
-    hydrate(dehydrated) {
+    persist: {
+        session: ["history"],
+    },
+    hydrate(dehydrated, localState, sessionState) {
         const route = dehydrated.route;
 
         return {
             ...dehydrated,
+            history: sessionState === null ? dehydrated.history : sessionState.history,
             route: route !== null && has(routes, route.name) ? routes[route.name] : null,
         };
     },
@@ -114,11 +131,11 @@ export const state = defineState({
                 resolve(
                     history.length < 2 ?
                         oldState :
-                        changeRoute(returnFalse, history => history.slice(0, -1))(history[history.length - 2])(
-                            getState,
-                            patchState,
-                            dispatchAction
-                        )
+                        changeBack({
+                            // pop actions always result in get methods because all the other methods are not in the history
+                            method: "get",
+                            url: history[history.length - 2],
+                        })(getState, patchState, dispatchAction)
                 );
             }),
     },
