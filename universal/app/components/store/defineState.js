@@ -70,7 +70,7 @@ export default function defineState(descriptor) {
     const state = {
         actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
             const execute = actionDescriptor[actionName];
-            const type = scope + "/" + actionName;
+            const type = namespace + "/" + actionName;
 
             actions[actionName] = (...args) => (dispatchAction, getState) => {
                 function getScopedState() {
@@ -80,10 +80,7 @@ export default function defineState(descriptor) {
                 function patchState(patch) {
                     return dispatchAction({
                         type: type + "/patch",
-                        payload: {
-                            ...getScopedState(),
-                            ...patch,
-                        },
+                        payload: patch,
                     });
                 }
 
