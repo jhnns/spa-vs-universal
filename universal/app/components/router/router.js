@@ -30,10 +30,10 @@ function handleTransition(getState, patchState, dispatchAction) {
 }
 
 function changeRoute(abortChange, reduceHistory) {
-    return url => (getState, patchState, dispatchAction) =>
+    return req => (getState, patchState, dispatchAction) =>
         new Promise(resolve => {
             const oldState = getState();
-            const parsedUrl = parseUrl(url);
+            const parsedUrl = parseUrl(req.url);
             const sanitizedUrl = parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : "");
 
             if (abortChange(oldState, sanitizedUrl)) {
@@ -45,7 +45,10 @@ function changeRoute(abortChange, reduceHistory) {
             const { route, params } = resolveRouteAndParams(parsedUrl);
 
             patchState({
-                url: sanitizedUrl,
+                request: {
+                    method: req.method,
+                    url: sanitizedUrl,
+                },
                 route,
                 params,
                 history: reduceHistory(oldState.history, sanitizedUrl),
@@ -85,8 +88,7 @@ export function selectPreviousUrl(globalState) {
 export const state = defineState({
     scope: name,
     initialState: {
-        entryUrl: null,
-        url: null,
+        request: null,
         route: null,
         params: null,
         history: [],
