@@ -1,5 +1,5 @@
 export default {
-    stateContext: {
+    state: {
         name: "app",
         scopes: Object.create(null),
     },

@@ -1,14 +1,31 @@
 import { state as chunkState } from "./chunks";
-import registries from "../../registries";
 import Placeholder from "../placeholder/placeholder";
 import defineComponent from "../util/defineComponent";
 import has from "../../util/has";
 
 const emptyArr = [];
 
-export default function defineChunkEntry(chunkEntry) {
-    const load = chunkEntry.load;
-    const childGenerator = has(chunkEntry, "Placeholder") ? [chunkEntry.Placeholder] : emptyArr;
+export default function defineChunkEntry(descriptor) {
+    const chunk = descriptor.chunk;
+    const context = descriptor.context;
+
+    if (typeof chunk !== "string") {
+        throw new Error("Chunk name is missing");
+    }
+    if (context === undefined) {
+        throw new Error("Chunk entry context is missing");
+    }
+
+    const id = has(descriptor, "name") ? descriptor.chunk + "/" + descriptor.name : descriptor.chunk;
+
+    if (has(context, id)) {
+        throw new Error(`Chunk entry ${ id } is already defined on given chunk entry context`);
+    }
+
+    const load = descriptor.load;
+    const childGenerator = has(descriptor, "Placeholder") ? [descriptor.Placeholder] : emptyArr;
+    let chunkModule = null;
+    let error = null;
     const ChunkEntryPlaceholder = defineComponent({
         connectToStore: {
             watch: [chunkState.select],
@@ -26,31 +43,29 @@ export default function defineChunkEntry(chunkEntry) {
             );
         },
     });
-    let chunkModule = null;
-    let error = null;
+    const chunkEntry = {
+        id,
+        load: () =>
+            load().then(
+                r => {
+                    error = null;
+                    chunkModule = r;
 
-    if (has(chunkEntry, "name") === false) {
-        chunkEntry.name = chunkEntry.chunk;
-    }
-    chunkEntry.load = () =>
-        load().then(
-            r => {
-                error = null;
-                chunkModule = r;
+                    return r;
+                },
+                e => {
+                    error = e;
+                    chunkModule = null;
 
-                return r;
-            },
-            e => {
-                error = e;
-                chunkModule = null;
-
-                throw e;
-            }
-        );
-    registries.chunkEntries[chunkEntry.name] = chunkEntry;
-
-    return {
-        load: chunkState.actions.ensure(chunkEntry),
+                    throw e;
+                }
+            ),
         Placeholder: ChunkEntryPlaceholder,
     };
+
+    chunkEntry.import = chunkState.actions.import(chunkEntry);
+
+    context[id] = chunkEntry;
+
+    return chunkEntry;
 }

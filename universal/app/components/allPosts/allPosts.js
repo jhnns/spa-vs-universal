@@ -1,5 +1,5 @@
 import defineState from "../store/defineState";
-import registries from "../../registries";
+import contexts from "../../contexts";
 import defineComponent from "../util/defineComponent";
 import { state as documentState } from "../document/document";
 import getAll from "../../api/posts/getAll";
@@ -10,7 +10,7 @@ const title = "All Peerigon News";
 
 export const state = defineState({
     scope: name,
-    context: registries.stateContext,
+    context: contexts.state,
     initialState: {
         posts: null,
     },

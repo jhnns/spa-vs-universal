@@ -11,22 +11,22 @@ function defineRoutes(routes) {
 export default defineRoutes({
     top5: {
         match: "/",
-        action: top5.load,
+        action: top5.import,
         Placeholder: top5.Placeholder,
     },
     allPosts: {
         match: "/all",
-        action: allPosts.load,
+        action: allPosts.import,
         Placeholder: allPosts.Placeholder,
     },
     about: {
         match: "/about",
-        action: about.load,
+        action: about.import,
         Placeholder: about.Placeholder,
     },
     notFound: {
         match: "/404",
-        action: notFound.load,
+        action: notFound.import,
         Placeholder: notFound.Placeholder,
     },
 });

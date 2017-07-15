@@ -1,5 +1,5 @@
 import defineState from "../store/defineState";
-import registries from "../../registries";
+import contexts from "../../contexts";
 import { state as documentState } from "../document/document";
 import { aboutSheet, headline, text } from "./about.css";
 
@@ -8,7 +8,7 @@ const title = "About";
 
 export const state = defineState({
     scope: name,
-    context: registries.stateContext,
+    context: contexts.state,
     initialState: {
         posts: null,
     },

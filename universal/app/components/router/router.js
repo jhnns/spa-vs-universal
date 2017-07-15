@@ -1,6 +1,6 @@
 import url from "url";
 import defineState from "../store/defineState";
-import registries from "../../registries";
+import contexts from "../../contexts";
 import createRouter from "./createRouter";
 import renderChild from "../util/renderChild";
 import routes from "../../routes";
@@ -107,7 +107,7 @@ export function selectPreviousUrl(globalState) {
 
 export const state = defineState({
     scope: name,
-    context: registries.stateContext,
+    context: contexts.state,
     initialState: {
         request: null,
         route: null,

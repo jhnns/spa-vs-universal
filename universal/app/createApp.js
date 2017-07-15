@@ -1,9 +1,9 @@
 import App from "./components/app/app";
 import createStore from "./components/store/createStore";
-import registries from "./registries";
+import contexts from "./contexts";
 
 export default function createApp(initialState) {
-    const store = createStore(registries.stateContext, initialState);
+    const store = createStore(contexts.state, initialState);
     const app = <App store={store} />;
 
     return {

@@ -57,7 +57,7 @@ export default function defineState(descriptor) {
     }
 
     if (typeof scope !== "string") {
-        throw new Error("Missing scope");
+        throw new Error("Scope is missing");
     }
     if (context === undefined) {
         throw new Error("State context is missing");

@@ -1,5 +1,5 @@
 import defineComponent from "../util/defineComponent";
-import registries from "../../registries";
+import contexts from "../../contexts";
 import defineState from "../store/defineState";
 import { selectPreviousUrl } from "../router/router";
 import { root, rootVisible, rootHidden, window, backdrop, backdropVisible, backdropHidden } from "./modal.css";
@@ -9,7 +9,7 @@ const name = "modal";
 
 export const state = defineState({
     scope: name,
-    context: registries.stateContext,
+    context: contexts.state,
     initialState: {
         component: null,
     },
