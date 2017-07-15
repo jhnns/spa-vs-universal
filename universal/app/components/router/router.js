@@ -69,7 +69,13 @@ function changeRoute(abortChange, reduceHistory) {
 }
 
 function changeBack(request) {
-    return changeRoute(returnFalse, history => history.slice().splice(-2, 1, request.url))(request);
+    return changeRoute(returnFalse, (history, url) => {
+        const newHistory = history.slice(0, -2);
+
+        newHistory.push(url);
+
+        return newHistory;
+    })(request);
 }
 
 function parseUrl(u) {
@@ -122,7 +128,13 @@ export const state = defineState({
     },
     actions: {
         push: changeRoute(isCurrentRequest, (history, url) => history.concat(url)),
-        replace: changeRoute(isCurrentRequest, (history, url) => history.slice().splice(-1, 1, url)),
+        replace: changeRoute(isCurrentRequest, (history, url) => {
+            const newHistory = history.slice(0, -1);
+
+            newHistory.push(url);
+
+            return newHistory;
+        }),
         pop: url => (getState, patchState, dispatchAction, execEffect) =>
             new Promise(resolve => {
                 const oldState = getState();

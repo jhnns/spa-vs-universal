@@ -25,7 +25,12 @@ export default defineComponent({
     },
     render(props, state) {
         return (
-            <Link title={"Go back"} {...props} onClick={this.handleClick} replaceRoute={state.previousUrl === null} />
+            <Link
+                title={"Go back"}
+                {...props}
+                onClick={this.handlers.handleClick}
+                replaceRoute={state.previousUrl !== null}
+            />
         );
     },
 });

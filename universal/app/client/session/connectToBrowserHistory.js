@@ -8,13 +8,16 @@ export default function connectToBrowserHistory(store) {
         const lengthDiff = newHistory.length - oldHistory.length;
 
         if (lengthDiff === 0) {
+            console.log("replace state");
             history.replaceState(null, "", newHistory[newHistory.length - 1]);
         } else if (lengthDiff > 0) {
             for (let i = 0; i < lengthDiff; i++) {
+                console.log("push state");
                 history.pushState(null, "", newHistory[oldHistory.length + i]);
             }
         } else if (lengthDiff < 0) {
             for (let i = 0; i < Math.abs(lengthDiff); i++) {
+                console.log("history back");
                 history.back();
             }
         }
