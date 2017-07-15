@@ -2,11 +2,12 @@ function isDefined(result) {
     return result !== null && result !== undefined;
 }
 
-export default function enhanceStore(createStore) {
-    return (reducers, initialState, enhancers) => {
+export default function enhanceStore(stateScopes) {
+    return createStore => (reducers, initialState, enhancers) => {
         const store = createStore(reducers, initialState, enhancers);
         const enhancedStore = {
             ...store,
+            stateScopes,
             watch(select, onChange) {
                 let oldValue = select(this.getState());
 

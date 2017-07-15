@@ -1,4 +1,5 @@
 import defineComponent from "../util/defineComponent";
+import registries from "../../registries";
 import defineState from "../store/defineState";
 import { root, rootVisible, rootHidden, window, backdrop, backdropVisible, backdropHidden } from "./modal.css";
 import GoBack from "../router/goBack";
@@ -8,6 +9,7 @@ const emptyObj = {};
 
 export const state = defineState({
     scope: name,
+    context: registries.stateContext,
     initialState: {
         component: null,
         backParams: emptyObj,

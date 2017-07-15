@@ -1,4 +1,5 @@
 import defineState from "../store/defineState";
+import registries from "../../registries";
 import chunkEntries from "./chunkEntries";
 import renderChild from "../util/renderChild";
 
@@ -10,6 +11,7 @@ export function selectLoadedChunks(globalState) {
 
 export const state = defineState({
     scope: name,
+    context: registries.stateContext,
     initialState: {
         loadedEntries: [],
     },

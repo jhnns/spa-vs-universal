@@ -1,8 +1,10 @@
+import registries from "../../registries";
 import defineState from "../store/defineState";
 import renderChild from "../util/renderChild";
 
 export const state = defineState({
     scope: "document",
+    context: registries.stateContext,
     initialState: {
         statusCode: null,
         title: null,

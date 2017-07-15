@@ -1,4 +1,5 @@
 import defineState from "../store/defineState";
+import registries from "../../registries";
 import defineComponent from "../util/defineComponent";
 import { state as documentState } from "../document/document";
 import getTop5 from "../../api/posts/getTop5";
@@ -9,6 +10,7 @@ const title = "Top 5 Peerigon News";
 
 export const state = defineState({
     scope: name,
+    context: registries.stateContext,
     initialState: {
         posts: null,
     },

@@ -1,4 +1,5 @@
 import has from "../../util/has";
+import stateStorage from "../../effects/stateStorage";
 
 const emptyObj = {};
 
@@ -12,11 +13,14 @@ function isDehydratable(state) {
 
 export default function defineState(descriptor) {
     const scope = descriptor.scope;
+    const context = descriptor.context;
+    const namespace = context.name + "/" + scope;
     const initialState = has(descriptor, "initialState") ? descriptor.initialState : {};
-    const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : s => Object.assign({}, s);
+    const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : s => ({ ...s });
+    const persist = has(descriptor, "persist") ? descriptor.persist : {};
 
-    function selectState(globalState) {
-        return ensureHydrated(has(globalState, scope) ? globalState[scope] : initialState);
+    function selectState(contextState) {
+        return ensureHydrated(has(contextState, scope) ? contextState[scope] : initialState);
     }
 
     function ensureHydrated(state) {
@@ -24,7 +28,9 @@ export default function defineState(descriptor) {
             return state;
         }
 
-        const hydratedState = hydrate(state);
+        const localState = stateStorage.readFrom(stateStorage.LOCAL, namespace);
+        const sessionState = stateStorage.readFrom(stateStorage.SESSION, namespace);
+        const hydratedState = hydrate(state, localState, sessionState);
 
         if (isDehydratable(hydratedState) === false) {
             hydratedState.toJSON = returnThis;
@@ -33,8 +39,31 @@ export default function defineState(descriptor) {
         return hydratedState;
     }
 
+    function writeTo(storageType) {
+        if (has(persist, storageType) === false) {
+            // Nothing to do
+            return Function.prototype;
+        }
+
+        return state => {
+            const stateToPersist = {
+                toJSON: state.toJSON,
+            };
+            const keys = persist[storageType];
+
+            keys.forEach(key => (stateToPersist[key] = state[key]));
+            stateStorage.writeTo(storageType, namespace, stateToPersist);
+        };
+    }
+
     if (typeof scope !== "string") {
         throw new Error("Missing scope");
+    }
+    if (context === undefined) {
+        throw new Error("State context is missing");
+    }
+    if (has(context.scopes, scope)) {
+        throw new Error(`Scope ${ scope } is already defined on given state context`);
     }
 
     const actionDescriptor = has(descriptor, "actions") ? descriptor.actions : emptyObj;
@@ -73,8 +102,14 @@ export default function defineState(descriptor) {
 
             return actions;
         }, {}),
+        persist: {
+            local: writeTo(stateStorage.LOCAL),
+            session: writeTo(stateStorage.SESSION),
+        },
         select: selectState,
     };
+
+    context.scopes[scope] = state;
 
     return state;
 }
