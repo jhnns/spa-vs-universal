@@ -23,11 +23,14 @@ export default function connectToBrowserHistory(store) {
         }
     }
 
-    store.watch(routerState.select, (newRouterState, oldRouterState) => {
-        if (duringPopState === false) {
-            synchronizeHistory(newRouterState.history, oldRouterState.history);
+    store.watch(
+        s => routerState.select(s).history,
+        (newHistory, oldHistory) => {
+            if (duringPopState === false) {
+                synchronizeHistory(newHistory, oldHistory);
+            }
         }
-    });
+    );
     onHistoryPop(location => {
         duringPopState = true;
         store.dispatch(routerState.actions.pop(location.href));

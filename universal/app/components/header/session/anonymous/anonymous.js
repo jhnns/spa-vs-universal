@@ -3,16 +3,18 @@ import { state as routerState } from "../../../router/router";
 import Link from "../../../router/link";
 import { link } from "../../link.css";
 import { nbsp } from "../../../../util/htmlEntities";
-import ModalRef from "../../../modal/modalRef";
+import ModalTrigger from "../../../modal/modalTrigger";
+import loginForm from "../../../loginForm";
 
 const name = "headerSessionAnonymous";
+const LoginFormPlaceholder = loginForm.Placeholder;
 
 export default defineComponent({
     name,
     connectToStore: {
         watch: [routerState.select],
         mapToState: ({ params }) => ({
-            params: {
+            showLoginParams: {
                 ...params,
                 showLogin: 1,
             },
@@ -21,14 +23,12 @@ export default defineComponent({
     render(props, state) {
         return (
             <div>
-                <Link params={state.params} {...link}>
+                <Link params={state.showLoginParams} {...link}>
                     Log{nbsp}in
                 </Link>
-                <ModalRef activationParam={"showLogin"}>
-                    <div>
-                        <h1>Hello this is a Modal</h1>
-                    </div>
-                </ModalRef>
+                <ModalTrigger triggerParam={"showLogin"} importAction={loginForm.import}>
+                    <LoginFormPlaceholder />
+                </ModalTrigger>
             </div>
         );
     },
