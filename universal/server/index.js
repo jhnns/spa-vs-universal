@@ -28,6 +28,12 @@ app.use(
         limit: config.bodyLimit,
     })
 );
+app.use(
+    bodyParser.urlencoded({
+        limit: config.bodyLimit,
+        extended: true,
+    })
+);
 api(app);
 app.use(
     connectGzipStatic(pathToPublic, {
