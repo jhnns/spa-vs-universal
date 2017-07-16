@@ -4,6 +4,7 @@ window.h = h;
 
 function startApp() {
     const createApp = require("../createApp").default;
+    const captureFormSubmit = require("./session/captureFormSubmit").default;
     const captureLinkClicks = require("./session/captureLinkClicks").default;
     const connectToBrowserHistory = require("./session/connectToBrowserHistory").default;
     const connectToDocument = require("./session/connectToDocument").default;
@@ -15,6 +16,7 @@ function startApp() {
     store.dispatch(storeState.actions.hydrateStates());
 
     captureLinkClicks(store);
+    captureFormSubmit(store);
     connectToBrowserHistory(store);
     connectToDocument(store);
 

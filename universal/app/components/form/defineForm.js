@@ -1,5 +1,8 @@
 import defineState from "../store/defineState";
 import defineComponent from "../util/defineComponent";
+import { state as routerState } from "../router/router";
+import has from "../../util/has";
+import routeToUrl from "../../util/routeToUrl";
 
 export default function defineForm(descriptor) {
     const state = defineState({
@@ -20,12 +23,16 @@ export default function defineForm(descriptor) {
     const Component = defineComponent({
         name: descriptor.name,
         connectToStore: {
-            watch: [state.select],
-            mapToState: s => s,
+            watch: [state.select, routerState.select],
+            mapToState: (state, routerState, props) => ({
+                ...state,
+                actionRoute: has(props, "actionRoute") ? props.actionRoute : routerState.route,
+                actionParams: has(props, "actionParams") ? props.actionParams : routerState.params,
+            }),
         },
         render(props, state) {
             return (
-                <form {...props.styles}>
+                <form method={"POST"} action={routeToUrl(state.actionRoute, state.actionParams)} {...props.styles}>
                     {descriptor.render(props, state)}
                 </form>
             );

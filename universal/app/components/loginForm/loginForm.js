@@ -4,6 +4,9 @@ import validators from "./loginFormValidators";
 import { loginSheet, loginInput, loginLabel, loginSubmit, formFeedback } from "./loginForm.css";
 import has from "../../util/has";
 import contexts from "../../contexts";
+import routes from "../../routes";
+
+const emptyObj = {};
 
 const form = defineForm({
     name: "loginForm",
@@ -21,7 +24,6 @@ const form = defineForm({
             <input
                 id={nameId}
                 name={"name"}
-                {...loginInput}
                 invalid={Boolean(validationErrors.name)}
                 autoCorrect="off"
                 autoCapitalize="off"
@@ -29,6 +31,7 @@ const form = defineForm({
                 type="text"
                 // Let the loginForm user decide if autoFocus is appropriate
                 autoFocus={autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
+                {...loginInput}
             />,
             <FormFeedback {...formFeedback}>
                 {validationErrors.name}
@@ -39,23 +42,23 @@ const form = defineForm({
             <input
                 id={passwordId}
                 name={"password"}
-                {...loginInput}
                 invalid={has(validationErrors, "name")}
                 autoCorrect="off"
                 autoCapitalize="off"
                 spellCheck="false"
                 type="password"
+                {...loginInput}
             />,
             <FormFeedback {...formFeedback}>
                 {validationErrors.password}
                 {submitError === null ? null : submitError.message}
             </FormFeedback>,
             <input
-                {...loginSubmit}
                 type="submit"
                 value="Log in"
                 data-pending={isSubmitPending}
-                disabled={isValid === false || isSubmitPending}
+                disabled={isSubmitPending}
+                {...loginSubmit}
             />,
         ];
         /* eslint-enable react/jsx-key */
@@ -67,5 +70,5 @@ export const state = form.state;
 export default function LoginForm(props) {
     const LoginForm = form.Component;
 
-    return <LoginForm {...props} styles={loginSheet} />;
+    return <LoginForm {...props} actionRoute={routes.login} actionParams={emptyObj} styles={loginSheet} />;
 }

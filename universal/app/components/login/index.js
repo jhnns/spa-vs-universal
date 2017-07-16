@@ -3,7 +3,6 @@ import contexts from "../../contexts";
 
 export default defineChunkEntry({
     chunk: "login",
-    name: "form",
     context: contexts.chunkEntries,
-    load: () => import("./loginForm" /* webpackChunkName: "login" */),
+    load: () => import("./login" /* webpackChunkName: "login" */),
 });
