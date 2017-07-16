@@ -7,11 +7,12 @@ export default function handleRequest(req, res) {
     const createApp = require("../createApp").default;
     const routerState = require("../components/router/router").state;
     const documentState = require("../components/document/document").state;
+    const storeState = require("../components/store/store").state;
     const renderApp = require("./renderApp").default;
     const preloadAllChunks = require("./preloadAllChunks").default;
     const { app, store } = createApp({});
 
-    res.header("Content-Type", "text/html");
+    store.dispatch(storeState.actions.hydrateStates());
 
     const routingFinished = preloadAllChunks().then(() => store.dispatch(routerState.actions.push(req)));
 
@@ -19,6 +20,8 @@ export default function handleRequest(req, res) {
         const appRendered = routingFinished.then(() => renderApp(app, store));
 
         res.status(statusCode);
+        res.header("Content-Type", "text/html");
+
         createRenderStream({
             title: store.when(s => documentState.select(s).title),
             headerTags: store.when(s => documentState.select(s).headerTags),

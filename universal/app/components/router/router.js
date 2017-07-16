@@ -99,8 +99,8 @@ function resolveRouteAndParams(parsedUrl) {
     };
 }
 
-export function selectPreviousUrl(globalState) {
-    const history = state.select(globalState).history;
+export function selectPreviousUrl(contextState) {
+    const history = state.select(contextState).history;
 
     return history.length > 1 ? history[history.length - 2] : null;
 }

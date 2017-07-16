@@ -20,14 +20,14 @@ export default function defineState(descriptor) {
     const persist = has(descriptor, "persist") ? descriptor.persist : {};
 
     function selectState(contextState) {
-        return ensureHydrated(has(contextState, scope) ? contextState[scope] : initialState);
+        return has(contextState, scope) ? contextState[scope] : initialState;
     }
 
-    function ensureHydrated(state) {
-        if (state !== initialState && isDehydratable(state) === true) {
-            return state;
-        }
+    function isHydrated(state) {
+        return state !== initialState && isDehydratable(state) === true;
+    }
 
+    function getHydrated(state) {
         const localState = stateStorage.readFrom(stateStorage.LOCAL, namespace);
         const sessionState = stateStorage.readFrom(stateStorage.SESSION, namespace);
         const hydratedState = hydrate(state, localState, sessionState);
@@ -102,6 +102,18 @@ export default function defineState(descriptor) {
         persist: {
             local: writeTo(stateStorage.LOCAL),
             session: writeTo(stateStorage.SESSION),
+        },
+        hydrate() {
+            return (dispatchAction, getState) => {
+                const state = selectState(getState());
+
+                if (isHydrated(state) === false) {
+                    dispatchAction({
+                        type: namespace + "/hydrate/put",
+                        payload: getHydrated(state),
+                    });
+                }
+            };
         },
         select: selectState,
     };

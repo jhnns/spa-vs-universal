@@ -80,11 +80,11 @@ export default function createComponent(descriptor) {
         const { mapToState, watch } = connectToStore;
 
         Component.prototype.getStateFromStore = function () {
-            const globalState = this.context.store.getState();
+            const contextState = this.context.store.getState();
 
             return mapToState.apply(
                 this.context,
-                watch.map(select => select(globalState)).concat(this.props, this.state)
+                watch.map(select => select(contextState)).concat(this.props, this.state)
             );
         };
     }

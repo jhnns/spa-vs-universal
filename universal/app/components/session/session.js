@@ -14,8 +14,8 @@ export const state = defineState({
     actions: {},
 });
 
-export function isLoggedIn(globalState) {
-    return state.select(globalState).user !== null;
+export function isLoggedIn(contextState) {
+    return state.select(contextState).user !== null;
 }
 
 export default renderChild;
