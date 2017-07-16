@@ -24,14 +24,14 @@ export default function defineChunkEntry(descriptor) {
 
     const load = descriptor.load;
     const childGenerator = has(descriptor, "Placeholder") ? [descriptor.Placeholder] : emptyArr;
-    let chunkModule = null;
+    let entryModule = null;
     let error = null;
     const ChunkEntryPlaceholder = defineComponent({
         connectToStore: {
             watch: [chunkState.select],
             mapToState() {
                 return {
-                    Component: chunkModule === null ? error : chunkModule.default,
+                    Component: entryModule === null ? error : entryModule.default,
                 };
             },
         },
@@ -45,21 +45,22 @@ export default function defineChunkEntry(descriptor) {
     });
     const chunkEntry = {
         id,
+        get: () => entryModule,
         load: () => {
-            if (chunkModule !== null) {
-                return Promise.resolve(chunkModule);
+            if (entryModule !== null) {
+                return Promise.resolve(entryModule);
             }
 
             return load().then(
                 result => {
                     error = null;
-                    chunkModule = result;
+                    entryModule = result;
 
                     return result;
                 },
                 err => {
                     error = err;
-                    chunkModule = null;
+                    entryModule = null;
 
                     throw err;
                 }

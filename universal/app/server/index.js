@@ -13,11 +13,10 @@ export default function handleRequest(req, res) {
 
     res.header("Content-Type", "text/html");
 
-    const chunksPreloaded = preloadAllChunks();
-    const routingFinished = store.dispatch(routerState.actions.push(req));
+    const routingFinished = preloadAllChunks().then(() => store.dispatch(routerState.actions.push(req)));
 
     store.when(s => documentState.select(s).statusCode).then(statusCode => {
-        const appRendered = Promise.all([routingFinished, chunksPreloaded]).then(() => renderApp(app, store));
+        const appRendered = routingFinished.then(() => renderApp(app, store));
 
         res.status(statusCode);
         createRenderStream({
