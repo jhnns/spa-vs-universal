@@ -3,7 +3,6 @@ import passport from "passport";
 import passportJwt from "passport-jwt";
 import compression from "compression";
 import jwt from "jsonwebtoken";
-import bodyParser from "body-parser";
 import { isProd } from "./env";
 import config from "./config";
 import dummyPosts from "./dummyData/posts";
@@ -35,12 +34,6 @@ export default app => {
     if (isProd) {
         app.use("/api", compression());
     }
-    app.use(
-        "/api",
-        bodyParser.json({
-            limit: config.bodyLimit,
-        })
-    );
     app.use("/api", passport.initialize());
     app.use("/api", (req, res, next) => {
         // Fake a delayed DB response

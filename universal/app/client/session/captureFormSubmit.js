@@ -1,13 +1,30 @@
 import { state as routerState } from "../../components/router/router";
 
-export default function captureLinkClicks(store) {
+const toArray = Array.from.bind(Array);
+
+function collectFormData(formElement) {
+    const formData = {};
+
+    for (const { name, value } of toArray(formElement.elements)) {
+        if (name !== "") {
+            formData[name] = value;
+        }
+    }
+
+    return formData;
+}
+
+export default function captureFormSubmit(store) {
     document.addEventListener("submit", event => {
-        const formNode = event.target;
+        const formElement = event.target;
+
+        event.preventDefault();
 
         store.dispatch(
             routerState.actions.push({
-                method: formNode.method,
-                url: formNode.action,
+                method: formElement.method,
+                url: formElement.action,
+                body: collectFormData(formElement),
             })
         );
     });

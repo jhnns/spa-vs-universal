@@ -6,6 +6,7 @@ import cors from "cors";
 import morgan from "morgan";
 import connectGzipStatic from "connect-gzip-static";
 import helmet from "helmet";
+import bodyParser from "body-parser";
 import config from "./config";
 import api from "./api";
 
@@ -20,6 +21,11 @@ app.use(helmet());
 app.use(
     cors({
         exposedHeaders: config.corsHeaders,
+    })
+);
+app.use(
+    bodyParser.json({
+        limit: config.bodyLimit,
     })
 );
 api(app);

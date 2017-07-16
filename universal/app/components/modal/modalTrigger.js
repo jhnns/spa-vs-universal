@@ -14,9 +14,9 @@ export default defineComponent({
             const modalComponent = children[0];
             let modalAction = null;
 
-            if (active === true && component !== modalComponent) {
+            if (active === true && (component === null || component.nodeName !== modalComponent.nodeName)) {
                 modalAction = modalState.actions.show(modalComponent);
-            } else if (active === false && component === modalComponent) {
+            } else if (active === false && component !== null && component.nodeName === modalComponent.nodeName) {
                 modalAction = modalState.actions.hide();
             }
 

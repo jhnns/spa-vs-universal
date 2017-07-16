@@ -26,8 +26,9 @@ function handleTransition(getState, patchState, dispatchAction) {
                     dispatchAction(componentModule.state.actions.enter(state.request, state.route, state.params))
                 ).then(() => {
                     const state = getState();
+                    const isErrorRoute = state.route.error === true;
 
-                    if (state.request.method !== "get") {
+                    if (state.request.method !== "get" && isErrorRoute === false) {
                         throw new Error(
                             "Router finished with non-get request. Use the replace action to forward to a get request."
                         );
@@ -48,6 +49,7 @@ function changeRoute(abortChange, reduceHistory) {
             const sanitizedReq = {
                 method: req.method.toLowerCase(),
                 url: parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : ""),
+                body: req.body,
             };
 
             if (abortChange(oldState, sanitizedReq)) {

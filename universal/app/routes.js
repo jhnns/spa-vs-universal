@@ -38,6 +38,7 @@ export default defineRoutes({
     },
     error: {
         action: error.import,
+        error: true,
         Placeholder: error.Placeholder,
     },
 });

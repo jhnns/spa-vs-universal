@@ -6,15 +6,15 @@ import has from "../../util/has";
 import contexts from "../../contexts";
 import routes from "../../routes";
 
-const emptyObj = {};
+const name = "loginForm";
 
 const form = defineForm({
-    name: "loginForm",
+    name,
     stateContext: contexts.state,
     validators,
     render({ autoFocus = false }, { name, isValid, validationErrors, isSubmitPending, submitError }) {
-        const nameId = `${ name }-login-name`;
-        const passwordId = `${ name }-login-password`;
+        const nameId = `${ name }-name`;
+        const passwordId = `${ name }-password`;
 
         /* eslint-disable react/jsx-key */
         return [
@@ -66,9 +66,14 @@ const form = defineForm({
 });
 
 export const state = form.state;
+const LoginForm = form.Component;
 
-export default function LoginForm(props) {
-    const LoginForm = form.Component;
+export default function LoginFormContainer(props) {
+    const actionParams = {};
 
-    return <LoginForm {...props} actionRoute={routes.login} actionParams={emptyObj} styles={loginSheet} />;
+    if (has(props, "next")) {
+        actionParams.next = props.next;
+    }
+
+    return <LoginForm {...props} actionRoute={routes.login} actionParams={actionParams} styles={loginSheet} />;
 }
