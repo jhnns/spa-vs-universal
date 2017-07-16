@@ -9,9 +9,6 @@ const title = "About";
 export const state = defineState({
     scope: name,
     context: contexts.state,
-    initialState: {
-        posts: null,
-    },
     actions: {
         enter: () => (getState, patchState, dispatchAction) => {
             dispatchAction(

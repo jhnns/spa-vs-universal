@@ -1,7 +1,8 @@
 import defineState from "../store/defineState";
+import renderChild from "../util/renderChild";
 import contexts from "../../contexts";
-import defineComponent from "../util/defineComponent";
-import { state as documentState } from "../document/document";
+import { state as routerState } from "../router/router";
+import routes from "../../routes";
 
 const name = "notFound";
 
@@ -11,23 +12,14 @@ export const state = defineState({
     actions: {
         enter: () => (getState, patchState, dispatchAction, execEffect) => {
             dispatchAction(
-                documentState.actions.update({
+                routerState.actions.show(routes.error, {
                     statusCode: 404,
                     title: "Not Found",
-                    headerTags: [],
+                    message: "The requested route does not exist",
                 })
             );
         },
     },
 });
 
-export default defineComponent({
-    name,
-    render() {
-        return (
-            <div>
-                <h2>Not Found</h2>
-            </div>
-        );
-    },
-});
+export default renderChild;

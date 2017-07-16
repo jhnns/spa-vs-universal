@@ -1,11 +1,11 @@
 import querystring from "querystring";
 
-export default function routeToUrl(route, params) {
+export default function matchPatternToUrl(matchPattern, params) {
     if (params === null) {
-        return route.match;
+        return matchPattern;
     }
 
-    let url = route.match;
+    let url = matchPattern;
     const searchParams = {};
 
     Object.keys(params).forEach(key => {

@@ -1,5 +1,5 @@
 import hookIntoEvent from "../util/hookIntoEvent";
-import routeToUrl from "../../util/routeToUrl";
+import matchPatternToUrl from "../../util/matchPatternToUrl";
 import defineComponent from "../util/defineComponent";
 import { state as routerState } from "./router";
 import has from "../../util/has";
@@ -35,8 +35,8 @@ export default defineComponent({
     name: "Link",
     connectToStore: {
         watch: [routerState.select],
-        mapToState: ({ route, url }) => ({
-            url,
+        mapToState: ({ route, request }) => ({
+            url: request.url,
             route,
         }),
     },
@@ -52,7 +52,7 @@ export default defineComponent({
         splitProps(props, state);
 
         const { route, params, children, replaceRoute, activeClass } = props.own;
-        const targetUrl = routeToUrl(route, params);
+        const targetUrl = matchPatternToUrl(has(route, "match") ? route.match : state.url, params);
 
         return (
             <a

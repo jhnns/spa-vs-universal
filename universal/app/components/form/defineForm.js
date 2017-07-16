@@ -2,7 +2,7 @@ import defineState from "../store/defineState";
 import defineComponent from "../util/defineComponent";
 import { state as routerState } from "../router/router";
 import has from "../../util/has";
-import routeToUrl from "../../util/routeToUrl";
+import matchPatternToUrl from "../../util/matchPatternToUrl";
 
 export default function defineForm(descriptor) {
     const state = defineState({
@@ -32,7 +32,11 @@ export default function defineForm(descriptor) {
         },
         render(props, state) {
             return (
-                <form method={"POST"} action={routeToUrl(state.actionRoute, state.actionParams)} {...props.styles}>
+                <form
+                    method={"POST"}
+                    action={matchPatternToUrl(state.actionRoute.match, state.actionParams)}
+                    {...props.styles}
+                >
                     {descriptor.render(props, state)}
                 </form>
             );

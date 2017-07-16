@@ -11,7 +11,7 @@ const router = createRouter();
 
 function handleTransition(getState, patchState, dispatchAction) {
     return new Promise(resolve => {
-        const { route, params } = getState();
+        const { route } = getState();
 
         resolve(
             dispatchAction(route.action).then(componentModule => {
@@ -22,7 +22,9 @@ function handleTransition(getState, patchState, dispatchAction) {
                     return state;
                 }
 
-                return Promise.resolve(dispatchAction(componentModule.state.actions.enter(route, params))).then(() => {
+                return Promise.resolve(
+                    dispatchAction(componentModule.state.actions.enter(state.request, state.route, state.params))
+                ).then(() => {
                     const state = getState();
 
                     if (state.request.method !== "get") {
@@ -135,6 +137,14 @@ export const state = defineState({
 
             return newHistory;
         }),
+        show: (route, params) => (getState, patchState, dispatchAction) =>
+            new Promise(resolve => {
+                patchState({
+                    route,
+                    params,
+                });
+                resolve(handleTransition(getState, patchState, dispatchAction));
+            }),
         pop: url => (getState, patchState, dispatchAction, execEffect) =>
             new Promise(resolve => {
                 const oldState = getState();

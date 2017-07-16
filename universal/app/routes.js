@@ -2,6 +2,7 @@ import top5 from "./components/top5";
 import allPosts from "./components/allPosts";
 import about from "./components/about";
 import notFound from "./components/notFound";
+import error from "./components/error";
 import login from "./components/login";
 import addObjectKeys from "./util/addObjectKeys";
 
@@ -34,5 +35,9 @@ export default defineRoutes({
         match: "/404",
         action: notFound.import,
         Placeholder: notFound.Placeholder,
+    },
+    error: {
+        action: error.import,
+        Placeholder: error.Placeholder,
     },
 });
