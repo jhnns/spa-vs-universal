@@ -45,21 +45,26 @@ export default function defineChunkEntry(descriptor) {
     });
     const chunkEntry = {
         id,
-        load: () =>
-            load().then(
-                r => {
-                    error = null;
-                    chunkModule = r;
+        load: () => {
+            if (chunkModule !== null) {
+                return Promise.resolve(chunkModule);
+            }
 
-                    return r;
+            return load().then(
+                result => {
+                    error = null;
+                    chunkModule = result;
+
+                    return result;
                 },
-                e => {
-                    error = e;
+                err => {
+                    error = err;
                     chunkModule = null;
 
-                    throw e;
+                    throw err;
                 }
-            ),
+            );
+        },
         Placeholder: ChunkEntryPlaceholder,
     };
 

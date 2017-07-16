@@ -1,6 +1,6 @@
 import { createStore as reduxCreateStore, compose, applyMiddleware } from "redux";
 import reduxThunk from "redux-thunk";
-import effectMiddleware from "../../effects/effectMiddleware";
+import effectMiddleware from "./effectMiddleware";
 import createReducer from "./createReducer";
 import enhanceStore from "./enhanceStore";
 

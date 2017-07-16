@@ -1,3 +1,7 @@
+import isPromise from "is-promise";
+
+const resolved = Promise.resolve();
+
 function isDefined(result) {
     return result !== null && result !== undefined;
 }
@@ -5,9 +9,20 @@ function isDefined(result) {
 export default function enhanceStore(stateContext) {
     return createStore => (reducers, initialState, enhancers) => {
         const store = createStore(reducers, initialState, enhancers);
+        const dispatch = store.dispatch;
         const enhancedStore = {
             ...store,
+            stable: resolved,
             context: stateContext,
+            dispatch(action) {
+                const result = dispatch.call(this, action);
+
+                if (isPromise(result)) {
+                    enhancedStore.stable = Promise.all([enhancedStore.stable, result]);
+                }
+
+                return result;
+            },
             watch(select, onChange) {
                 let oldValue = select(this.getState());
 

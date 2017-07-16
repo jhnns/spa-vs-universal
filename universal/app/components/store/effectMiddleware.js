@@ -1,4 +1,4 @@
-import has from "../util/has";
+import has from "../../util/has";
 
 export default function effectMiddleware(execEffect) {
     return store => next => action => {
