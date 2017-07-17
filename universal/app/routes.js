@@ -31,15 +31,14 @@ export default defineRoutes({
         action: login.import,
         Placeholder: login.Placeholder,
     },
-    notFound: {
-        url: "/404",
-        action: notFound.import,
-        Placeholder: notFound.Placeholder,
-    },
     error: {
-        url: "/",
         action: error.import,
         error: true,
         Placeholder: error.Placeholder,
+    },
+    notFound: {
+        action: notFound.import,
+        error: true,
+        Placeholder: notFound.Placeholder,
     },
 });
