@@ -13,6 +13,16 @@ export const state = defineState({
         token: null,
         xsrfToken: null,
     },
+    persist: {
+        local: true,
+    },
+    hydrate(dehydrated, localState) {
+        if (localState === null) {
+            return dehydrated;
+        }
+
+        return localState;
+    },
     actions: {
         create: (name, password) => (getState, patchState, dispatchAction, execEffect) =>
             execEffect(createSession, name, password).then(res => {
@@ -21,6 +31,7 @@ export const state = defineState({
                     token: res.token,
                     xsrfToken: res.xsrfToken,
                 });
+                dispatchAction(state.persist.local);
 
                 return true;
             }),

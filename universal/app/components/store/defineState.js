@@ -35,9 +35,11 @@ export default function defineState(descriptor) {
             return Function.prototype;
         }
 
+        const keys = persist[storageType];
+
         return (dispatchAction, getState, execEffect) => {
             const dehydratedState = selectState(getState()).toJSON();
-            const keysToPersist = persist[storageType];
+            const keysToPersist = keys === true ? Object.keys(dehydratedState) : keys;
             const stateToPersist = {};
 
             keysToPersist.forEach(key => (stateToPersist[key] = dehydratedState[key]));
