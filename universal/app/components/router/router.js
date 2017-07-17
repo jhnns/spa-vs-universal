@@ -42,34 +42,38 @@ function handleTransition(getState, patchState, dispatchAction) {
 }
 
 function changeRoute(abortChange, reduceHistory) {
-    return req => (getState, patchState, dispatchAction, execEffect) =>
-        new Promise(resolve => {
-            const oldState = getState();
-            const parsedUrl = parseUrl(req.url);
-            const sanitizedReq = {
-                method: req.method.toLowerCase(),
-                url: parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : ""),
-                body: req.body,
-            };
+    return req => {
+        const request = typeof req === "string" ? { method: "get", url: req, body: null } : req;
 
-            if (abortChange(oldState, sanitizedReq)) {
-                resolve(oldState);
+        return (getState, patchState, dispatchAction, execEffect) =>
+            new Promise(resolve => {
+                const oldState = getState();
+                const parsedUrl = parseUrl(request.url);
+                const sanitizedReq = {
+                    method: request.method.toLowerCase(),
+                    url: parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : ""),
+                    body: request.body,
+                };
 
-                return;
-            }
+                if (abortChange(oldState, sanitizedReq)) {
+                    resolve(oldState);
 
-            const { route, params } = resolveRouteAndParams(parsedUrl);
+                    return;
+                }
 
-            patchState({
-                request: sanitizedReq,
-                route,
-                params,
-                history: reduceHistory(oldState.history, sanitizedReq.url),
+                const { route, params } = resolveRouteAndParams(parsedUrl);
+
+                patchState({
+                    request: sanitizedReq,
+                    route,
+                    params,
+                    history: reduceHistory(oldState.history, sanitizedReq.url),
+                });
+                execEffect(state.persist.session, getState());
+
+                resolve(handleTransition(getState, patchState, dispatchAction));
             });
-            execEffect(state.persist.session, getState());
-
-            resolve(handleTransition(getState, patchState, dispatchAction));
-        });
+    };
 }
 
 function changeBack(request) {

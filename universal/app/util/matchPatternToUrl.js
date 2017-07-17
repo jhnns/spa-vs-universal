@@ -5,7 +5,7 @@ export default function matchPatternToUrl(matchPattern, params) {
         return matchPattern;
     }
 
-    let url = matchPattern;
+    let url = typeof matchPattern === "string" ? matchPattern : "";
     const searchParams = {};
 
     Object.keys(params).forEach(key => {

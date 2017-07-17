@@ -9,14 +9,16 @@ import matchPatternToUrl from "../../../../util/matchPatternToUrl";
 
 const name = "headerSessionAnonymous";
 const LoginFormPlaceholder = loginForm.Placeholder;
+const emptyObj = {};
 
 export default defineComponent({
     name,
     connectToStore: {
         watch: [routerState.select],
         mapToState: ({ route, params }) => {
-            const paramsWithShowLogin = { ...params, showLogin: 1 };
-            const paramsWithoutShowLogin = { ...params };
+            const paramsToExtend = route.error === true ? emptyObj : params;
+            const paramsWithShowLogin = { ...paramsToExtend, showLogin: 1 };
+            const paramsWithoutShowLogin = { ...paramsToExtend };
 
             delete paramsWithoutShowLogin.showLogin;
 

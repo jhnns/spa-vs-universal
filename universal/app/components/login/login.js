@@ -4,6 +4,7 @@ import contexts from "../../contexts";
 import routes from "../../routes";
 import createSession from "../../api/session/create";
 import has from "../../util/has";
+import redirect, { REDIRECT_TYPE_SEE_OTHER } from "../../actions/redirect";
 
 const resolved = Promise.resolve();
 const name = "login";
@@ -26,13 +27,7 @@ export const state = defineState({
             }
 
             return createSession(request.body).then(
-                () =>
-                    dispatchAction(
-                        routerState.actions.replace({
-                            method: "get",
-                            url: has(params, "next") ? params.next : "/",
-                        })
-                    ),
+                () => dispatchAction(redirect(has(params, "next") ? params.next : "/", REDIRECT_TYPE_SEE_OTHER)),
                 console.error
             );
         },

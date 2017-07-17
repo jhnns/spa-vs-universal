@@ -37,6 +37,7 @@ export default defineRoutes({
         Placeholder: notFound.Placeholder,
     },
     error: {
+        match: "/",
         action: error.import,
         error: true,
         Placeholder: error.Placeholder,

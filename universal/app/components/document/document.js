@@ -12,7 +12,9 @@ export const state = defineState({
     },
     actions: {
         update: newState => (getState, patchState, dispatchAction, execEffect) => {
-            patchState(newState);
+            patchState({
+                ...newState,
+            });
         },
     },
 });
