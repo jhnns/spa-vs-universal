@@ -20,9 +20,6 @@ export default function handleRequest(req, res) {
 
     const routingFinished = preloadAllChunkEntries().then(() => store.dispatch(routerState.actions.push(req)));
 
-    store.when(s => routerState.select(s).history, history => history.length > 1).then(history => {
-        res.header("Location", history[history.length - 1]);
-    });
     store.when(s => documentState.select(s).statusCode).then(statusCode => {
         const history = routerState.select(store.getState()).history;
         const appRendered = routingFinished.then(() => renderApp(app, store));
