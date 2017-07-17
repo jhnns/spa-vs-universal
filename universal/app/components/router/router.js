@@ -22,8 +22,22 @@ function handleTransition(getState, patchState, dispatchAction) {
                     return state;
                 }
 
+                const actions = componentModule.state.actions;
+                let action = null;
+
+                if (state.route === state.previousRoute) {
+                    if (has(actions, "update")) {
+                        action = actions.update;
+                    }
+                } else {
+                    if (has(actions, "enter") === false) {
+                        throw new Error(`Route ${ route.name } has no enter action`);
+                    }
+                    action = actions.enter;
+                }
+
                 return Promise.resolve(
-                    dispatchAction(componentModule.state.actions.enter(state.request, state.route, state.params))
+                    action === null ? null : dispatchAction(action(state.request, state.route, state.params))
                 ).then(() => {
                     const state = getState();
                     const isErrorRoute = state.route.error === true;
@@ -52,6 +66,7 @@ function changeRoute(abortChange, reduceHistory) {
                 const sanitizedReq = {
                     method: request.method.toLowerCase(),
                     url: parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : ""),
+                    parsedUrl,
                     body: request.body,
                 };
 
@@ -67,6 +82,8 @@ function changeRoute(abortChange, reduceHistory) {
                     request: sanitizedReq,
                     route,
                     params,
+                    previousRoute: oldState.route,
+                    previousParams: oldState.params,
                     history: reduceHistory(oldState.history, sanitizedReq.url),
                 });
                 execEffect(state.persist.session, getState());
@@ -120,6 +137,8 @@ export const state = defineState({
         request: null,
         route: null,
         params: null,
+        previousRoute: null,
+        previousParams: null,
         history: [],
     },
     persist: {
