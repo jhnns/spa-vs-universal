@@ -145,9 +145,8 @@ export const state = defineState({
     persist: {
         session: ["history"],
     },
-    hydrate(dehydrated, execEffect) {
+    hydrate(dehydrated, localState, sessionState) {
         const route = dehydrated.route;
-        const sessionState = execEffect(storage.readFrom, storage.SESSION_STORAGE, state);
 
         return {
             ...dehydrated,

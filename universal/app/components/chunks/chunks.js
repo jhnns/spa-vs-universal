@@ -12,6 +12,7 @@ function addIfNecessary(chunkEntry, getState, patchState, dispatchAction) {
         patchState({
             loadedEntries: loadedEntries.concat(chunkEntry),
         });
+
         dispatchAction(storeState.actions.hydrateStates());
     }
 }
@@ -39,8 +40,6 @@ export const state = defineState({
         };
     },
     actions: {
-        preload: () => (getState, patchState, dispatchAction) =>
-            Promise.all(getState().loadedEntries.map(entry => entry.load())),
         import: chunkEntry => (getState, patchState, dispatchAction) => {
             const entryModule = chunkEntry.get();
 
@@ -53,11 +52,10 @@ export const state = defineState({
                 return Promise.resolve(entryModule);
             }
 
-            return chunkEntry.load().then(chunkEntry => {
-                addIfNecessary(chunkEntry, getState, patchState, dispatchAction);
-
-                return chunkEntry;
-            });
+            return chunkEntry
+                .load()
+                .then(() => addIfNecessary(chunkEntry, getState, patchState, dispatchAction))
+                .then(() => chunkEntry.get());
         },
     },
 });

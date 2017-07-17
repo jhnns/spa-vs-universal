@@ -9,7 +9,7 @@ export default function handleRequest(req, res) {
     const documentState = require("../components/document/document").state;
     const storeState = require("../components/store/store").state;
     const renderApp = require("./renderApp").default;
-    const preloadAllChunks = require("./preloadAllChunks").default;
+    const preloadAllChunkEntries = require("./preloadAllChunkEntries").default;
 
     const initialState = {};
     const effectContext = { req, res };
@@ -17,7 +17,7 @@ export default function handleRequest(req, res) {
 
     store.dispatch(storeState.actions.hydrateStates());
 
-    const routingFinished = preloadAllChunks().then(() => store.dispatch(routerState.actions.push(req)));
+    const routingFinished = preloadAllChunkEntries().then(() => store.dispatch(routerState.actions.push(req)));
 
     store.when(s => documentState.select(s).statusCode).then(statusCode => {
         const appRendered = routingFinished.then(() => renderApp(app, store));

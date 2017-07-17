@@ -2,7 +2,6 @@ import has from "../../util/has";
 import storage from "../../effects/storage";
 
 const emptyObj = {};
-const resolved = Promise.resolve();
 
 function returnThis() {
     return this; // eslint-disable-line no-invalid-this
@@ -12,26 +11,22 @@ function isDehydratable(state) {
     return typeof state.toJSON === "function";
 }
 
-function copy(state) {
-    return {
-        ...state,
-    };
-}
-
 export default function defineState(descriptor) {
     const scope = descriptor.scope;
     const context = descriptor.context;
     const namespace = context.name + "/" + scope;
-    const initialState = has(descriptor, "initialState") ? descriptor.initialState : {};
-    const hydrate = has(descriptor, "hydrate") ? descriptor.hydrate : copy;
-    const persist = has(descriptor, "persist") ? descriptor.persist : {};
+    const initialState = has(descriptor, "initialState") ? descriptor.initialState : emptyObj;
+    const hydrate = descriptor.hydrate;
+    const persist = has(descriptor, "persist") ? descriptor.persist : emptyObj;
+    const localPersist = has(persist, "local") ? persist.local : false;
+    const sessionPersist = has(persist, "session") ? persist.session : false;
 
     function selectState(contextState) {
         return has(contextState, scope) ? contextState[scope] : initialState;
     }
 
     function isHydrated(state) {
-        return state !== initialState && typeof state.toJSON === "function";
+        return hydrate === undefined || (state !== initialState && typeof state.toJSON === "function");
     }
 
     function writeTo(storageType) {
@@ -88,20 +83,25 @@ export default function defineState(descriptor) {
         }, {}),
         hydrate() {
             return (dispatchAction, getState, execEffect) => {
-                const state = selectState(getState());
+                const dehydrated = selectState(getState());
 
-                if (isHydrated(state)) {
-                    return resolved;
+                if (isHydrated(dehydrated)) {
+                    return;
                 }
 
-                return Promise.resolve(hydrate(state, execEffect)).then(state => {
-                    if (isDehydratable(state) === false) {
-                        state.toJSON = returnThis;
-                    }
-                    dispatchAction({
-                        type: namespace + "/hydrate/put",
-                        payload: state,
-                    });
+                const localState = localPersist ? execEffect(storage.readFrom, storage.LOCAL_STORAGE, namespace) : null;
+                const sessionState = sessionPersist ?
+                    execEffect(storage.readFrom, storage.SESSION_STORAGE, namespace) :
+                    null;
+                const hydrated = hydrate(dehydrated, localState, sessionState);
+
+                if (isDehydratable(hydrated) === false) {
+                    hydrated.toJSON = returnThis;
+                }
+
+                dispatchAction({
+                    type: namespace + "/hydrate/put",
+                    payload: hydrated,
                 });
             };
         },

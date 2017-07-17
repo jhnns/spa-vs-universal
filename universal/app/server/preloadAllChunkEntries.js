@@ -2,7 +2,7 @@ import contexts from "../contexts";
 
 let promise = null;
 
-export default function preloadAllChunks() {
+export default function preloadAllChunkEntries() {
     if (promise !== null) {
         return promise;
     }

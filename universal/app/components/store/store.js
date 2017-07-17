@@ -9,8 +9,9 @@ export const state = defineState({
     context: contexts.state,
     actions: {
         hydrateStates() {
-            return (getState, patchState, dispatchAction, execEffect) =>
-                Promise.all(Object.values(contexts.state.scopes).map(scope => dispatchAction(scope.hydrate())));
+            return (getState, patchState, dispatchAction, execEffect) => {
+                Object.values(contexts.state.scopes).map(scope => dispatchAction(scope.hydrate()));
+            };
         },
     },
 });
