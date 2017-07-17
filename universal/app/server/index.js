@@ -27,7 +27,12 @@ export default function handleRequest(req, res) {
         res.status(statusCode);
         res.header("Content-Type", "text/html");
         if (statusCodes.isRedirect(statusCode) || history.length > 1) {
-            res.header("Location", history[history.length - 1]);
+            // It is important to use the redirect() method here or otherwise express-session
+            // won't save the session on POST requests
+            // https://stackoverflow.com/a/26532987
+            res.redirect(history[history.length - 1]);
+
+            return;
         }
 
         createRenderStream({

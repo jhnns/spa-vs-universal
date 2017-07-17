@@ -4,6 +4,7 @@ import path from "path";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import session from "express-session";
 import connectGzipStatic from "connect-gzip-static";
 import helmet from "helmet";
 import bodyParser from "body-parser";
@@ -39,6 +40,17 @@ app.use(
     connectGzipStatic(pathToPublic, {
         // We use hashed filenames, a long max age is ok
         maxAge: 365 * 24 * 60 * 60 * 1000,
+    })
+);
+app.use(
+    session({
+        cookie: {
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+        },
+        resave: false,
+        rolling: true,
+        saveUninitialized: false,
+        secret: "Universal JavaScript!",
     })
 );
 app.use(universalApp);
