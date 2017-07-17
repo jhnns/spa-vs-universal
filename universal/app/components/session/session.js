@@ -4,24 +4,24 @@ import defineState from "../store/defineState";
 import contexts from "../../contexts";
 
 const name = "session";
+const initialState = {
+    user: null,
+    token: null,
+};
 
 export const state = defineState({
     scope: name,
     context: contexts.state,
-    initialState: {
-        user: null,
-        token: null,
-        xsrfToken: null,
-    },
+    initialState,
     persist: {
         local: true,
     },
     hydrate(dehydrated, localState) {
-        if (localState === null) {
+        if (dehydrated.user !== null && dehydrated.token !== null) {
             return dehydrated;
         }
 
-        return localState;
+        return localState === null ? dehydrated : localState;
     },
     actions: {
         create: (name, password) => (getState, patchState, dispatchAction, execEffect) =>
@@ -29,7 +29,6 @@ export const state = defineState({
                 patchState({
                     user: res.user,
                     token: res.token,
-                    xsrfToken: res.xsrfToken,
                 });
                 dispatchAction(state.persist.local);
 

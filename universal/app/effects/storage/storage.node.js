@@ -14,7 +14,6 @@ export default {
         }
 
         req.session[namespace] = state;
-        // req.session.save();
     },
     readFrom: ({ req }) => (storageType, namespace) => {
         if (storageType === SESSION_STORAGE) {

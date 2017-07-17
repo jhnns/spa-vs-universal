@@ -5,7 +5,6 @@ import createRouter from "./createRouter";
 import renderChild from "../util/renderChild";
 import routes from "../../routes";
 import has from "../../util/has";
-import storage from "../../effects/storage";
 
 const name = "router";
 const router = createRouter();
@@ -43,7 +42,7 @@ function handleTransition(getState, patchState, dispatchAction) {
                     const state = getState();
                     const isErrorRoute = state.route.error === true;
 
-                    if (state.request.method !== "get" && isErrorRoute === false) {
+                    if (state.request !== null && state.request.method !== "get" && isErrorRoute === false) {
                         throw new Error(
                             "Router finished with non-get request. Use the replace action to forward to a get request."
                         );
@@ -56,6 +55,17 @@ function handleTransition(getState, patchState, dispatchAction) {
     });
 }
 
+function sanitizeRequest(request) {
+    const parsedUrl = parseUrl(request.url);
+
+    return {
+        method: request.method.toLowerCase(),
+        url: parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : ""),
+        parsedUrl,
+        body: request.body,
+    };
+}
+
 function changeRoute(abortChange, reduceHistory) {
     return req => {
         const request = typeof req === "string" ? { method: "get", url: req, body: null } : req;
@@ -63,13 +73,7 @@ function changeRoute(abortChange, reduceHistory) {
         return (getState, patchState, dispatchAction, execEffect) =>
             new Promise(resolve => {
                 const oldState = getState();
-                const parsedUrl = parseUrl(request.url);
-                const sanitizedReq = {
-                    method: request.method.toLowerCase(),
-                    url: parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : ""),
-                    parsedUrl,
-                    body: request.body,
-                };
+                const sanitizedReq = sanitizeRequest(request);
 
                 if (abortChange(oldState, sanitizedReq)) {
                     resolve(oldState);
@@ -77,7 +81,7 @@ function changeRoute(abortChange, reduceHistory) {
                     return;
                 }
 
-                const { route, params } = resolveRouteAndParams(parsedUrl);
+                const { route, params } = resolveRouteAndParams(sanitizedReq.parsedUrl);
 
                 patchState({
                     request: sanitizedReq,
@@ -163,12 +167,18 @@ export const state = defineState({
 
             return newHistory;
         }),
-        show: (route, params) => (getState, patchState, dispatchAction) =>
+        show: (route, params, initialRequest) => (getState, patchState, dispatchAction) =>
             new Promise(resolve => {
-                patchState({
+                const state = {
                     route,
                     params,
-                });
+                };
+
+                if (initialRequest !== undefined) {
+                    state.request = sanitizeRequest(initialRequest);
+                }
+
+                patchState(state);
                 resolve(handleTransition(getState, patchState, dispatchAction));
             }),
         pop: url => (getState, patchState, dispatchAction, execEffect) =>

@@ -2,6 +2,7 @@ import fetch from "../../fetch";
 
 const defaultOptions = {
     method: "POST",
+    credentials: "same-origin",
     headers: {
         "Content-Type": "application/json",
     },

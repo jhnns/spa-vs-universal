@@ -11,6 +11,7 @@ function startApp() {
     const preloadChunkEntries = require("./preloadChunkEntries").default;
     const chunkState = require("../components/chunks/chunks").state;
     const storeState = require("../components/store/store").state;
+    const sessionState = require("../components/session/session").state;
 
     const initialState = window.__PRELOADED_STATE__ || {};
     const effectContext = {};
@@ -29,6 +30,9 @@ function startApp() {
         const applyLazyStylesheets = require("./session/applyLazyStylesheets").default;
 
         applyLazyStylesheets();
+
+        // Ensure that our local session state is always up-to-date
+        store.dispatch(sessionState.persist.local);
     });
 }
 

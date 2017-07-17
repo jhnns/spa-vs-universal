@@ -5,6 +5,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import session from "express-session";
+import csurf from "csurf";
 import connectGzipStatic from "connect-gzip-static";
 import helmet from "helmet";
 import bodyParser from "body-parser";
@@ -35,13 +36,6 @@ app.use(
         extended: true,
     })
 );
-api(app);
-app.use(
-    connectGzipStatic(pathToPublic, {
-        // We use hashed filenames, a long max age is ok
-        maxAge: 365 * 24 * 60 * 60 * 1000,
-    })
-);
 app.use(
     session({
         cookie: {
@@ -53,6 +47,28 @@ app.use(
         secret: "Universal JavaScript!",
     })
 );
+api(app);
+app.use(
+    connectGzipStatic(pathToPublic, {
+        // We use hashed filenames, a long max age is ok
+        maxAge: 365 * 24 * 60 * 60 * 1000,
+    })
+);
+app.use(csurf());
+app.use((err, req, res, next) => {
+    if (err.code === "EBADCSRFTOKEN") {
+        req.error = {
+            code: 403,
+            title: "Bad CSRF Token",
+        };
+    } else {
+        req.error = {
+            code: 500,
+            title: "An unexpected error happened",
+        };
+    }
+    next();
+});
 app.use(universalApp);
 
 app.server.listen(process.env.PORT || config.port, config.hostname || "localhost", () => {

@@ -67,8 +67,11 @@ export default app => {
 
         const payload = { id: user.id };
         const token = jwt.sign(payload, jwtOptions.secretOrKey);
+        const data = { token, user };
 
-        res.status(201).json({ status: "success", data: { token, user } });
+        req.session["app/session"] = data;
+
+        res.status(201).json({ status: "success", data });
     });
     app.use("/api", api.getMiddleware());
     app.use((err, req, res, next) => {

@@ -11,14 +11,19 @@ export default function handleRequest(req, res) {
     const storeState = require("../components/store/store").state;
     const preloadAllChunkEntries = require("./preloadAllChunkEntries").default;
     const statusCodes = require("../util/statusCodes");
+    const has = require("../util/has").default;
+    const routes = require("../routes").default;
 
     const initialState = {};
     const effectContext = { req, res };
     const { app, store } = createApp(initialState, effectContext);
+    const firstRouterAction = has(req, "error") ?
+        routerState.actions.show(routes.error, req.error, req) :
+        routerState.actions.push(req);
 
     store.dispatch(storeState.actions.hydrateStates());
 
-    const routingFinished = preloadAllChunkEntries().then(() => store.dispatch(routerState.actions.push(req)));
+    const routingFinished = preloadAllChunkEntries().then(() => store.dispatch(firstRouterAction));
 
     store.when(s => documentState.select(s).statusCode).then(statusCode => {
         const history = routerState.select(store.getState()).history;
