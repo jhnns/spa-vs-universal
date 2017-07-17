@@ -3,8 +3,9 @@ import { state as routerState } from "../router/router";
 import contexts from "../../contexts";
 import routes from "../../routes";
 import has from "../../util/has";
-import redirect, { REDIRECT_TYPE_SEE_OTHER } from "../../actions/redirect";
+import redirect from "../../actions/redirect";
 import { state as sessionState } from "../session/session";
+import { SEE_OTHER } from "../../util/statusCodes";
 
 const resolved = Promise.resolve();
 const name = "login";
@@ -27,7 +28,7 @@ export const state = defineState({
             }
 
             return dispatchAction(sessionState.actions.create(request.body.name, request.body.password)).then(
-                () => dispatchAction(redirect(has(params, "next") ? params.next : "/", REDIRECT_TYPE_SEE_OTHER)),
+                () => dispatchAction(redirect(has(params, "next") ? params.next : "/", SEE_OTHER)),
                 console.error
             );
         },

@@ -1,27 +1,19 @@
 import { state as routerState } from "../components/router/router";
 import { state as documentState } from "../components/document/document";
-import has from "../util/has";
 
-export const REDIRECT_TYPE_SEE_OTHER = "See other";
-export const REDIRECT_TYPE_TEMPORARY = "Temporary redirect";
-export const REDIRECT_TYPE_PERMANENT = "Permanent redirect";
-export const statusCodes = {
-    [REDIRECT_TYPE_SEE_OTHER]: 303,
-    [REDIRECT_TYPE_TEMPORARY]: 307,
-    [REDIRECT_TYPE_PERMANENT]: 308,
-};
-
-export default function redirect(request, redirectType) {
+export default function redirect(request, statusCode) {
     return (dispatchAction, getState) =>
         new Promise(resolve => {
-            if (has(statusCodes, redirectType) === false) {
-                throw new Error("Unknown redirect type " + redirectType);
-            }
+            // We dispatch the routerState replace action first because as soon as the statusCode is present
+            // the headers will be flushed.
+            const routingFinished = dispatchAction(routerState.actions.replace(request));
+
             dispatchAction(
                 documentState.actions.update({
-                    statusCode: statusCodes[redirectType],
+                    statusCode,
                 })
             );
-            resolve(dispatchAction(routerState.actions.replace(request)));
+
+            resolve(routingFinished);
         });
 }
