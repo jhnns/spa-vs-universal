@@ -11,7 +11,7 @@ class ResolverPlugin {
     }
     apply(resolver) {
         resolver.plugin("described-resolve", (request, callback) => {
-            const requestPath = request.request;
+            const requestPath = request.__innerRequest;
             const pathMatch = /[/\\]effects[/\\]([^/\\]+)$/.exec(requestPath);
 
             if (pathMatch === null) {

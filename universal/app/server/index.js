@@ -10,7 +10,10 @@ export default function handleRequest(req, res) {
     const storeState = require("../components/store/store").state;
     const renderApp = require("./renderApp").default;
     const preloadAllChunks = require("./preloadAllChunks").default;
-    const { app, store } = createApp({});
+
+    const initialState = {};
+    const effectContext = { req, res };
+    const { app, store } = createApp(initialState, effectContext);
 
     store.dispatch(storeState.actions.hydrateStates());
 

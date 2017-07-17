@@ -2,7 +2,7 @@ import defineState from "../store/defineState";
 import contexts from "../../contexts";
 import defineComponent from "../util/defineComponent";
 import { state as documentState } from "../document/document";
-import getTop5 from "../../api/posts/getTop5";
+import getTop5 from "../../effects/api/posts/getTop5";
 import Posts from "../posts/posts";
 
 const name = "top5";

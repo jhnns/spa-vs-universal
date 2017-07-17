@@ -11,17 +11,21 @@ function startApp() {
     const chunkState = require("../components/chunks/chunks").state;
     const storeState = require("../components/store/store").state;
 
-    const { app, store } = createApp(window.__PRELOADED_STATE__ || {});
+    const initialState = window.__PRELOADED_STATE__ || {};
+    const effectContext = {};
+    const { app, store } = createApp(initialState, effectContext);
+    const chunksPreloaded = store
+        .dispatch(chunkState.hydrate())
+        .then(() => store.dispatch(chunkState.actions.preload()));
+    const statesHydrated = store.dispatch(storeState.actions.hydrateStates());
 
-    store.dispatch(storeState.actions.hydrateStates());
-
-    captureLinkClick(store);
-    captureFormSubmit(store);
-    connectToBrowserHistory(store);
-    connectToDocument(store);
-
-    store.dispatch(chunkState.actions.preload()).then(() => {
+    Promise.all([chunksPreloaded, statesHydrated]).then(() => {
         render(app, document.body, document.body.firstElementChild);
+
+        captureLinkClick(store);
+        captureFormSubmit(store);
+        connectToBrowserHistory(store);
+        connectToDocument(store);
 
         const applyLazyStylesheets = require("./session/applyLazyStylesheets").default;
 

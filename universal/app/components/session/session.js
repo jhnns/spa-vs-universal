@@ -1,5 +1,5 @@
 import renderChild from "../util/renderChild";
-import createSession from "../../api/session/create";
+import createSession from "../../effects/api/session/create";
 import defineState from "../store/defineState";
 import contexts from "../../contexts";
 

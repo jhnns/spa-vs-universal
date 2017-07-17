@@ -5,6 +5,7 @@ import createRouter from "./createRouter";
 import renderChild from "../util/renderChild";
 import routes from "../../routes";
 import has from "../../util/has";
+import storage from "../../effects/storage";
 
 const name = "router";
 const router = createRouter();
@@ -86,7 +87,7 @@ function changeRoute(abortChange, reduceHistory) {
                     previousParams: oldState.params,
                     history: reduceHistory(oldState.history, sanitizedReq.url),
                 });
-                execEffect(state.persist.session, getState());
+                dispatchAction(state.persist.session);
 
                 resolve(handleTransition(getState, patchState, dispatchAction));
             });
@@ -144,8 +145,9 @@ export const state = defineState({
     persist: {
         session: ["history"],
     },
-    hydrate(dehydrated, localState, sessionState) {
+    hydrate(dehydrated, execEffect) {
         const route = dehydrated.route;
+        const sessionState = execEffect(storage.readFrom, storage.SESSION_STORAGE, state);
 
         return {
             ...dehydrated,

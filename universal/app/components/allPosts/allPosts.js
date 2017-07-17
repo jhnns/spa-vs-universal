@@ -2,7 +2,7 @@ import defineState from "../store/defineState";
 import contexts from "../../contexts";
 import defineComponent from "../util/defineComponent";
 import { state as documentState } from "../document/document";
-import getAll from "../../api/posts/getAll";
+import getAll from "../../effects/api/posts/getAll";
 import Posts from "../posts/posts";
 
 const name = "allPosts";

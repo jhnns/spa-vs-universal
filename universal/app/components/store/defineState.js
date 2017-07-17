@@ -1,7 +1,8 @@
 import has from "../../util/has";
-import stateStorage from "../../effects/stateStorage";
+import storage from "../../effects/storage";
 
 const emptyObj = {};
+const resolved = Promise.resolve();
 
 function returnThis() {
     return this; // eslint-disable-line no-invalid-this
@@ -11,12 +12,18 @@ function isDehydratable(state) {
     return typeof state.toJSON === "function";
 }
 
+function copy(state) {
+    return {
+        ...state,
+    };
+}
+
 export default function defineState(descriptor) {
     const scope = descriptor.scope;
     const context = descriptor.context;
     const namespace = context.name + "/" + scope;
     const initialState = has(descriptor, "initialState") ? descriptor.initialState : {};
-    const hydrate = typeof descriptor.hydrate === "function" ? descriptor.hydrate : s => ({ ...s });
+    const hydrate = has(descriptor, "hydrate") ? descriptor.hydrate : copy;
     const persist = has(descriptor, "persist") ? descriptor.persist : {};
 
     function selectState(contextState) {
@@ -24,19 +31,7 @@ export default function defineState(descriptor) {
     }
 
     function isHydrated(state) {
-        return state !== initialState && isDehydratable(state) === true;
-    }
-
-    function getHydrated(state) {
-        const localState = stateStorage.readFrom(stateStorage.LOCAL, namespace);
-        const sessionState = stateStorage.readFrom(stateStorage.SESSION, namespace);
-        const hydratedState = hydrate(state, localState, sessionState);
-
-        if (isDehydratable(hydratedState) === false) {
-            hydratedState.toJSON = returnThis;
-        }
-
-        return hydratedState;
+        return state !== initialState && typeof state.toJSON === "function";
     }
 
     function writeTo(storageType) {
@@ -45,14 +40,14 @@ export default function defineState(descriptor) {
             return Function.prototype;
         }
 
-        return state => {
-            const stateToPersist = {
-                toJSON: state.toJSON,
-            };
-            const keys = persist[storageType];
+        return (dispatchAction, getState, execEffect) => {
+            const dehydratedState = selectState(getState()).toJSON();
+            const keysToPersist = persist[storageType];
+            const stateToPersist = {};
 
-            keys.forEach(key => (stateToPersist[key] = state[key]));
-            stateStorage.writeTo(storageType, namespace, stateToPersist);
+            keysToPersist.forEach(key => (stateToPersist[key] = dehydratedState[key]));
+
+            execEffect(storage.writeTo, storageType, namespace, stateToPersist);
         };
     }
 
@@ -68,6 +63,8 @@ export default function defineState(descriptor) {
 
     const actionDescriptor = has(descriptor, "actions") ? descriptor.actions : emptyObj;
     const state = {
+        context,
+        scope,
         actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
             const execute = actionDescriptor[actionName];
             const type = namespace + "/" + actionName;
@@ -89,23 +86,30 @@ export default function defineState(descriptor) {
 
             return actions;
         }, {}),
-        persist: {
-            local: writeTo(stateStorage.LOCAL),
-            session: writeTo(stateStorage.SESSION),
-        },
         hydrate() {
-            return (dispatchAction, getState) => {
+            return (dispatchAction, getState, execEffect) => {
                 const state = selectState(getState());
 
-                if (isHydrated(state) === false) {
+                if (isHydrated(state)) {
+                    return resolved;
+                }
+
+                return Promise.resolve(hydrate(state, execEffect)).then(state => {
+                    if (isDehydratable(state) === false) {
+                        state.toJSON = returnThis;
+                    }
                     dispatchAction({
                         type: namespace + "/hydrate/put",
-                        payload: getHydrated(state),
+                        payload: state,
                     });
-                }
+                });
             };
         },
         select: selectState,
+        persist: {
+            local: writeTo(storage.LOCAL_STORAGE),
+            session: writeTo(storage.SESSION_STORAGE),
+        },
     };
 
     context.scopes[scope] = state;

@@ -1,15 +1,15 @@
-const LOCAL = "local";
-const SESSION = "session";
+const LOCAL_STORAGE = "local";
+const SESSION_STORAGE = "session";
 
-const storages = {
-    [LOCAL]: localStorage,
-    [SESSION]: sessionStorage,
+const defaultStorages = {
+    [LOCAL_STORAGE]: localStorage,
+    [SESSION_STORAGE]: sessionStorage,
 };
 
 export default {
-    LOCAL,
-    SESSION,
-    writeTo(storageType, namespace, state) {
+    LOCAL_STORAGE,
+    SESSION_STORAGE,
+    writeTo: ({ storages = defaultStorages }) => (storageType, namespace, state) => {
         const storage = storages[storageType];
         const stringifiedState = JSON.stringify(state);
 
@@ -27,7 +27,7 @@ export default {
             }
         }
     },
-    readFrom(storageType, namespace) {
+    readFrom: ({ storages = defaultStorages }) => (storageType, namespace) => {
         const result = storages[storageType].getItem(namespace);
 
         return result === null ? null : JSON.parse(result);
