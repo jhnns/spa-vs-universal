@@ -1,5 +1,5 @@
 import { state as routerState } from "../components/router/router";
-import document from "../components/document/document";
+import { state as documentState } from "../components/document/document";
 import has from "../util/has";
 
 export const REDIRECT_TYPE_SEE_OTHER = "See other";
@@ -18,7 +18,7 @@ export default function redirect(request, redirectType) {
                 throw new Error("Unknown redirect type " + redirectType);
             }
             dispatchAction(
-                document.actions.update({
+                documentState.actions.update({
                     statusCode: statusCodes[redirectType],
                 })
             );
