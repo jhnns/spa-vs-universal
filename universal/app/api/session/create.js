@@ -7,10 +7,10 @@ const defaultOptions = {
     },
 };
 
-export default function create(payload) {
+export default function create(name, password) {
     return fetch("/session", {
         ...defaultOptions,
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ name, password }),
     })
         .then(res => res.json())
         .then(res => {

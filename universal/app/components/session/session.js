@@ -1,4 +1,5 @@
 import renderChild from "../util/renderChild";
+import createSession from "../../api/session/create";
 import defineState from "../store/defineState";
 import contexts from "../../contexts";
 
@@ -10,12 +11,20 @@ export const state = defineState({
     initialState: {
         user: null,
         token: null,
+        xsrfToken: null,
     },
-    actions: {},
-});
+    actions: {
+        create: (name, password) => (getState, patchState, dispatchAction, execEffect) =>
+            execEffect(createSession, name, password).then(res => {
+                patchState({
+                    user: res.user,
+                    token: res.token,
+                    xsrfToken: res.xsrfToken,
+                });
 
-export function isLoggedIn(contextState) {
-    return state.select(contextState).user !== null;
-}
+                return true;
+            }),
+    },
+});
 
 export default renderChild;

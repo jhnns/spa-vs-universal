@@ -1,6 +1,8 @@
 import defineComponent from "../../../util/defineComponent";
 import { root, userName, userImage } from "./personal.css";
 import { nbsp } from "../../../../util/htmlEntities";
+import Link from "../../../router/link";
+import { link } from "../../link.css";
 
 const name = "headerSessionPersonal";
 
@@ -20,7 +22,9 @@ export default defineComponent({
                     {user.name}
                 </span>
                 <span>
-                    Log{nbsp}out
+                    <Link {...link}>
+                        Log{nbsp}out
+                    </Link>
                 </span>
             </div>
         );

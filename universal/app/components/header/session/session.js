@@ -11,9 +11,10 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [sessionState.select],
-        mapToState(state) {
+        mapToState({ user }) {
             return {
-                user: state.user,
+                user,
+                isLoggedIn: user !== null,
             };
         },
     },
@@ -23,7 +24,7 @@ export default defineComponent({
 
         return (
             <div {...styles}>
-                {user === null ? <Anonymous /> : <Personal user={user} />}
+                {state.isLoggedIn ? <Personal user={user} /> : <Anonymous />}
             </div>
         );
     },
