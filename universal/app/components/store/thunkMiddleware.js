@@ -2,7 +2,7 @@ import { createEffectAction } from "./effectMiddleware";
 
 function executeAction(action, dispatchAction, getState) {
     function execEffect(effect, ...args) {
-        return dispatchAction(createEffectAction(action.type, effect, args));
+        return dispatchAction(createEffectAction(effect, args));
     }
 
     return action(dispatchAction, getState, execEffect);

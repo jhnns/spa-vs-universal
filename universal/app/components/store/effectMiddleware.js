@@ -1,8 +1,8 @@
 import has from "../../util/has";
 
-export function createEffectAction(actionType, effect, args) {
+export function createEffectAction(effect, args) {
     return {
-        type: actionType + "/effect",
+        type: "effect",
         payload: {
             effect,
             args,
