@@ -5,7 +5,7 @@ import { link } from "../../link.css";
 import { nbsp } from "../../../../util/htmlEntities";
 import ModalTrigger from "../../../modal/modalTrigger";
 import loginForm from "../../../loginForm";
-import matchPatternToUrl from "../../../../util/matchPatternToUrl";
+import renderUrl from "../../../../util/renderUrl";
 
 const name = "headerSessionAnonymous";
 const LoginFormPlaceholder = loginForm.Placeholder;
@@ -25,7 +25,7 @@ export default defineComponent({
             return {
                 paramsWithShowLogin,
                 loginFormProps: {
-                    next: matchPatternToUrl(route.match, paramsWithoutShowLogin),
+                    next: renderUrl(route.url, paramsWithoutShowLogin),
                 },
             };
         },

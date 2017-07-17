@@ -12,32 +12,32 @@ function defineRoutes(routes) {
 
 export default defineRoutes({
     top5: {
-        match: "/",
+        url: "/",
         action: top5.import,
         Placeholder: top5.Placeholder,
     },
     allPosts: {
-        match: "/all",
+        url: "/all",
         action: allPosts.import,
         Placeholder: allPosts.Placeholder,
     },
     about: {
-        match: "/about",
+        url: "/about",
         action: about.import,
         Placeholder: about.Placeholder,
     },
     login: {
-        match: "/login",
+        url: "/login",
         action: login.import,
         Placeholder: login.Placeholder,
     },
     notFound: {
-        match: "/404",
+        url: "/404",
         action: notFound.import,
         Placeholder: notFound.Placeholder,
     },
     error: {
-        match: "/",
+        url: "/",
         action: error.import,
         error: true,
         Placeholder: error.Placeholder,

@@ -1,5 +1,5 @@
 import hookIntoEvent from "../util/hookIntoEvent";
-import matchPatternToUrl from "../../util/matchPatternToUrl";
+import renderUrl from "../../util/renderUrl";
 import defineComponent from "../util/defineComponent";
 import { state as routerState } from "./router";
 import has from "../../util/has";
@@ -52,7 +52,7 @@ export default defineComponent({
         splitProps(props, state);
 
         const { route, params, children, replaceRoute, activeClass } = props.own;
-        const targetUrl = matchPatternToUrl(has(route, "match") ? route.match : state.url, params);
+        const targetUrl = renderUrl(route.url, params);
 
         return (
             <a

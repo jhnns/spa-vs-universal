@@ -6,7 +6,7 @@ export default function createRouter() {
     let result;
 
     Object.values(routes).filter(route => !(route.error === true)).forEach(route => {
-        router.on(route.match, urlParams => (result = { route, urlParams }));
+        router.on(route.url, urlParams => (result = { route, urlParams }));
     });
 
     return url => {
