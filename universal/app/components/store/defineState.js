@@ -72,7 +72,7 @@ export default function defineState(descriptor) {
             const execute = actionDescriptor[actionName];
             const type = namespace + "/" + actionName;
 
-            actions[actionName] = (...args) => (dispatchAction, getState) => {
+            actions[actionName] = (...args) => (dispatchAction, getState, execEffect) => {
                 function getScopedState() {
                     return selectState(getState());
                 }
@@ -81,16 +81,6 @@ export default function defineState(descriptor) {
                     return dispatchAction({
                         type: type + "/patch",
                         payload: patch,
-                    });
-                }
-
-                function execEffect(effect, ...args) {
-                    return dispatchAction({
-                        type: type + "/effect",
-                        payload: {
-                            effect,
-                            args,
-                        },
                     });
                 }
 
