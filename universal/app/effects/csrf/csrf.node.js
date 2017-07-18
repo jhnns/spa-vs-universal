@@ -1,3 +1,3 @@
 export default function csrf({ req }) {
-    return () => req.csrfToken();
+    return () => (typeof req.csrfToken === "function" ? req.csrfToken() : null);
 }

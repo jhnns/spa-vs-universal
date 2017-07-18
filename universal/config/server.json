@@ -1,9 +1,8 @@
 {
-	"port": 3000,
-	"hostname": "localhost",
-	"bodyLimit": "100kb",
-	"corsHeaders": [
-		"Link"
-	],
-	"responseDelay": 300
+  "port": 3000,
+  "hostname": "localhost",
+  "devServerPort": 8080,
+  "bodyLimit": "100kb",
+  "corsHeaders": ["Link"],
+  "responseDelay": 300
 }

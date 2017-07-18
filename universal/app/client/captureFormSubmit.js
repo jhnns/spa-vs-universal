@@ -1,16 +1,16 @@
 import { state as routerState } from "../components/router/router";
-import filterProps from "../util/filterProps";
 
 const toArray = Array.from.bind(Array);
+const formDataFilter = ["_method", "_csrf"];
 
 function collectFormData(formElement) {
     const formData = {};
 
-    for (const { name, value } of toArray(formElement.elements)) {
-        if (name !== "") {
+    toArray(formElement.elements)
+        .filter(({ name }) => name !== "" && formDataFilter.indexOf(name) === -1)
+        .forEach(({ name, value }) => {
             formData[name] = value;
-        }
-    }
+        });
 
     return formData;
 }
@@ -23,7 +23,7 @@ export default function captureFormSubmit(store) {
 
         store.dispatch(
             routerState.actions.push({
-                method: formElement.method,
+                method: formElement.elements._method,
                 url: formElement.action,
                 body: collectFormData(formElement),
             })
