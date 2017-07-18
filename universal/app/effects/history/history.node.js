@@ -4,10 +4,10 @@ export default {
     push: () => url => {
         throw new Error(`Cannot push ${ url } to server history. Use replace() to respond with a redirect.`);
     },
-    replace: ({ req }) => (url, statusCode = SEE_OTHER) => {
+    replace: ({ res }) => (url, statusCode = SEE_OTHER) => {
         // It is important to use the redirect() method here or otherwise express-session
         // won't save the session on POST requests
         // https://stackoverflow.com/a/26532987
-        req.redirect(statusCode, url);
+        res.redirect(statusCode, url);
     },
 };

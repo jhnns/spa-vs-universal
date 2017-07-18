@@ -75,5 +75,13 @@ export default function LoginFormContainer(props) {
         actionParams.next = props.next;
     }
 
-    return <LoginForm {...props} actionRoute={routes.login} actionParams={actionParams} styles={loginSheet} />;
+    return (
+        <LoginForm
+            {...props}
+            method={"post"}
+            actionRoute={routes.login}
+            actionParams={actionParams}
+            styles={loginSheet}
+        />
+    );
 }

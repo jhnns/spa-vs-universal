@@ -3,6 +3,7 @@ import defineComponent from "../util/defineComponent";
 import { state as routerState } from "../router/router";
 import has from "../../util/has";
 import renderUrl from "../../util/renderUrl";
+import csrf from "../../effects/csrf";
 
 export default function defineForm(descriptor) {
     const state = defineState({
@@ -11,6 +12,7 @@ export default function defineForm(descriptor) {
         initialState: {
             name: descriptor.name,
             data: Object.create(null),
+            csrfToken: null,
             isPristine: true,
             isValid: false,
             validationErrors: Object.create(null),
@@ -18,6 +20,12 @@ export default function defineForm(descriptor) {
             submitSuccess: false,
             submitError: false,
             submitResult: null,
+        },
+        hydrate(dehydrated, execEffect) {
+            return {
+                ...dehydrated,
+                csrfToken: execEffect(csrf),
+            };
         },
     });
     const Component = defineComponent({
@@ -31,8 +39,18 @@ export default function defineForm(descriptor) {
             }),
         },
         render(props, state) {
+            const method = has(props, "method") ? props.method.toLowerCase() : "get";
+
+            // HTML forms only support GET and POST
+            // The actual method is encoded as _method param
             return (
-                <form method={"POST"} action={renderUrl(state.actionRoute.url, state.actionParams)} {...props.styles}>
+                <form
+                    method={method === "get" ? "GET" : "POST"}
+                    action={renderUrl(state.actionRoute.url, state.actionParams)}
+                    {...props.styles}
+                >
+                    <input type="hidden" name="_method" value={method} />
+                    <input type="hidden" name="_csrf" value={state.csrfToken} />
                     {descriptor.render(props, state)}
                 </form>
             );
