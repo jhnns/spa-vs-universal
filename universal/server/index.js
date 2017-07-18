@@ -2,7 +2,6 @@ import "source-map-support/register";
 import http from "http";
 import path from "path";
 import express from "express";
-import cors from "cors";
 import morgan from "morgan";
 import session from "express-session";
 import csurf from "csurf";
@@ -20,11 +19,7 @@ app.server = http.createServer(app);
 
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(
-    cors({
-        exposedHeaders: config.corsHeaders,
-    })
-);
+app.use(helmet.referrerPolicy({ policy: "same-origin" }));
 app.use(
     bodyParser.json({
         limit: config.bodyLimit,

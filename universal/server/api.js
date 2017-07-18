@@ -69,9 +69,18 @@ export default app => {
         const token = jwt.sign(payload, jwtOptions.secretOrKey);
         const data = { token, user };
 
-        Object.assign(req.session, data);
+        // Generate new session id for logged in user
+        // Prevents session fixation attacks, see https://en.wikipedia.org/wiki/Session_fixation
+        req.session.regenerate(err => {
+            if (err) {
+                next(err);
 
-        res.status(201).json({ status: "success", data });
+                return;
+            }
+
+            Object.assign(req.session, data);
+            res.status(201).json({ status: "success", data });
+        });
     });
     app.use("/api", api.getMiddleware());
     app.use((err, req, res, next) => {
