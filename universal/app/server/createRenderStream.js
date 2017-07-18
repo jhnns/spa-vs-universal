@@ -28,10 +28,10 @@ export default function createRenderStream({ title, headerTags, html, css, state
 </head>
 <body>
   ${ html }
+  <script>
+    window.__PRELOADED_STATE__ = ${ renderedState };
+  </script>
 </body>
-<script>
-  window.__PRELOADED_STATE__ = ${ renderedState };
-</script>
 </html>
 `;
 }
