@@ -2,7 +2,7 @@ import hookIntoEvent from "../util/hookIntoEvent";
 import renderUrl from "../../util/renderUrl";
 import defineComponent from "../util/defineComponent";
 import { state as routerState } from "./router";
-import filterProps from "../util/filterProps";
+import filterProps from "../../util/filterProps";
 
 const emptyObj = {};
 const emptyArr = [];

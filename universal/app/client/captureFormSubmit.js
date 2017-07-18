@@ -1,4 +1,5 @@
 import { state as routerState } from "../components/router/router";
+import filterProps from "../util/filterProps";
 
 const toArray = Array.from.bind(Array);
 

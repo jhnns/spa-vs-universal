@@ -1,7 +1,7 @@
 import defineComponent from "../util/defineComponent";
 import Link from "../router/link";
 import ModalTrigger from "./modalTrigger";
-import filterProps from "../util/filterProps";
+import filterProps from "../../util/filterProps";
 import { state as routerState } from "../router/router";
 
 const name = "modalLink";

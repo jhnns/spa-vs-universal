@@ -5,7 +5,7 @@ import { nbsp } from "../../../../util/htmlEntities";
 import ModalLink from "../../../modal/modalLink";
 import loginForm from "../../../loginForm";
 import renderUrl from "../../../../util/renderUrl";
-import filterProps from "../../../util/filterProps";
+import filterProps from "../../../../util/filterProps";
 
 const name = "headerSessionAnonymous";
 const LoginFormPlaceholder = loginForm.Placeholder;

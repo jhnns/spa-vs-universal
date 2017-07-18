@@ -2,7 +2,7 @@ import defineComponent from "../util/defineComponent";
 import { state as routerState } from "./router";
 import Link from "./link";
 import has from "../../util/has";
-import filterProps from "../util/filterProps";
+import filterProps from "../../util/filterProps";
 
 const name = "goBack";
 const ownProps = ["fallback"];
