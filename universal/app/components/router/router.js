@@ -3,8 +3,9 @@ import defineState from "../store/defineState";
 import contexts from "../../contexts";
 import createRouter from "./createRouter";
 import renderChild from "../util/renderChild";
-import routes from "../../routes";
 import has from "../../util/has";
+import routes from "../../routes";
+import { read, write } from "../../effects/routerState";
 
 const name = "router";
 const router = createRouter();
@@ -91,7 +92,7 @@ function changeRoute(abortChange, reduceHistory) {
                     previousParams: oldState.params,
                     history: reduceHistory(oldState.history, sanitizedReq.url),
                 });
-                dispatchAction(state.persist.session);
+                execEffect(write, getState());
 
                 resolve(handleTransition(getState, patchState, dispatchAction));
             });
@@ -146,15 +147,13 @@ export const state = defineState({
         previousParams: null,
         history: [],
     },
-    persist: {
-        session: ["history"],
-    },
-    hydrate(dehydrated, localState, sessionState) {
+    hydrate(dehydrated, execEffect) {
+        const localState = execEffect(read);
         const route = dehydrated.route;
 
         return {
             ...dehydrated,
-            history: sessionState === null ? dehydrated.history : sessionState.history,
+            history: localState.history === null ? dehydrated.history : localState.history,
             route: route !== null && has(routes, route.name) ? routes[route.name] : null,
         };
     },

@@ -1,27 +1,13 @@
-import has from "../../util/has";
+export const LOCAL_STORAGE = "local";
+export const SESSION_STORAGE = "session";
 
-const LOCAL_STORAGE = "local";
-const SESSION_STORAGE = "session";
+function returnNull() {
+    return null;
+}
 
-export default {
-    LOCAL_STORAGE,
-    SESSION_STORAGE,
-    writeTo: ({ req }) => (storageType, namespace, state) => {
-        if (storageType === SESSION_STORAGE) {
-            // There is no coherent browsing session on the server
-            // Do nothing in this case
-            return;
-        }
-
-        req.session[namespace] = state;
-    },
-    readFrom: ({ req }) => (storageType, namespace) => {
-        if (storageType === SESSION_STORAGE) {
-            // There is no coherent browsing session on the server
-            // so we can't read anything
-            return null;
-        }
-
-        return has(req.session, namespace) ? req.session[namespace] : null;
-    },
-};
+export function setItem() {
+    return Function.prototype;
+}
+export function getItem() {
+    return returnNull;
+}

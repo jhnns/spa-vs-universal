@@ -1,5 +1,4 @@
 import has from "../../util/has";
-import storage from "../../effects/storage";
 
 const emptyObj = {};
 
@@ -17,9 +16,6 @@ export default function defineState(descriptor) {
     const namespace = context.name + "/" + scope;
     const initialState = has(descriptor, "initialState") ? descriptor.initialState : emptyObj;
     const hydrate = descriptor.hydrate;
-    const persist = has(descriptor, "persist") ? descriptor.persist : emptyObj;
-    const localPersist = has(persist, "local") ? persist.local : false;
-    const sessionPersist = has(persist, "session") ? persist.session : false;
 
     function selectState(contextState) {
         return has(contextState, scope) ? contextState[scope] : initialState;
@@ -27,25 +23,6 @@ export default function defineState(descriptor) {
 
     function isHydrated(state) {
         return hydrate === undefined || (state !== initialState && typeof state.toJSON === "function");
-    }
-
-    function writeTo(storageType) {
-        if (has(persist, storageType) === false) {
-            // Nothing to do
-            return Function.prototype;
-        }
-
-        const keys = persist[storageType];
-
-        return (dispatchAction, getState, execEffect) => {
-            const dehydratedState = selectState(getState()).toJSON();
-            const keysToPersist = keys === true ? Object.keys(dehydratedState) : keys;
-            const stateToPersist = {};
-
-            keysToPersist.forEach(key => (stateToPersist[key] = dehydratedState[key]));
-
-            execEffect(storage.writeTo, storageType, namespace, stateToPersist);
-        };
     }
 
     if (typeof scope !== "string") {
@@ -61,6 +38,7 @@ export default function defineState(descriptor) {
     const actionDescriptor = has(descriptor, "actions") ? descriptor.actions : emptyObj;
     const state = {
         context,
+        namespace,
         scope,
         actions: Object.keys(actionDescriptor).reduce((actions, actionName) => {
             const execute = actionDescriptor[actionName];
@@ -91,11 +69,7 @@ export default function defineState(descriptor) {
                     return;
                 }
 
-                const localState = localPersist ? execEffect(storage.readFrom, storage.LOCAL_STORAGE, namespace) : null;
-                const sessionState = sessionPersist ?
-                    execEffect(storage.readFrom, storage.SESSION_STORAGE, namespace) :
-                    null;
-                const hydrated = hydrate(dehydrated, localState, sessionState);
+                const hydrated = hydrate(dehydrated, execEffect);
 
                 if (isDehydratable(hydrated) === false) {
                     hydrated.toJSON = returnThis;
@@ -108,10 +82,6 @@ export default function defineState(descriptor) {
             };
         },
         select: selectState,
-        persist: {
-            local: writeTo(storage.LOCAL_STORAGE),
-            session: writeTo(storage.SESSION_STORAGE),
-        },
     };
 
     context.scopes[scope] = state;

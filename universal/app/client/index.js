@@ -4,14 +4,13 @@ window.h = h;
 
 function startApp() {
     const createApp = require("../createApp").default;
-    const captureFormSubmit = require("./session/captureFormSubmit").default;
-    const captureLinkClick = require("./session/captureLinkClick").default;
-    const connectToBrowserHistory = require("./session/connectToBrowserHistory").default;
-    const connectToDocument = require("./session/connectToDocument").default;
+    const captureFormSubmit = require("./captureFormSubmit").default;
+    const captureLinkClick = require("./captureLinkClick").default;
+    const connectToBrowserHistory = require("./connectToBrowserHistory").default;
+    const connectToDocument = require("./connectToDocument").default;
     const preloadChunkEntries = require("./preloadChunkEntries").default;
     const chunkState = require("../components/chunks/chunks").state;
     const storeState = require("../components/store/store").state;
-    const sessionState = require("../components/session/session").state;
 
     const initialState = window.__PRELOADED_STATE__ || {};
     const effectContext = {};
@@ -27,12 +26,9 @@ function startApp() {
         connectToBrowserHistory(store);
         connectToDocument(store);
 
-        const applyLazyStylesheets = require("./session/applyLazyStylesheets").default;
+        const applyLazyStylesheets = require("./applyLazyStylesheets").default;
 
         applyLazyStylesheets();
-
-        // Ensure that our local session state is always up-to-date
-        store.dispatch(sessionState.persist.local);
     });
 }
 

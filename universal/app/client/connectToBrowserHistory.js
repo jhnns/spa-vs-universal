@@ -1,5 +1,5 @@
 import onHistoryPop from "nanohistory";
-import { state as routerState } from "../../components/router/router";
+import { state as routerState } from "../components/router/router";
 
 export default function connectToBrowserHistory(store) {
     let duringPopState = false;

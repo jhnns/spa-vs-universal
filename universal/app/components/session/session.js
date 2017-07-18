@@ -2,26 +2,24 @@ import renderChild from "../util/renderChild";
 import createSession from "../../effects/api/session/create";
 import defineState from "../store/defineState";
 import contexts from "../../contexts";
+import { read } from "../../effects/sessionState";
 
 const name = "session";
-const initialState = {
-    user: null,
-    token: null,
-};
 
 export const state = defineState({
     scope: name,
     context: contexts.state,
-    initialState,
-    persist: {
-        local: true,
+    initialState: {
+        user: null,
+        token: null,
     },
-    hydrate(dehydrated, localState) {
-        if (dehydrated.user !== null && dehydrated.token !== null) {
-            return dehydrated;
-        }
+    hydrate(dehydrated, execEffect) {
+        const state = execEffect(read);
 
-        return localState === null ? dehydrated : localState;
+        return {
+            ...dehydrated,
+            ...state,
+        };
     },
     actions: {
         create: (name, password) => (getState, patchState, dispatchAction, execEffect) =>
@@ -30,7 +28,6 @@ export const state = defineState({
                     user: res.user,
                     token: res.token,
                 });
-                dispatchAction(state.persist.local);
 
                 return true;
             }),

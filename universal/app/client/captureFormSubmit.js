@@ -1,4 +1,4 @@
-import { state as routerState } from "../../components/router/router";
+import { state as routerState } from "../components/router/router";
 
 const toArray = Array.from.bind(Array);
 

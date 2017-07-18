@@ -1,5 +1,5 @@
 import onLinkClick from "nanohref";
-import { state as routerState } from "../../components/router/router";
+import { state as routerState } from "../components/router/router";
 
 export default function captureLinkClick(store) {
     onLinkClick(node => {
