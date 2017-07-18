@@ -5,10 +5,15 @@ import createRouter from "./createRouter";
 import renderChild from "../util/renderChild";
 import has from "../../util/has";
 import routes from "../../routes";
-import { read, write } from "../../effects/routerState";
+import { read as readHistory, write as writeHistory } from "../../effects/storage/session/history";
 
 const name = "router";
 const router = createRouter();
+const defaultRequest = {
+    method: "get",
+    url: "/",
+    body: {},
+};
 
 function handleTransition(getState, patchState, dispatchAction) {
     return new Promise(resolve => {
@@ -43,7 +48,7 @@ function handleTransition(getState, patchState, dispatchAction) {
                     const state = getState();
                     const isErrorRoute = state.route.error === true;
 
-                    if (state.request !== null && state.request.method !== "get" && isErrorRoute === false) {
+                    if (state.request.method !== "get" && isErrorRoute === false) {
                         throw new Error(
                             "Router finished with non-get request. Use the replace action to forward to a get request."
                         );
@@ -69,7 +74,7 @@ function sanitizeRequest(request) {
 
 function changeRoute(abortChange, reduceHistory) {
     return req => {
-        const request = typeof req === "string" ? { method: "get", url: req, body: null } : req;
+        const request = typeof req === "string" ? { ...defaultRequest, url: req } : req;
 
         return (getState, patchState, dispatchAction, execEffect) =>
             new Promise(resolve => {
@@ -83,6 +88,7 @@ function changeRoute(abortChange, reduceHistory) {
                 }
 
                 const { route, params } = resolveRouteAndParams(sanitizedReq.parsedUrl);
+                const history = reduceHistory(oldState.history, sanitizedReq.url);
 
                 patchState({
                     request: sanitizedReq,
@@ -90,9 +96,9 @@ function changeRoute(abortChange, reduceHistory) {
                     params,
                     previousRoute: oldState.route,
                     previousParams: oldState.params,
-                    history: reduceHistory(oldState.history, sanitizedReq.url),
+                    history,
                 });
-                execEffect(write, getState());
+                execEffect(writeHistory, history);
 
                 resolve(handleTransition(getState, patchState, dispatchAction));
             });
@@ -148,12 +154,12 @@ export const state = defineState({
         history: [],
     },
     hydrate(dehydrated, execEffect) {
-        const localState = execEffect(read);
+        const history = execEffect(readHistory);
         const route = dehydrated.route;
 
         return {
             ...dehydrated,
-            history: localState.history === null ? dehydrated.history : localState.history,
+            history: history === null ? dehydrated.history : history,
             route: route !== null && has(routes, route.name) ? routes[route.name] : null,
         };
     },
@@ -173,7 +179,11 @@ export const state = defineState({
                     params,
                 };
 
-                if (initialRequest !== undefined) {
+                if (initialRequest === undefined) {
+                    if (getState().request === null) {
+                        throw new Error("Cannot call show without initial request");
+                    }
+                } else {
                     state.request = sanitizeRequest(initialRequest);
                 }
 
@@ -193,11 +203,8 @@ export const state = defineState({
                 }
 
                 resolve(
-                    changeBack({
-                        // pop actions always result in get methods because all the other methods are not in the history
-                        method: "get",
-                        url,
-                    })(getState, patchState, dispatchAction, execEffect)
+                    // pop actions always result in get methods because all the other methods are not in the history
+                    changeBack(url)(getState, patchState, dispatchAction, execEffect)
                 );
             }),
     },
