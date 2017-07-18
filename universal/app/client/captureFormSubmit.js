@@ -23,7 +23,7 @@ export default function captureFormSubmit(store) {
 
         store.dispatch(
             routerState.actions.push({
-                method: formElement.elements._method,
+                method: formElement.elements._method.value,
                 url: formElement.action,
                 body: collectFormData(formElement),
             })
