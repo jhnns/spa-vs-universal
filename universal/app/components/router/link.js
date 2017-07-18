@@ -38,7 +38,7 @@ export default defineComponent({
         const anchorProps = filterProps(props, ownProps);
         const {
             route = state.route,
-            params = route.error === true ? emptyObj : state.params,
+            params = emptyObj,
             additionalParams,
             withoutParams = emptyArr,
             children,

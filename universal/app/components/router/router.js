@@ -60,7 +60,8 @@ function handleTransition(getState, patchState, dispatchAction) {
     });
 }
 
-function sanitizeRequest(request) {
+function sanitizeRequest(req) {
+    const request = typeof req === "string" ? { ...defaultRequest, url: req } : req;
     const parsedUrl = parseUrl(request.url);
 
     return {
@@ -73,26 +74,22 @@ function sanitizeRequest(request) {
 }
 
 function changeRoute({ abortIf, historyEffect }) {
-    return (req, statusCode) => {
-        const request = typeof req === "string" ? { ...defaultRequest, url: req } : req;
+    return (request, statusCode) => (getState, patchState, dispatchAction, execEffect) =>
+        new Promise(resolve => {
+            const oldState = getState();
+            const sanitizedReq = sanitizeRequest(request);
 
-        return (getState, patchState, dispatchAction, execEffect) =>
-            new Promise(resolve => {
-                const oldState = getState();
-                const sanitizedReq = sanitizeRequest(request);
+            if (abortIf(oldState, sanitizedReq)) {
+                resolve(oldState);
 
-                if (abortIf(oldState, sanitizedReq)) {
-                    resolve(oldState);
+                return;
+            }
 
-                    return;
-                }
+            const { route, params } = resolveRouteAndParams(sanitizedReq.parsedUrl);
 
-                const { route, params } = resolveRouteAndParams(sanitizedReq.parsedUrl);
-
-                execEffect(historyEffect, sanitizedReq.url, statusCode);
-                resolve(enterRoute(sanitizedReq, route, params)(getState, patchState, dispatchAction));
-            });
-    };
+            execEffect(historyEffect, sanitizedReq.url, statusCode);
+            resolve(enterRoute(sanitizedReq, route, params)(getState, patchState, dispatchAction));
+        });
 }
 
 function parseUrl(u) {
