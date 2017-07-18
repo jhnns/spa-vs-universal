@@ -2,9 +2,11 @@ import hookIntoEvent from "../util/hookIntoEvent";
 import renderUrl from "../../util/renderUrl";
 import defineComponent from "../util/defineComponent";
 import { state as routerState } from "./router";
-import has from "../../util/has";
+import filterProps from "../util/filterProps";
 
 const emptyObj = {};
+const emptyArr = [];
+const ownProps = ["route", "params", "children", "activeClass"];
 
 function preloadNextComponent(route) {
     const component = route !== undefined && route.component;
@@ -14,55 +16,45 @@ function preloadNextComponent(route) {
     }
 }
 
-function splitProps(props, state) {
-    const own = {
-        route: props.route || state.route,
-        params: props.params || null,
-        children: props.children,
-        replaceRoute: Boolean(props.replaceRoute),
-        activeClass: props.activeClass || "",
-    };
-
-    props.a = Object.keys(props).filter(key => has(own, key) === false).reduce((a, key) => {
-        a[key] = props[key];
-
-        return a;
-    }, {});
-    props.own = own;
-}
-
 export default defineComponent({
     name: "Link",
     connectToStore: {
         watch: [routerState.select],
-        mapToState: ({ route, request }) => ({
+        mapToState: ({ request, route, params }) => ({
             url: request.url,
             route,
+            params,
         }),
     },
     handlers: {
         handleMouseOver: hookIntoEvent("onMouseOver", (dispatchAction, event, props) => {
-            preloadNextComponent(props.own.route);
+            preloadNextComponent(props.route);
         }),
         handleFocus: hookIntoEvent("onFocus", (dispatchAction, event, props) => {
-            preloadNextComponent(props.own.route);
+            preloadNextComponent(props.route);
         }),
     },
     render(props, state) {
-        splitProps(props, state);
-
-        const { route, params, children, replaceRoute, activeClass } = props.own;
-        const targetUrl = renderUrl(route.url, params);
+        const anchorProps = filterProps(props, ownProps);
+        const {
+            route = state.route,
+            params = route.error === true ? emptyObj : state.params,
+            additionalParams,
+            withoutParams = emptyArr,
+            children,
+            activeClass,
+        } = props;
+        const finalParams = filterProps(Object.assign({}, params, additionalParams), withoutParams);
+        const targetUrl = renderUrl(route.url, finalParams);
 
         return (
             <a
-                {...props.a}
+                {...anchorProps}
                 {...(route === state.route ? activeClass : emptyObj)}
                 href={targetUrl}
                 onMouseOver={this.handlers.handleMouseOver}
                 onFocus={this.handlers.handleFocus}
                 data-route={true}
-                data-replace-url={replaceRoute}
             >
                 {children}
             </a>

@@ -1,9 +1,8 @@
 import defineComponent from "../util/defineComponent";
 import contexts from "../../contexts";
 import defineState from "../store/defineState";
-import { selectPreviousUrl } from "../router/router";
+import GoBack from "../router/goBack";
 import { root, rootVisible, rootHidden, window, backdrop, backdropVisible, backdropHidden } from "./modal.css";
-import Link from "../router/link";
 
 const name = "modal";
 
@@ -36,11 +35,10 @@ export const state = defineState({
 export default defineComponent({
     name,
     connectToStore: {
-        watch: [state.select, selectPreviousUrl],
-        mapToState: ({ component }, previousUrl, oldState) => ({
+        watch: [state.select],
+        mapToState: ({ component }, oldState) => ({
             active: component !== null,
             component: component === null ? oldState.component : component,
-            previousUrl,
         }),
     },
     render(props, state) {
@@ -55,7 +53,7 @@ export default defineComponent({
 
         return (
             <div {...rootStyles}>
-                <Link href={state.previousUrl} {...backdropStyles} />
+                <GoBack {...backdropStyles} />
                 <div {...window}>
                     {state.component}
                 </div>

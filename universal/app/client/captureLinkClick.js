@@ -11,8 +11,6 @@ export default function captureLinkClick(store) {
             return;
         }
 
-        const action = routerState.actions[node.hasAttribute("data-replace-url") ? "replace" : "push"];
-
-        store.dispatch(action(url));
+        store.dispatch(routerState.actions.push(url));
     });
 }

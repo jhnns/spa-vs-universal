@@ -6,8 +6,7 @@ function startApp() {
     const createApp = require("../createApp").default;
     const captureFormSubmit = require("./captureFormSubmit").default;
     const captureLinkClick = require("./captureLinkClick").default;
-    const connectToBrowserHistory = require("./connectToBrowserHistory").default;
-    const connectToDocument = require("./connectToDocument").default;
+    const captureHistoryPop = require("./captureHistoryPop").default;
     const preloadChunkEntries = require("./preloadChunkEntries").default;
     const chunkState = require("../components/chunks/chunks").state;
     const storeState = require("../components/store/store").state;
@@ -23,8 +22,7 @@ function startApp() {
 
         captureLinkClick(store);
         captureFormSubmit(store);
-        connectToBrowserHistory(store);
-        connectToDocument(store);
+        captureHistoryPop(store);
 
         const applyLazyStylesheets = require("./applyLazyStylesheets").default;
 

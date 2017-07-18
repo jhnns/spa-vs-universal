@@ -1,18 +1,23 @@
 import defineComponent from "../util/defineComponent";
-import { selectPreviousUrl } from "./router";
+import { state as routerState } from "./router";
 import Link from "./link";
+import has from "../../util/has";
+import filterProps from "../util/filterProps";
 
 const name = "goBack";
+const ownProps = ["fallback"];
 
 export default defineComponent({
     name,
     connectToStore: {
-        watch: [selectPreviousUrl],
-        mapToState: previousUrl => ({
-            previousUrl,
+        watch: [routerState.select],
+        mapToState: ({ params }, props) => ({
+            previousUrl: has(params, "previous") ? params.previous : has(props, "fallback") ? props.fallback : "/",
         }),
     },
     render(props, state) {
-        return <Link {...props} href={state.previousUrl} />;
+        const linkProps = filterProps(props, ownProps);
+
+        return <Link {...linkProps} href={state.previousUrl} />;
     },
 });

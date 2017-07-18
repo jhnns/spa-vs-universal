@@ -2,7 +2,7 @@ import renderChild from "../util/renderChild";
 import createSession from "../../effects/api/session/create";
 import defineState from "../store/defineState";
 import contexts from "../../contexts";
-import { read } from "../../effects/sessionState";
+import sessionState from "../../effects/sessionState";
 
 const name = "session";
 
@@ -14,7 +14,7 @@ export const state = defineState({
         token: null,
     },
     hydrate(dehydrated, execEffect) {
-        const state = execEffect(read);
+        const state = execEffect(sessionState.read);
 
         return {
             ...dehydrated,

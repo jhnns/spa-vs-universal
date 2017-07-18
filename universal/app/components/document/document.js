@@ -1,6 +1,7 @@
 import contexts from "../../contexts";
 import defineState from "../store/defineState";
 import renderChild from "../util/renderChild";
+import document from "../../effects/document";
 
 export const state = defineState({
     scope: "document",
@@ -11,10 +12,12 @@ export const state = defineState({
         headerTags: null,
     },
     actions: {
-        update: newState => (getState, patchState, dispatchAction, execEffect) => {
-            patchState({
-                ...newState,
-            });
+        update: state => (getState, patchState, dispatchAction, execEffect) => {
+            patchState(state);
+
+            const newState = getState();
+
+            execEffect(document.setTitle, newState.title);
         },
     },
 });
