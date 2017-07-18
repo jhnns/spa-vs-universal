@@ -16,7 +16,7 @@ export const state = defineState({
         enter: (request, route, params) => (getState, patchState, dispatchAction, execEffect) => {
             if (request.method !== "post") {
                 dispatchAction(
-                    routerState.actions.enter(routes.error, {
+                    routerState.actions.enter(request, routes.error, {
                         statusCode: 405,
                         title: "Method not allowed",
                         message: "Only the post method is allowed at " + request.url,

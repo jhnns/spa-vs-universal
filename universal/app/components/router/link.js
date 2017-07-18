@@ -6,7 +6,7 @@ import filterProps from "../util/filterProps";
 
 const emptyObj = {};
 const emptyArr = [];
-const ownProps = ["route", "params", "children", "activeClass"];
+const ownProps = ["route", "params", "children", "activeClass", "additionalParams", "withoutParams"];
 
 function preloadNextComponent(route) {
     const component = route !== undefined && route.component;
@@ -45,7 +45,10 @@ export default defineComponent({
             activeClass,
         } = props;
         const finalParams = filterProps(Object.assign({}, params, additionalParams), withoutParams);
-        const targetUrl = renderUrl(route.url, finalParams);
+        const targetUrl = renderUrl(
+            route.error === true ? (typeof state.params.next === "string" ? state.params.next : "/") : route.url,
+            finalParams
+        );
 
         return (
             <a

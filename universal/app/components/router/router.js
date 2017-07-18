@@ -46,8 +46,9 @@ function handleTransition(getState, patchState, dispatchAction) {
                     action === null ? null : dispatchAction(action(state.request, state.route, state.params))
                 ).then(() => {
                     const state = getState();
+                    const isErrorRoute = state.route.error === true;
 
-                    if (state.request.method !== "get" && state.route.error === true) {
+                    if (state.request.method !== "get" && isErrorRoute === false) {
                         throw new Error(
                             "Router finished with non-get request. Use the replace action to forward to a get request."
                         );

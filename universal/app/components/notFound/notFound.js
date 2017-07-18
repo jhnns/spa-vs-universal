@@ -10,9 +10,9 @@ export const state = defineState({
     scope: name,
     context: contexts.state,
     actions: {
-        enter: () => (getState, patchState, dispatchAction, execEffect) => {
+        enter: request => (getState, patchState, dispatchAction, execEffect) => {
             dispatchAction(
-                routerState.actions.enter(routes.error, {
+                routerState.actions.enter(request, routes.error, {
                     statusCode: 404,
                     title: "Not Found",
                     message: "The requested route does not exist",

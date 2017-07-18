@@ -11,8 +11,8 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [routerState.select],
-        mapToState: ({ request }) => ({
-            previous: request.url,
+        mapToState: ({ request, route }) => ({
+            previous: route.error === true ? null : request.url,
         }),
     },
     render(props, state) {
@@ -20,7 +20,9 @@ export default defineComponent({
         const additionalParams = Object.assign({}, props.additionalParams);
 
         additionalParams[props.triggerParam] = 1;
-        additionalParams.previous = state.previous;
+        if (state.previous !== null) {
+            additionalParams.previous = state.previous;
+        }
 
         return (
             <Link {...linkProps} additionalParams={additionalParams}>
