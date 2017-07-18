@@ -1,4 +1,4 @@
-import fetch from "../../fetch";
+import api from "../../api";
 
 const defaultOptions = {
     method: "POST",
@@ -10,7 +10,7 @@ const defaultOptions = {
 
 export default function create(context) {
     return (name, password) =>
-        fetch(context)("/session", {
+        api(context)("/session", {
             ...defaultOptions,
             body: JSON.stringify({ name, password }),
         })
