@@ -21,7 +21,7 @@ export default defineComponent({
 
             return {
                 loginFormProps: {
-                    next: renderUrl(route.url, filterProps(paramsToExtend, [triggerParam])),
+                    next: renderUrl(route.url, filterProps(paramsToExtend, [triggerParam, "previous"])),
                 },
             };
         },
