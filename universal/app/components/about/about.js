@@ -1,24 +1,14 @@
 import defineState from "../store/defineState";
 import contexts from "../../contexts";
-import { state as documentState } from "../document/document";
 import { aboutSheet, headline, text } from "./about.css";
 
 const name = "about";
-const title = "About";
 
 export const state = defineState({
     scope: name,
     context: contexts.state,
     actions: {
-        enter: () => (getState, patchState, dispatchAction) => {
-            dispatchAction(
-                documentState.actions.update({
-                    statusCode: 200,
-                    title,
-                    headerTags: [],
-                })
-            );
-        },
+        enter: () => (getState, patchState, dispatchAction) => {},
     },
 });
 
