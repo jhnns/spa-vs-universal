@@ -1,4 +1,4 @@
-import defineChunkEntry from "../chunks/defineChunkEntry";
+import defineChunkEntry from "../../components/chunks/defineChunkEntry";
 import contexts from "../../contexts";
 
 export default defineChunkEntry({

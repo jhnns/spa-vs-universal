@@ -82,6 +82,17 @@ export default app => {
             res.status(201).json({ status: "success", data });
         });
     });
+    app.delete("/api/session", authenticateJwt, (req, res, next) => {
+        req.session.destroy(err => {
+            if (err) {
+                next(err);
+
+                return;
+            }
+
+            res.status(200).json({ status: "success" });
+        });
+    });
     app.use("/api", api.getMiddleware());
     app.use((err, req, res, next) => {
         if (err.name === "AuthenticationError") {

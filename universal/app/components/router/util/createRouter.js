@@ -1,5 +1,5 @@
 import nanorouter from "nanorouter";
-import routes from "../../routes";
+import routes from "../../../routes";
 
 export default function createRouter() {
     const router = nanorouter({ default: "/404" });
@@ -10,7 +10,7 @@ export default function createRouter() {
 
         if (i === arr.length - 1) {
             if (typeof urlPattern === "string") {
-                throw new Error("Expected the last catch-all route to have no url pattern");
+                // throw new Error("Expected the last catch-all route to have no url pattern");
             }
             urlPattern = "404";
         } else if (typeof urlPattern !== "string") {

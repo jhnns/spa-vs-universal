@@ -7,7 +7,6 @@ import has from "../../util/has";
 
 const name = "error";
 const emptyArr = [];
-const defaultNextUrl = "/";
 
 export const state = defineState({
     scope: name,

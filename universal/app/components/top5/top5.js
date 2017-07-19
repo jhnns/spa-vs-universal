@@ -1,12 +1,12 @@
 import defineState from "../store/defineState";
 import contexts from "../../contexts";
 import defineComponent from "../util/defineComponent";
-import { state as documentState } from "../document/document";
 import getTop5 from "../../effects/api/posts/getTop5";
 import Posts from "../posts/posts";
 
 const name = "top5";
-const title = "Top 5 Peerigon News";
+
+export const title = "Top 5 Peerigon News";
 
 export const state = defineState({
     scope: name,
@@ -15,21 +15,13 @@ export const state = defineState({
         posts: null,
     },
     actions: {
-        enter: () => (getState, patchState, dispatchAction, execEffect) => {
-            dispatchAction(
-                documentState.actions.update({
-                    statusCode: 200,
-                    title,
-                    headerTags: [],
-                })
-            );
-
-            return execEffect(getTop5).then(posts => {
+        enter: () => (getState, patchState, dispatchAction, execEffect) =>
+            execEffect(getTop5).then(posts => {
                 patchState({
                     posts,
                 });
-            });
-        },
+            }),
+        update: () => (getState, patchState, dispatchAction, execEffect) => Function.prototype,
     },
 });
 

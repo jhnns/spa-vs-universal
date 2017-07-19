@@ -3,8 +3,6 @@ import Placeholder from "../placeholder/placeholder";
 import defineComponent from "../util/defineComponent";
 import has from "../../util/has";
 
-const emptyArr = [];
-
 export default function defineChunkEntry(descriptor) {
     const chunk = descriptor.chunk;
     const context = descriptor.context;
@@ -23,7 +21,6 @@ export default function defineChunkEntry(descriptor) {
     }
 
     const load = descriptor.load;
-    const childGenerator = has(descriptor, "Placeholder") ? [descriptor.Placeholder] : emptyArr;
     let entryModule = null;
     let error = null;
     const ChunkEntryPlaceholder = defineComponent({
@@ -36,11 +33,11 @@ export default function defineChunkEntry(descriptor) {
             },
         },
         render(props, state) {
-            return (
-                <Placeholder Component={state.Component} props={props.props}>
-                    {childGenerator}
-                </Placeholder>
-            );
+            if (descriptor.placeholder) {
+                return descriptor.placeholder(props, state);
+            }
+
+            return <Placeholder Component={state.Component} props={props} />;
         },
     });
     const chunkEntry = {
