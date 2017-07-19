@@ -5,7 +5,7 @@ import nexaHeavy from "../../styles/type/nexaHeavy";
 import { maxContentWidth } from "../../styles/layout";
 import { offscreen as a11yOffscreen } from "../../styles/a11y";
 import { header as headerZIndex } from "../../styles/zIndex";
-import { verticalOffset, logoHeight, headerCollapseBreakpoint } from "./common";
+import { logoHeight, headerCollapseBreakpoint } from "./common";
 
 export const root = css({
     position: "sticky",
@@ -21,7 +21,7 @@ export const content = css({
     alignItems: "center",
     lineHeight: logoHeight + "rem",
     flexWrap: "wrap",
-    padding: [px(6) + verticalOffset, "px ", px(6), "px ", px(6) - verticalOffset, "px"].join(""),
+    padding: px(6),
     maxWidth: maxContentWidth + "rem",
     marginLeft: "auto",
     marginRight: "auto",

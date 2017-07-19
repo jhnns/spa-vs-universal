@@ -1,10 +1,9 @@
 import { root, userName, userImage } from "./personal.css";
-import { nbsp } from "../../../../util/htmlEntities";
-import Link from "../../../router/link";
 import { link } from "../../link.css";
 import defineForm from "../../../form/defineForm";
 import Form from "../../../form/form";
 import contexts from "../../../../contexts";
+import routes from "../../../../routes";
 
 const LogoutForm = defineForm({
     name: "logoutForm",
@@ -15,10 +14,8 @@ const LogoutForm = defineForm({
     }),
     render(props, { csrfToken }) {
         return (
-            <Form method={"DELETE"}>
-                <input type="submit">
-                    Log{nbsp}out
-                </input>
+            <Form method={"DELETE"} actionRoute={routes.logout}>
+                <input type="submit" value={"Log out"} {...link} />
             </Form>
         );
     },
@@ -37,11 +34,7 @@ export default function HeaderSessionPersonal(props) {
             <span {...userName}>
                 {user.name}
             </span>
-            <span>
-                <Link {...link}>
-                    Log{nbsp}out
-                </Link>
-            </span>
+            <LogoutForm />
         </div>
     );
 }

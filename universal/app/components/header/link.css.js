@@ -12,10 +12,14 @@ export const activeLink = css(activeLinkStyles);
 
 export const link = css({
     ...nexaXBold,
+    // There's a small baseline correction necessary
+    position: "relative",
+    top: 1,
     color: "currentColor",
     fontSize: rem(12) + "rem",
     textDecoration: "none",
     padding: `2px ${ px(5) }px`,
+    cursor: "pointer",
     ":hover": activeLinkStyles,
     ":active": activeLinkStyles,
 });

@@ -25,7 +25,7 @@ export const root = css({
 
 export const rootHidden = css({
     transition: `transform 0s ${ fadeDurationCss }`,
-    transform: "translateX(100%)",
+    transform: "translateY(-100%)",
 });
 
 export const rootVisible = css({});
@@ -46,7 +46,7 @@ export const backdrop = css({
 export const backdropHidden = css({
     opacity: 0,
     transition: `opacity ${ fadeDurationCss } ease-in-out, transform 0s ${ fadeDurationCss }`,
-    transform: "translateX(100%)",
+    transform: "translateY(-100%)",
 });
 
 export const backdropVisible = css({

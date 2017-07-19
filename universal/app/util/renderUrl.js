@@ -1,7 +1,7 @@
 import querystring from "querystring";
 
 export default function renderUrl(urlPattern, params) {
-    if (params === null) {
+    if (params === null || params === undefined) {
         return urlPattern;
     }
 
