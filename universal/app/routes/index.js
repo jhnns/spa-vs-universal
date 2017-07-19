@@ -26,13 +26,8 @@ export default defineRoutes({
         entry: about.import,
         placeholder: () => about.Placeholder,
     },
-    login: {
-        url: "/login",
-        entry: session.import,
-        placeholder: () => session.Placeholder,
-    },
-    logout: {
-        url: "/logout",
+    session: {
+        url: "/session",
         entry: session.import,
         placeholder: () => session.Placeholder,
     },

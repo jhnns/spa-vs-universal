@@ -14,7 +14,7 @@ const LogoutForm = defineForm({
     }),
     render(props, { csrfToken }) {
         return (
-            <Form method={"DELETE"} actionRoute={routes.logout}>
+            <Form method={"DELETE"} actionRoute={routes.session}>
                 <input type="submit" value={"Log out"} {...link} />
             </Form>
         );

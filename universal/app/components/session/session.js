@@ -31,7 +31,7 @@ export const state = defineState({
                 });
             }),
         destroy: () => (getState, patchState, dispatchAction, execEffect) =>
-            execEffect(destroySession).then(res => {
+            execEffect(destroySession, getState().token).then(res => {
                 patchState({
                     user: null,
                     token: null,

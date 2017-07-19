@@ -29,7 +29,7 @@ export default defineForm({
         return (
             <Form
                 method={"POST"}
-                actionRoute={routes.login}
+                actionRoute={routes.session}
                 actionParams={actionParams}
                 csrfToken={csrfToken}
                 {...loginSheet}

@@ -1,24 +1,23 @@
 import api from "../../api";
 
-const defaultOptions = {
-    method: "DELETE",
-    credentials: "same-origin",
-    headers: {
-        "Content-Type": "application/json",
-    },
-};
+function getOptions(token) {
+    return {
+        method: "DELETE",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: "JWT " + token,
+        },
+    };
+}
 
 export default function destroy(context) {
-    return (name, password) =>
-        api(context)("/session", {
-            ...defaultOptions,
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.status === "success") {
-                    return res.data;
-                }
+    return token =>
+        api(context)("/session", getOptions(token)).then(res => res.json()).then(res => {
+            if (res.status === "success") {
+                return res.data;
+            }
 
-                throw new Error(res.message);
-            });
+            throw new Error(res.message);
+        });
 }

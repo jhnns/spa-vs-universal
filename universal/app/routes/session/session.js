@@ -13,7 +13,7 @@ export function POST(request, route, params) {
 
 export function DELETE(request, route, params) {
     return (dispatchAction, getState, execEffect) =>
-        dispatchAction(sessionState.actions.create(request.body.name, request.body.password)).then(
+        dispatchAction(sessionState.actions.destroy()).then(
             () => dispatchAction(routerState.actions.replace(has(params, "next") ? params.next : "/", SEE_OTHER)),
             console.error
         );

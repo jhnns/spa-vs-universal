@@ -29,52 +29,55 @@ export default function enterRoute(request, optionalRoute, optionalParams) {
             }
 
             patchState(stateAtTransitionStart);
-            dispatchAction(stateAtTransitionStart.route.entry)
-                .then(chunkEntryModule =>
-                    ifStillSameRequest(() => {
-                        const { request, route, params } = getState();
-                        const methodAction = chunkEntryModule[request.method];
-
-                        if (methodAction === undefined) {
-                            const allowedMethods = Object.keys(chunkEntryModule);
-                            const pathname = getState().request.parsedUrl.pathname;
-
-                            return enterRoute(request, routes.error, methodNotAllowed(allowedMethods, pathname));
-                        }
-
-                        return dispatchAction(methodAction(request, route, params));
-                    })
-                )
-                .then(getActions => {
+            dispatchAction(stateAtTransitionStart.route.entry).then(chunkEntryModule =>
+                ifStillSameRequest(() => {
                     const { request, route, params } = getState();
+                    const methodAction = chunkEntryModule[request.method];
 
-                    if (request.method !== "GET") {
-                        const isErrorRoute = route.error === true;
+                    if (methodAction === undefined) {
+                        const allowedMethods = Object.keys(chunkEntryModule);
+                        const pathname = getState().request.parsedUrl.pathname;
 
-                        if (request.method !== "GET" && isErrorRoute === false) {
-                            throw new Error(
-                                "Router finished with non-GET request. Use the replace action to forward to a get request."
-                            );
-                        }
-
-                        return void resolve();
+                        return enterRoute(request, routes.error, methodNotAllowed(allowedMethods, pathname))(
+                            getState,
+                            patchState,
+                            dispatchAction
+                        ).then(resolve, reject);
                     }
 
-                    return ifStillSameRequest(() => {
-                        let action;
+                    return Promise.resolve(dispatchAction(methodAction(request, route, params)))
+                        .then(getActions => {
+                            const { request, route, params } = getState();
 
-                        if (route === stateBeforeTransitionStart.route) {
-                            action = has(getActions, "update") ? getActions.update : getActions.enter;
-                        } else {
-                            action = getActions.enter;
-                        }
-                        if (action === undefined) {
-                            throw new Error(`Route ${ route.name } has no enter action`);
-                        }
+                            if (request.method !== "GET") {
+                                const isErrorRoute = route.error === true;
 
-                        return dispatchAction(action(request, route, params));
-                    });
+                                if (request.method !== "GET" && isErrorRoute === false) {
+                                    throw new Error(
+                                        "Router finished with non-GET request. Use the replace action to forward to a get request."
+                                    );
+                                }
+
+                                return void resolve();
+                            }
+
+                            return ifStillSameRequest(() => {
+                                let action;
+
+                                if (route === stateBeforeTransitionStart.route) {
+                                    action = has(getActions, "update") ? getActions.update : getActions.enter;
+                                } else {
+                                    action = getActions.enter;
+                                }
+                                if (action === undefined) {
+                                    throw new Error(`Route ${ route.name } has no enter action`);
+                                }
+
+                                return dispatchAction(action(request, route, params));
+                            });
+                        })
+                        .then(resolve, reject);
                 })
-                .then(resolve, reject);
+            );
         });
 }
