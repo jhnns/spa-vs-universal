@@ -28,7 +28,7 @@ export default defineComponent({
         return (
             <div>
                 <ModalLink
-                    modal={<LoginFormPlaceholder next={state.nextUrlAfterLogin} />}
+                    modal={<LoginFormPlaceholder autoFocus={true} next={state.nextUrlAfterLogin} />}
                     triggerParam={triggerParam}
                     importAction={loginForm.import}
                     {...link}
