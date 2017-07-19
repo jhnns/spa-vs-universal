@@ -6,6 +6,12 @@ import { root, rootVisible, rootHidden, window, backdrop, backdropVisible, backd
 
 const name = "modal";
 
+function isCurrentlyActive(state, component) {
+    const current = state.component;
+
+    return current !== null && current === component;
+}
+
 export const state = defineState({
     scope: name,
     context: contexts.state,
@@ -20,14 +26,18 @@ export const state = defineState({
     },
     actions: {
         show: component => (getState, patchState, dispatchAction) => {
-            patchState({
-                component,
-            });
+            if (isCurrentlyActive(getState(), component) === false) {
+                patchState({
+                    component,
+                });
+            }
         },
-        hide: () => (getState, patchState, dispatchAction) => {
-            patchState({
-                component: null,
-            });
+        hide: component => (getState, patchState, dispatchAction) => {
+            if (isCurrentlyActive(getState(), component) === true) {
+                patchState({
+                    component: null,
+                });
+            }
         },
     },
 });
@@ -38,7 +48,7 @@ export default defineComponent({
         watch: [state.select],
         mapToState: ({ component }, oldState) => ({
             active: component !== null,
-            component: component === null ? oldState.component : component,
+            component,
         }),
     },
     render(props, state) {

@@ -20,18 +20,25 @@ export default defineComponent({
             const paramsToExtend = route.error === true ? emptyObj : params;
 
             return {
-                loginFormProps: {
-                    next: renderUrl(route.url, filterProps(paramsToExtend, [triggerParam, "previous"])),
-                },
+                nextUrlAfterLogin: renderUrl(route.url, filterProps(paramsToExtend, [triggerParam, "previous"])),
             };
         },
     },
     render(props, state) {
-        const placeholder = <LoginFormPlaceholder props={state.loginFormProps} />;
-
         return (
             <div>
-                <ModalLink modal={placeholder} triggerParam={triggerParam} importAction={loginForm.import} {...link}>
+                <ModalLink
+                    modal={
+                        <LoginFormPlaceholder
+                            props={{
+                                next: state.nextUrlAfterLogin,
+                            }}
+                        />
+                    }
+                    triggerParam={triggerParam}
+                    importAction={loginForm.import}
+                    {...link}
+                >
                     Log{nbsp}in
                 </ModalLink>
             </div>

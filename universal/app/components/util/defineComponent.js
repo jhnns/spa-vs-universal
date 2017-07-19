@@ -1,5 +1,4 @@
 import { Component as PreactComponent } from "preact";
-import shallowEqual from "shallowequal";
 import renderChild from "./renderChild";
 import has from "../../util/has";
 
@@ -8,6 +7,36 @@ const emptyArr = [];
 
 function throwNoContextError() {
     throw new Error("No store available in this component context");
+}
+
+function compare(a, b, compareChildren) {
+    if (a === b) {
+        return true;
+    }
+
+    const aKeys = Object.keys(a);
+    const bKeys = Object.keys(b);
+
+    if (aKeys.length !== bKeys.length) {
+        return false;
+    }
+
+    for (let i = 0; i < aKeys.length; i++) {
+        const key = aKeys[i];
+
+        if (compareChildren === true && key === "children") {
+            if (compare(a.children, b.children) === false) {
+                return false;
+            }
+            continue;
+        }
+
+        if (has(b, key) === false || a[key] !== b[key]) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 export default function createComponent(descriptor) {
@@ -42,7 +71,7 @@ export default function createComponent(descriptor) {
             willUpdate.call(context, props, this.state, this.dispatchAction);
         }
         shouldComponentUpdate(newProps, newState) {
-            return shallowEqual(newProps, this.props) === false || shallowEqual(newState, this.state) === false;
+            return compare(newProps, this.props, true) === false || compare(newState, this.state, false) === false;
         }
         componentWillUpdate(newProps, newState) {
             willUpdate.call(this.context, newProps, newState, this.dispatchAction);

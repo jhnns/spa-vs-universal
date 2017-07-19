@@ -8,29 +8,21 @@ const name = "modalTrigger";
 export default defineComponent({
     name,
     connectToStore: {
-        watch: [routerState.select, modalState.select],
-        mapToState: ({ params }, { component }, { triggerParam, children }, oldState) => {
-            const active = parseInt(params[triggerParam]) === 1;
-            const modalComponent = children[0];
-            let modalAction = null;
-
-            if (active === true && (component === null || component.nodeName !== modalComponent.nodeName)) {
-                modalAction = modalState.actions.show(modalComponent);
-            } else if (active === false && component !== null && component.nodeName === modalComponent.nodeName) {
-                modalAction = modalState.actions.hide();
-            }
-
-            return {
-                modalAction,
-            };
-        },
+        watch: [routerState.select],
+        mapToState: ({ params }, { triggerParam }) => ({
+            shouldBeActive: parseInt(params[triggerParam]) === 1,
+        }),
     },
     willUpdate(props, state, dispatchAction) {
-        if (state.modalAction !== null) {
+        const childComponent = props.children[0];
+
+        if (state.shouldBeActive) {
             if (has(props, "importAction")) {
                 dispatchAction(props.importAction);
             }
-            dispatchAction(state.modalAction);
+            dispatchAction(modalState.actions.show(childComponent));
+        } else {
+            dispatchAction(modalState.actions.hide(childComponent));
         }
     },
     render() {
