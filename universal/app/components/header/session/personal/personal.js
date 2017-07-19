@@ -10,11 +10,13 @@ const LogoutForm = defineForm({
     context: contexts.state,
     connectToStore: state => ({
         watch: [state.select],
-        mapToState: s => ({ ...s }),
+        mapToState: ({ csrfToken }) => ({
+            csrfToken,
+        }),
     }),
     render(props, { csrfToken }) {
         return (
-            <Form method={"DELETE"} actionRoute={routes.session}>
+            <Form method={"DELETE"} actionRoute={routes.session} csrfToken={csrfToken}>
                 <input type="submit" value={"Log out"} {...link} />
             </Form>
         );
