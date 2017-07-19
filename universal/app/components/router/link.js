@@ -6,7 +6,7 @@ import filterProps from "../../util/filterProps";
 
 const emptyObj = {};
 const emptyArr = [];
-const ownProps = ["route", "params", "children", "activeClass", "additionalParams", "withoutParams"];
+const ownProps = ["route", "params", "children", "activeClass", "replaceRoute", "additionalParams", "withoutParams"];
 
 function preloadNextComponent(route) {
     const component = route !== undefined && route.component;
@@ -41,6 +41,7 @@ export default defineComponent({
             params = emptyObj,
             additionalParams,
             withoutParams = emptyArr,
+            replaceRoute = false,
             children,
             activeClass,
         } = props;
@@ -58,6 +59,7 @@ export default defineComponent({
                 onMouseOver={this.handlers.handleMouseOver}
                 onFocus={this.handlers.handleFocus}
                 data-route={true}
+                data-replace-url={replaceRoute}
             >
                 {children}
             </a>

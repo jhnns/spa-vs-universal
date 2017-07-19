@@ -7,7 +7,7 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [routerState.select],
-        mapToState: s => s,
+        mapToState: s => ({ ...s }),
     },
     render(props, state) {
         const { request, route, params } = state;

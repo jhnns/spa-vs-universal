@@ -5,7 +5,7 @@ import renderUrl from "../../util/renderUrl";
 const ownProps = ["method", "csrfToken", "actionRoute", "actionParams"];
 
 export default function Form(props) {
-    const method = has(props, "method") ? props.method.toLowerCase() : "get";
+    const method = has(props, "method") ? props.method.toUpperCase() : "GET";
     const formProps = filterProps(props, ownProps);
     const csrfTokenField =
         typeof props.csrfToken === "string" && props.csrfToken.length > 0 ?
@@ -16,7 +16,7 @@ export default function Form(props) {
     // The actual method is encoded as _method param
     return (
         <form
-            method={method === "get" ? "GET" : "POST"}
+            method={method === "GET" ? "GET" : "POST"}
             action={renderUrl(props.actionRoute.url, props.actionParams)}
             {...formProps}
         >

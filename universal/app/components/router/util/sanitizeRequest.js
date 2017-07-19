@@ -1,7 +1,7 @@
 import parseUrl from "./parseUrl";
 
 const defaultRequest = {
-    method: "get",
+    method: "GET",
     url: "/",
     body: {},
 };
@@ -12,7 +12,7 @@ export default function sanitizeRequest(req) {
 
     return {
         sanitized: true,
-        method: request.method.toLowerCase(),
+        method: request.method.toUpperCase(),
         url: parsedUrl.path + (typeof parsedUrl.hash === "string" ? parsedUrl.hash : ""),
         parsedUrl,
         body: request.body,

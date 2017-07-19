@@ -26,11 +26,9 @@ export default function defineChunkEntry(descriptor) {
     const ChunkEntryPlaceholder = defineComponent({
         connectToStore: {
             watch: [chunkState.select],
-            mapToState() {
-                return {
-                    Component: entryModule === null ? error : entryModule.default,
-                };
-            },
+            mapToState: () => ({
+                Component: entryModule === null ? error : entryModule.default,
+            }),
         },
         render(props, state) {
             if (descriptor.placeholder) {

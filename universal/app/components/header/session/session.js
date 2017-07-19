@@ -11,12 +11,10 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [sessionState.select],
-        mapToState({ user }) {
-            return {
-                user,
-                isLoggedIn: user !== null,
-            };
-        },
+        mapToState: ({ user }) => ({
+            user,
+            isLoggedIn: user !== null,
+        }),
     },
     render(props, state) {
         const user = state.user;

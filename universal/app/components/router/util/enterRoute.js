@@ -48,12 +48,12 @@ export default function enterRoute(request, optionalRoute, optionalParams) {
                 .then(getActions => {
                     const { request, route, params } = getState();
 
-                    if (request.method !== "get") {
+                    if (request.method !== "GET") {
                         const isErrorRoute = route.error === true;
 
-                        if (request.method !== "get" && isErrorRoute === false) {
+                        if (request.method !== "GET" && isErrorRoute === false) {
                             throw new Error(
-                                "Router finished with non-get request. Use the replace action to forward to a get request."
+                                "Router finished with non-GET request. Use the replace action to forward to a get request."
                             );
                         }
 
@@ -63,7 +63,7 @@ export default function enterRoute(request, optionalRoute, optionalParams) {
                     return ifStillSameRequest(() => {
                         let action;
 
-                        if (request.route === stateBeforeTransitionStart.route) {
+                        if (route === stateBeforeTransitionStart.route) {
                             action = has(getActions, "update") ? getActions.update : getActions.enter;
                         } else {
                             action = getActions.enter;

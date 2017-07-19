@@ -11,11 +11,11 @@ const LogoutForm = defineForm({
     context: contexts.state,
     connectToStore: state => ({
         watch: [state.select],
-        mapToState: s => s,
+        mapToState: s => ({ ...s }),
     }),
     render(props, { csrfToken }) {
         return (
-            <Form method={"delete"}>
+            <Form method={"DELETE"}>
                 <input type="submit">
                     Log{nbsp}out
                 </input>

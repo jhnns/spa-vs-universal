@@ -33,7 +33,7 @@ export default function handleTransition(action, getState, patchState, dispatchA
                     const state = getState();
                     const isErrorRoute = state.route.error === true;
 
-                    if (state.request.method !== "get" && isErrorRoute === false) {
+                    if (state.request.method !== "GET" && isErrorRoute === false) {
                         throw new Error(
                             "Router finished with non-get request. Use the replace action to forward to a get request."
                         );

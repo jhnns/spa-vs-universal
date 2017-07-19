@@ -6,8 +6,6 @@ import Posts from "../posts/posts";
 
 const name = "top5";
 
-export const title = "Top 5 Peerigon News";
-
 export const state = defineState({
     scope: name,
     context: contexts.state,
@@ -29,11 +27,9 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [state.select],
-        mapToState(state) {
-            return state;
-        },
+        mapToState: s => ({ ...s }),
     },
     render(props, state) {
-        return <Posts a11yTitle={title} posts={state.posts} />;
+        return <Posts a11yTitle={"Top 5 Peerigon News"} posts={state.posts} />;
     },
 });

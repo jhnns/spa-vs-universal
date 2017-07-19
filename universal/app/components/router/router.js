@@ -10,7 +10,7 @@ import enterRoute from "./util/enterRoute";
 const name = "router";
 
 function isCurrentGetRequest(state, request) {
-    return state.request !== null && state.request.method === "get" && state.request.url === request.url;
+    return state.request !== null && state.request.method === "GET" && state.request.url === request.url;
 }
 
 export const state = defineState({

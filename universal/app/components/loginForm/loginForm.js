@@ -14,7 +14,7 @@ export default defineForm({
     context: contexts.state,
     connectToStore: state => ({
         watch: [state.select],
-        mapToState: s => s,
+        mapToState: s => ({ ...s }),
     }),
     render(props, { name, csrfToken, isValid, validationErrors, isSubmitPending, submitError }) {
         const nameId = `${ name }-name`;
@@ -28,7 +28,7 @@ export default defineForm({
         /* eslint-disable react/jsx-key */
         return (
             <Form
-                method={"post"}
+                method={"POST"}
                 actionRoute={routes.login}
                 actionParams={actionParams}
                 csrfToken={csrfToken}
