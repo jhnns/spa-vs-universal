@@ -28,13 +28,7 @@ export default defineComponent({
         return (
             <div>
                 <ModalLink
-                    modal={
-                        <LoginFormPlaceholder
-                            props={{
-                                next: state.nextUrlAfterLogin,
-                            }}
-                        />
-                    }
+                    modal={<LoginFormPlaceholder next={state.nextUrlAfterLogin} />}
                     triggerParam={triggerParam}
                     importAction={loginForm.import}
                     {...link}
