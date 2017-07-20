@@ -32,9 +32,13 @@ export default function enterRoute(request, optionalRoute, optionalParams) {
             dispatchAction(stateAtTransitionStart.route.entry).then(chunkEntryModule =>
                 ifStillSameRequest(() => {
                     const { request, route, params } = getState();
-                    const methodAction = chunkEntryModule[request.method];
+                    const methodAction = chunkEntryModule[route.error === true ? "GET" : request.method];
 
                     if (methodAction === undefined) {
+                        if (route.error === true) {
+                            throw new Error(`Error route ${ route.name } has no GET method`);
+                        }
+
                         const allowedMethods = Object.keys(chunkEntryModule);
                         const pathname = getState().request.parsedUrl.pathname;
 
@@ -48,8 +52,9 @@ export default function enterRoute(request, optionalRoute, optionalParams) {
                     return Promise.resolve(dispatchAction(methodAction(request, route, params)))
                         .then(getActions => {
                             const { request, route, params } = getState();
+                            const isErrorRoute = route.error === true;
 
-                            if (request.method !== "GET") {
+                            if (request.method !== "GET" && isErrorRoute === false) {
                                 return void resolve();
                             }
 
