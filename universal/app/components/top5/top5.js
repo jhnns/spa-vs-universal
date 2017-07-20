@@ -27,7 +27,6 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [state.select],
-        mapToState: s => ({ ...s }),
     },
     render(props, state) {
         return <Posts a11yTitle={"Top 5 Peerigon News"} posts={state.posts} />;

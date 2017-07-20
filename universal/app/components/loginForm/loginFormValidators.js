@@ -1,6 +1,6 @@
 export default {
-    name: values => {
-        const name = values.get("name");
+    name: formData => {
+        const name = formData.name;
 
         if (name === "") {
             return "Missing login name";
@@ -8,8 +8,8 @@ export default {
 
         return null;
     },
-    password: values => {
-        const password = values.get("password");
+    password: formData => {
+        const password = formData.password;
 
         if (password === "") {
             return "Missing password";

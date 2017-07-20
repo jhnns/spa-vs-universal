@@ -30,7 +30,6 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [state.select],
-        mapToState: s => ({ ...s }),
     },
     render(props, state) {
         return (

@@ -39,6 +39,11 @@ function compare(a, b, compareChildren) {
     return true;
 }
 
+function defaultMapToState(state) {
+    // It's important to copy the state because preact merges it with the existing component state
+    return { ...state };
+}
+
 export default function createComponent(descriptor) {
     const { render = renderChild } = descriptor;
     const connectToStore = descriptor.connectToStore;
@@ -106,7 +111,7 @@ export default function createComponent(descriptor) {
         };
     }
     if (shouldConnect === true) {
-        const { mapToState, watch } = connectToStore;
+        const { mapToState = defaultMapToState, watch } = connectToStore;
 
         Component.prototype.getStateFromStore = function () {
             const contextState = this.context.store.getState();

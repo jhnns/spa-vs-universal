@@ -1,4 +1,4 @@
-import parseUrl from "./parseUrl";
+import url from "url";
 
 const defaultRequest = {
     method: "GET",
@@ -6,9 +6,13 @@ const defaultRequest = {
     body: {},
 };
 
+function parseUrlAndQueryString(u) {
+    return url.parse(u, true);
+}
+
 export default function sanitizeRequest(req) {
     const request = typeof req === "string" ? { ...defaultRequest, url: req } : req;
-    const parsedUrl = parseUrl(request.url);
+    const parsedUrl = parseUrlAndQueryString(request.url);
 
     return {
         sanitized: true,

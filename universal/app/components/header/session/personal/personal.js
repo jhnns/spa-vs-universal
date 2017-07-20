@@ -1,19 +1,24 @@
 import { root, userName, userImage } from "./personal.css";
 import { link } from "../../link.css";
 import defineForm from "../../../form/defineForm";
+import defineComponent from "../../../util/defineComponent";
 import Form from "../../../form/form";
 import contexts from "../../../../contexts";
 import routes from "../../../../routes";
 
-const LogoutForm = defineForm({
+const logoutForm = defineForm({
     name: "logoutForm",
     context: contexts.state,
-    connectToStore: state => ({
-        watch: [state.select],
+});
+
+const LogoutForm = defineComponent({
+    name: "LogoutForm",
+    connectToStore: {
+        watch: [logoutForm.select],
         mapToState: ({ csrfToken }) => ({
             csrfToken,
         }),
-    }),
+    },
     render(props, { csrfToken }) {
         return (
             <Form method={"DELETE"} actionRoute={routes.session} csrfToken={csrfToken}>

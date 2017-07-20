@@ -1,7 +1,7 @@
 import sanitizeRequest from "./sanitizeRequest";
 import resolveRouteAndParams from "./resolveRouteAndParams";
 import routes from "../../../routes";
-import methodNotAllowed from "./methodNotAllowed";
+import methodNotAllowed from "../errors/methodNotAllowed";
 import has from "../../../util/has";
 
 function getNewState(request, optionalRoute, optionalParams) {

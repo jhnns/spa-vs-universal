@@ -1,20 +1,49 @@
 import { state as routerState } from "../../components/router/router";
-import has from "../../util/has";
 import { state as sessionState } from "../../components/session/session";
 import { SEE_OTHER } from "../../util/statusCodes";
+import contexts from "../../contexts";
+import routes from "../../routes";
 
 export function POST(request, route, params) {
-    return (dispatchAction, getState, execEffect) =>
-        dispatchAction(sessionState.actions.create(request.body.name, request.body.password)).then(
-            () => dispatchAction(routerState.actions.replace(has(params, "next") ? params.next : "/", SEE_OTHER)),
-            console.error
+    return (dispatchAction, getState, execEffect) => {
+        function abort() {
+            dispatchAction(routerState.actions.replace(params.previous, SEE_OTHER));
+        }
+
+        const form = params.form;
+        const formState = contexts.state.scopes[form];
+        const formData = request.body;
+
+        dispatchAction(formState.actions.fillOut(formData));
+
+        const validationResult = dispatchAction(formState.actions.validate());
+
+        if (validationResult.isValid === false) {
+            return abort();
+        }
+
+        dispatchAction(formState.actions.updateSubmitResult(null));
+
+        return dispatchAction(sessionState.actions.create(formData.name, formData.password)).then(
+            result => {
+                dispatchAction(formState.actions.updateSubmitResult(result));
+                dispatchAction(formState.actions.clear());
+
+                return dispatchAction(routerState.actions.replace(params.next, SEE_OTHER));
+            },
+            result => {
+                dispatchAction(formState.actions.updateSubmitResult(result));
+
+                return abort();
+            }
         );
+    };
 }
 
 export function DELETE(request, route, params) {
     return (dispatchAction, getState, execEffect) =>
         dispatchAction(sessionState.actions.destroy()).then(
-            () => dispatchAction(routerState.actions.replace(has(params, "next") ? params.next : "/", SEE_OTHER)),
-            console.error
+            () => dispatchAction(routerState.actions.replace(params.next, SEE_OTHER)),
+            err => dispatchAction(routerState.actions.enter(request, routes.error, err))
         );
 }

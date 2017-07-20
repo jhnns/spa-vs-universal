@@ -1,8 +1,8 @@
-export default function filterProps(allProps, filterList) {
+export default function filterProps(allProps, blacklist) {
     const filteredProps = {};
 
     Object.keys(allProps)
-        .filter(key => filterList.indexOf(key) === -1)
+        .filter(key => blacklist.indexOf(key) === -1)
         .forEach(key => (filteredProps[key] = allProps[key]));
 
     return filteredProps;

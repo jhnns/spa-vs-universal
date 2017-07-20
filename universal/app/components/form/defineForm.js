@@ -1,17 +1,23 @@
 import defineState from "../store/defineState";
-import defineComponent from "../util/defineComponent";
+import { state as sessionState } from "../session/session";
 import csrf from "../../effects/csrf";
+import has from "../../util/has";
+
+const emptyObj = {};
 
 export default function defineForm(descriptor) {
-    const state = defineState({
-        scope: descriptor.name,
+    const formName = descriptor.name;
+    const validators = has(descriptor, "validators") ? descriptor.validators : emptyObj;
+    const validationFields = Object.keys(validators);
+
+    return defineState({
+        scope: formName,
         context: descriptor.context,
         initialState: {
-            name: descriptor.name,
+            name: formName,
             data: Object.create(null),
             csrfToken: null,
-            isPristine: true,
-            isValid: false,
+            isValid: true,
             validationErrors: Object.create(null),
             isSubmitPending: false,
             submitSuccess: false,
@@ -24,12 +30,54 @@ export default function defineForm(descriptor) {
                 csrfToken: execEffect(csrf),
             };
         },
-    });
-    const Component = defineComponent({
-        name: descriptor.name,
-        connectToStore: descriptor.connectToStore(state),
-        render: descriptor.render,
-    });
+        actions: {
+            fillOut: data => (getState, patchState, dispatchAction, execEffect) => {
+                patchState({
+                    data,
+                });
+                dispatchAction(sessionState.actions.rememberFormState(formName, getState()));
+            },
+            clear: () => (getState, patchState, dispatchAction, execEffect) => {
+                patchState({
+                    data: Object.create(null),
+                });
+                dispatchAction(sessionState.actions.discardFormState(formName));
+            },
+            validate: () => (getState, patchState, dispatchAction) => {
+                const validationErrors = Object.create(null);
+                const data = getState().data;
+                let isValid = true;
 
-    return Component;
+                validationFields.forEach(key => {
+                    const result = validators[key](data[key]);
+
+                    if (result !== null) {
+                        validationErrors[key] = result;
+                        isValid = false;
+                    }
+                });
+
+                const result = {
+                    validationErrors,
+                    isValid,
+                };
+
+                patchState(result);
+
+                return result;
+            },
+            updateSubmitResult: result => (getState, patchState, dispatchAction) => {
+                const isError = result instanceof Error;
+
+                patchState({
+                    isSubmitPending: result === null,
+                    // during submit, we assume that the form is valid
+                    isValid: isError === false,
+                    submitResult: result,
+                    submitSuccess: isError === false,
+                    submitError: isError,
+                });
+            },
+        },
+    });
 }
