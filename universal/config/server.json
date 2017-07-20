@@ -4,5 +4,15 @@
   "devServerPort": 8080,
   "bodyLimit": "100kb",
   "corsHeaders": ["Link"],
-  "responseDelay": 300
+  "responseDelay": 300,
+  "session": {
+    "name": "app.id",
+    "cookie": {
+      "maxAge": 2592000000
+    },
+    "resave": false,
+    "rolling": true,
+    "saveUninitialized": false,
+    "secret": "Universal JavaScript!"
+  }
 }

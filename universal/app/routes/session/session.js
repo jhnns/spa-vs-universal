@@ -13,7 +13,7 @@ function delay(result) {
 export function POST(request, route, params) {
     return (dispatchAction, getState, execEffect) => {
         function abort() {
-            dispatchAction(routerState.actions.replace(params.previous, SEE_OTHER));
+            return dispatchAction(routerState.actions.replace(params.previous, SEE_OTHER));
         }
 
         const form = params.form;
@@ -23,6 +23,8 @@ export function POST(request, route, params) {
         dispatchAction(formState.actions.fillOut(formData));
 
         const validationResult = dispatchAction(formState.actions.validate());
+
+        dispatchAction(formState.actions.clearConfidential());
 
         if (validationResult.isValid === false) {
             return abort();

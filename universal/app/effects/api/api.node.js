@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { parse as parseCookie } from "cookie";
 import config from "../../../config/server";
 
 const root = `http://${ config.hostname }:${ config.port }/api`;
@@ -18,6 +19,13 @@ export default function api({ req, res }) {
             const cookie = apiRes.headers.get("set-cookie");
 
             if (!cookie) {
+                return apiRes;
+            }
+
+            const oldCookie = typeof req.headers.cookie === "string" ? parseCookie(req.headers.cookie) : null;
+            const newCookie = parseCookie(cookie);
+
+            if (oldCookie === null || oldCookie[config.session.name] === newCookie[config.session.name]) {
                 return apiRes;
             }
 

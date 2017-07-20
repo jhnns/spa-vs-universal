@@ -13,16 +13,18 @@ const name = "loginForm";
 const state = defineForm({
     name,
     context: contexts.state,
+    confidential: ["password"],
     validators,
 });
 
-function inputFieldProperties(fieldName, validationErrors) {
+function inputFieldProperties(fieldName, data, validationErrors) {
     return {
         name: fieldName,
         invalid: has(validationErrors, fieldName),
         autoCorrect: "off",
         autoCapitalize: "off",
         spellCheck: "false",
+        value: data[fieldName],
     };
 }
 
@@ -31,7 +33,7 @@ export default defineComponent({
     connectToStore: {
         watch: [state.select],
     },
-    render(props, { csrfToken, validationErrors, isSubmitPending, submitError }) {
+    render(props, { csrfToken, data, validationErrors, isSubmitPending, submitError }) {
         const nameId = `${ name }-name`;
         const passwordId = `${ name }-password`;
 
@@ -45,7 +47,7 @@ export default defineComponent({
                 </label>
                 <input
                     id={nameId}
-                    {...inputFieldProperties("name", validationErrors)}
+                    {...inputFieldProperties("name", data, validationErrors)}
                     type="text"
                     // Let the loginForm user decide if autoFocus is appropriate
                     autoFocus={props.autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
@@ -59,7 +61,7 @@ export default defineComponent({
                 </label>
                 <input
                     id={passwordId}
-                    {...inputFieldProperties("password", validationErrors)}
+                    {...inputFieldProperties("password", data, validationErrors)}
                     type="password"
                     {...loginInput}
                 />

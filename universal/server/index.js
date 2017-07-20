@@ -39,17 +39,7 @@ app.use(
         extended: true,
     })
 );
-app.use(
-    session({
-        cookie: {
-            maxAge: 30 * 24 * 60 * 60 * 1000,
-        },
-        resave: false,
-        rolling: true,
-        saveUninitialized: false,
-        secret: "Universal JavaScript!",
-    })
-);
+app.use(session(config.session));
 api(app);
 app.use(
     connectGzipStatic(pathToPublic, {
@@ -57,6 +47,13 @@ app.use(
         maxAge: 365 * 24 * 60 * 60 * 1000,
     })
 );
+app.use((req, res, next) => {
+    if (req.body && typeof req.body._method === "string") {
+        req.method = req.body._method.toUpperCase();
+    }
+    next();
+});
+app.use(csurf());
 app.use((req, res, next) => {
     // GET requests don't require a referrer header
     if (req.method === "GET") {
@@ -83,35 +80,19 @@ app.use((req, res, next) => {
 
     next(error);
 });
-app.use((req, res, next) => {
-    if (req.body && typeof req.body._method === "string") {
-        req.method = req.body._method.toUpperCase();
-    }
-    next();
-});
-// We need to do the error handling before adding the csurf() middleware
-// because our application code relies on the presence of req.csrfToken()
 app.use((err, req, res, next) => {
     if (err.code === "EBADREFERER") {
         req.error = {
             code: 403,
             title: err.message,
         };
-    } else {
-        req.error = {
-            code: 500,
-            title: "An unexpected error happened",
-        };
-    }
-    next();
-});
-app.use(csurf());
-app.use((err, req, res, next) => {
-    if (err.code === "EBADCSRFTOKEN") {
+    } else if (err.code === "EBADCSRFTOKEN") {
         req.error = {
             code: 403,
             title: "Bad CSRF Token",
         };
+    } else {
+        throw err;
     }
     next();
 });

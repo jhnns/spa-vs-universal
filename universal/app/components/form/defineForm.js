@@ -4,11 +4,13 @@ import csrf from "../../effects/csrf";
 import has from "../../util/has";
 
 const emptyObj = {};
+const emptyArr = [];
 
 export default function defineForm(descriptor) {
     const formName = descriptor.name;
     const validators = has(descriptor, "validators") ? descriptor.validators : emptyObj;
     const validationFields = Object.keys(validators);
+    const confidential = has(descriptor, "confidential") ? descriptor.confidential : emptyArr;
 
     return defineState({
         scope: formName,
@@ -43,6 +45,19 @@ export default function defineForm(descriptor) {
                 });
                 dispatchAction(sessionState.actions.discardFormState(formName));
             },
+            clearConfidential: () => (getState, patchState, dispatchAction, execEffect) => {
+                const oldData = getState().data;
+                const newData = {};
+
+                Object.keys(oldData).filter(key => confidential.indexOf(key) === -1).forEach(key => {
+                    newData[key] = oldData[key];
+                });
+
+                patchState({
+                    data: newData,
+                });
+                dispatchAction(sessionState.actions.rememberFormState(formName, getState()));
+            },
             validate: () => (getState, patchState, dispatchAction) => {
                 const validationErrors = Object.create(null);
                 const data = getState().data;
@@ -63,6 +78,7 @@ export default function defineForm(descriptor) {
                 };
 
                 patchState(result);
+                dispatchAction(sessionState.actions.rememberFormState(formName, getState()));
 
                 return result;
             },
@@ -77,6 +93,7 @@ export default function defineForm(descriptor) {
                     submitSuccess: isError === false,
                     submitError: isError,
                 });
+                dispatchAction(sessionState.actions.rememberFormState(formName, getState()));
             },
         },
     });
