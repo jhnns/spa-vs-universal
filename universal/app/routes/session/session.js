@@ -4,12 +4,6 @@ import { SEE_OTHER } from "../../util/statusCodes";
 import contexts from "../../contexts";
 import routes from "../../routes";
 
-function delay(result) {
-    return new Promise(
-        resolve => (typeof window === "undefined" ? resolve(result) : setTimeout(resolve, 5000, result))
-    );
-}
-
 export function POST(request, route, params) {
     return (dispatchAction, getState, execEffect) => {
         function abort() {
@@ -32,7 +26,7 @@ export function POST(request, route, params) {
 
         dispatchAction(formState.actions.updateSubmitResult(null));
 
-        return delay().then(() => dispatchAction(sessionState.actions.create(formData.name, formData.password))).then(
+        return dispatchAction(sessionState.actions.create(formData.name, formData.password)).then(
             result => {
                 dispatchAction(formState.actions.updateSubmitResult(result));
                 // No need to clear the form data, if this was a success, the session is destroyed anyway
