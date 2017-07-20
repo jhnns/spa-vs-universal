@@ -12,4 +12,9 @@ export default {
 
         return false; // false = do not enter the next route
     },
+    reset: ({ res }) => (url, statusCode = SEE_OTHER) => {
+        res.redirect(statusCode, url);
+
+        return false; // false = do not enter the next route
+    },
 };

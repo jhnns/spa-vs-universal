@@ -6,6 +6,7 @@ import routes from "../../routes";
 import history from "../../effects/history";
 import changeRoute from "./util/changeRoute";
 import enterRoute from "./util/enterRoute";
+import sanitizeRequest from "./util/sanitizeRequest";
 
 const name = "router";
 
@@ -33,6 +34,11 @@ export const state = defineState({
         push: changeRoute({ abortIf: isCurrentGetRequest, historyEffect: history.push }),
         replace: changeRoute({ abortIf: isCurrentGetRequest, historyEffect: history.replace }),
         enter: enterRoute,
+        reset: url => (getState, patchState, dispatchAction, execEffect) => {
+            const request = sanitizeRequest(url);
+
+            return Promise.resolve(execEffect(history.reset, request.url));
+        },
     },
 });
 

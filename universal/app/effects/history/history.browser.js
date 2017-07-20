@@ -9,4 +9,19 @@ export default {
 
         return true; // true = enter the next route
     },
+    reset: () => url => {
+        try {
+            localStorage.clear();
+        } catch (err) {
+            console.error(err);
+        }
+        try {
+            sessionStorage.clear();
+        } catch (err) {
+            console.error(err);
+        }
+        window.location = url;
+
+        return true; // true = enter the next route
+    },
 };

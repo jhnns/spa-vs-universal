@@ -29,7 +29,7 @@ export function POST(request, route, params) {
         return dispatchAction(sessionState.actions.create(formData.name, formData.password)).then(
             result => {
                 dispatchAction(formState.actions.updateSubmitResult(result));
-                // No need to clear the form data, if this was a success, the session is destroyed anyway
+                dispatchAction(formState.actions.clear());
 
                 return dispatchAction(routerState.actions.replace(params.next, SEE_OTHER));
             },
@@ -45,7 +45,7 @@ export function POST(request, route, params) {
 export function DELETE(request, route, params) {
     return (dispatchAction, getState, execEffect) =>
         dispatchAction(sessionState.actions.destroy()).then(
-            () => dispatchAction(routerState.actions.replace(params.next, SEE_OTHER)),
+            () => dispatchAction(routerState.actions.reset(params.next)),
             err => dispatchAction(routerState.actions.enter(request, routes.error, err))
         );
 }
