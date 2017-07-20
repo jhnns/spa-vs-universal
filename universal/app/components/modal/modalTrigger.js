@@ -9,9 +9,18 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [routerState.select],
-        mapToState: ({ params }, { triggerParam }) => ({
-            shouldBeActive: parseInt(params[triggerParam]) === 1,
-        }),
+        mapToState: ({ request, route, params }, { triggerParam }, oldState) => {
+            const isErrorRoute = route.error === true;
+            const skipStateChange = request.method !== "GET" && isErrorRoute === false;
+
+            if (skipStateChange) {
+                return oldState;
+            }
+
+            return {
+                shouldBeActive: parseInt(params[triggerParam]) === 1,
+            };
+        },
     },
     willUpdate(props, state, dispatchAction) {
         const childComponent = props.children[0];

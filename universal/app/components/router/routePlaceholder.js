@@ -7,11 +7,19 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [routerState.select],
+        mapToState: ({ request, route, params }, props, oldState) => {
+            const Component = route.placeholder === undefined ? null : route.placeholder(request, route, params);
+
+            if (Component === null) {
+                return oldState;
+            }
+
+            return {
+                component: <Component request={request} route={route} params={params} />,
+            };
+        },
     },
     render(props, state) {
-        const { request, route, params } = state;
-        const Component = route.placeholder(request, route, params);
-
-        return <Component request={request} route={route} params={params} />;
+        return state.component;
     },
 });

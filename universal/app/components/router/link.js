@@ -18,7 +18,7 @@ const ownProps = [
     "preloadAction",
 ];
 
-function preloadNextComponent(dispatchAction, event, props, state) {
+function dispatchPreloadAction(dispatchAction, event, props, state) {
     dispatchAction(state.preloadAction);
 }
 
@@ -39,8 +39,8 @@ export default defineComponent({
         },
     },
     handlers: {
-        handleMouseOver: hookIntoEvent("onMouseOver", preloadNextComponent),
-        handleFocus: hookIntoEvent("onFocus", preloadNextComponent),
+        handleMouseOver: hookIntoEvent("onMouseOver", dispatchPreloadAction),
+        handleFocus: hookIntoEvent("onFocus", dispatchPreloadAction),
     },
     render(props, state) {
         const anchorProps = filterProps(props, ownProps);

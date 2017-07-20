@@ -3,6 +3,10 @@ import Placeholder from "../placeholder/placeholder";
 import defineComponent from "../util/defineComponent";
 import has from "../../util/has";
 
+function delay(result) {
+    return new Promise(resolve => (typeof window === "undefined" ? resolve(result) : setTimeout(resolve, 0, result)));
+}
+
 export default function defineChunkEntry(descriptor) {
     const chunk = descriptor.chunk;
     const context = descriptor.context;
@@ -46,7 +50,7 @@ export default function defineChunkEntry(descriptor) {
                 return Promise.resolve(entryModule);
             }
 
-            return load().then(
+            return load().then(delay).then(
                 result => {
                     error = null;
                     entryModule = result;

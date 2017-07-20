@@ -29,7 +29,6 @@ export default function api({ req, res }) {
 
                         return;
                     }
-
                     res.removeHeader("Set-Cookie");
                     res.header("Set-Cookie", cookie);
                     resolve(apiRes);

@@ -29,7 +29,6 @@ export default defineRoutes({
     session: {
         url: "/session",
         entry: session.import,
-        placeholder: () => session.Placeholder,
     },
     error: {
         entry: error.import,

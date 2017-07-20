@@ -34,19 +34,10 @@ export default defineComponent({
     render(props, { csrfToken, validationErrors, isSubmitPending, submitError }) {
         const nameId = `${ name }-name`;
         const passwordId = `${ name }-password`;
-        const actionParams = {};
-
-        if (has(props, "next")) {
-            actionParams.next = props.next;
-        }
 
         return (
             <Form
-                name={name}
-                method={"POST"}
-                actionRoute={routes.session}
-                actionParams={actionParams}
-                csrfToken={csrfToken}
+                name={name} method={"POST"} actionRoute={routes.session} csrfToken={csrfToken}
                 {...loginSheet}
             >
                 <label htmlFor={nameId} {...loginLabel}>

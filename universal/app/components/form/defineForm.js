@@ -49,7 +49,7 @@ export default function defineForm(descriptor) {
                 let isValid = true;
 
                 validationFields.forEach(key => {
-                    const result = validators[key](data[key]);
+                    const result = validators[key](data);
 
                     if (result !== null) {
                         validationErrors[key] = result;

@@ -1,7 +1,7 @@
 import { overflowContainer, message } from "./formFeedback.css";
 
 export default function FormFeedback(props) {
-    const styles = { ...overflowContainer, ...props.styles };
+    const styles = { ...overflowContainer, ...props };
 
     return (
         <span {...styles}>
