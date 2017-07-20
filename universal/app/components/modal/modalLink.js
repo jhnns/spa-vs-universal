@@ -25,7 +25,7 @@ export default defineComponent({
         }
 
         return (
-            <Link {...linkProps} additionalParams={additionalParams}>
+            <Link {...linkProps} additionalParams={additionalParams} preloadAction={props.importAction}>
                 {props.children}
                 <ModalTrigger triggerParam={props.triggerParam} importAction={props.importAction}>
                     {props.modal}
