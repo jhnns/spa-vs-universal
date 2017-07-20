@@ -40,6 +40,7 @@ export default function defineChunkEntry(descriptor) {
     });
     const chunkEntry = {
         id,
+        chunk,
         get: () => entryModule,
         load: () => {
             if (entryModule !== null) {

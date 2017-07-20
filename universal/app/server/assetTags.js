@@ -30,6 +30,11 @@ function prepareAssetTags() {
 
 export default function get(chunkName) {
     const tags = assetTags === null ? prepareAssetTags() : assetTags;
+    const tag = tags[chunkName];
 
-    return tags[chunkName];
+    if (typeof tag !== "string") {
+        throw new Error(`No asset tag for chunk ${ chunkName }`);
+    }
+
+    return tag;
 }
