@@ -13,7 +13,6 @@ export const state = defineState({
     initialState: {
         user: null,
         token: null,
-        formStates: Object.create(null),
     },
     hydrate(dehydrated, execEffect) {
         const state = execEffect(session.read);
@@ -40,30 +39,6 @@ export const state = defineState({
                     token: null,
                 });
             }),
-        rememberFormState: (formName, state) => (getState, patchState, dispatchAction, execEffect) => {
-            const formStates = Object.create(null);
-            const patch = {
-                formStates,
-            };
-
-            Object.assign(formStates, getState().formStates);
-            formStates[formName] = state;
-
-            patchState(patch);
-            execEffect(session.write, patch);
-        },
-        discardFormState: formName => (getState, patchState, dispatchAction, execEffect) => {
-            const formStates = Object.create(null);
-            const patch = {
-                formStates,
-            };
-
-            Object.assign(formStates, getState().formStates);
-            delete formStates[formName];
-
-            patchState(patch);
-            execEffect(session.write, patch);
-        },
     },
 });
 

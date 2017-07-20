@@ -1,6 +1,6 @@
 import defineState from "../store/defineState";
-import { state as sessionState } from "../session/session";
 import csrf from "../../effects/csrf";
+import session from "../../effects/session";
 import has from "../../util/has";
 
 const emptyObj = {};
@@ -27,8 +27,11 @@ export default function defineForm(descriptor) {
             submitResult: null,
         },
         hydrate(dehydrated, execEffect) {
+            const flashState = execEffect(session.readFlash, formName);
+
             return {
                 ...dehydrated,
+                ...(flashState === null ? emptyObj : flashState),
                 csrfToken: execEffect(csrf),
             };
         },
@@ -37,26 +40,11 @@ export default function defineForm(descriptor) {
                 patchState({
                     data,
                 });
-                dispatchAction(sessionState.actions.rememberFormState(formName, getState()));
             },
             clear: () => (getState, patchState, dispatchAction, execEffect) => {
                 patchState({
                     data: Object.create(null),
                 });
-                dispatchAction(sessionState.actions.discardFormState(formName));
-            },
-            clearConfidential: () => (getState, patchState, dispatchAction, execEffect) => {
-                const oldData = getState().data;
-                const newData = {};
-
-                Object.keys(oldData).filter(key => confidential.indexOf(key) === -1).forEach(key => {
-                    newData[key] = oldData[key];
-                });
-
-                patchState({
-                    data: newData,
-                });
-                dispatchAction(sessionState.actions.rememberFormState(formName, getState()));
             },
             validate: () => (getState, patchState, dispatchAction) => {
                 const validationErrors = Object.create(null);
@@ -78,7 +66,6 @@ export default function defineForm(descriptor) {
                 };
 
                 patchState(result);
-                dispatchAction(sessionState.actions.rememberFormState(formName, getState()));
 
                 return result;
             },
@@ -89,11 +76,23 @@ export default function defineForm(descriptor) {
                     isSubmitPending: result === null,
                     // during submit, we assume that the form is valid
                     isValid: isError === false,
-                    submitResult: result,
+                    submitResult: isError ? result.message : result,
                     submitSuccess: isError === false,
                     submitError: isError,
                 });
-                dispatchAction(sessionState.actions.rememberFormState(formName, getState()));
+            },
+            saveInSessionFlash: () => (getState, patchState, dispatchAction, execEffect) => {
+                const state = getState();
+                const data = {};
+
+                Object.keys(state.data).filter(key => confidential.indexOf(key) === -1).forEach(key => {
+                    data[key] = state.data[key];
+                });
+
+                execEffect(session.writeFlash, formName, {
+                    ...state,
+                    data,
+                });
             },
         },
     });

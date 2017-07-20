@@ -33,7 +33,7 @@ export default defineComponent({
     connectToStore: {
         watch: [state.select],
     },
-    render(props, { csrfToken, data, validationErrors, isSubmitPending, submitError }) {
+    render(props, { csrfToken, data, validationErrors, isSubmitPending, submitError, submitResult }) {
         const nameId = `${ name }-name`;
         const passwordId = `${ name }-password`;
 
@@ -67,7 +67,7 @@ export default defineComponent({
                 />
                 <FormFeedback {...formFeedback}>
                     {validationErrors.password}
-                    {submitError === null ? null : submitError.message}
+                    {submitError ? submitResult : null}
                 </FormFeedback>
                 <input
                     type="submit"

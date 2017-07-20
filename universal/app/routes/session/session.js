@@ -6,13 +6,15 @@ import routes from "../../routes";
 
 function delay(result) {
     return new Promise(
-        resolve => (typeof window === "undefined" ? resolve(result) : setTimeout(resolve, 10000, result))
+        resolve => (typeof window === "undefined" ? resolve(result) : setTimeout(resolve, 5000, result))
     );
 }
 
 export function POST(request, route, params) {
     return (dispatchAction, getState, execEffect) => {
         function abort() {
+            dispatchAction(formState.actions.saveInSessionFlash());
+
             return dispatchAction(routerState.actions.replace(params.previous, SEE_OTHER));
         }
 
@@ -23,8 +25,6 @@ export function POST(request, route, params) {
         dispatchAction(formState.actions.fillOut(formData));
 
         const validationResult = dispatchAction(formState.actions.validate());
-
-        dispatchAction(formState.actions.clearConfidential());
 
         if (validationResult.isValid === false) {
             return abort();
