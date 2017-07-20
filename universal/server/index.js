@@ -26,7 +26,8 @@ app.server = http.createServer(app);
 
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(helmet.referrerPolicy({ policy: "same-origin" }));
+// "same-origin" would be the best, but "origin-when-cross-origin" has the best cross-browser support
+app.use(helmet.referrerPolicy({ policy: "origin-when-cross-origin" }));
 app.use(
     bodyParser.json({
         limit: config.bodyLimit,
