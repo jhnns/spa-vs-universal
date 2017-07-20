@@ -50,14 +50,6 @@ export default function enterRoute(request, optionalRoute, optionalParams) {
                             const { request, route, params } = getState();
 
                             if (request.method !== "GET") {
-                                const isErrorRoute = route.error === true;
-
-                                if (request.method !== "GET" && isErrorRoute === false) {
-                                    throw new Error(
-                                        "Router finished with non-GET request. Use the replace action to forward to a get request."
-                                    );
-                                }
-
                                 return void resolve();
                             }
 

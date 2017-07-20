@@ -15,8 +15,12 @@ export default function changeRoute({ abortIf, historyEffect }) {
             }
 
             const { route, params } = resolveRouteAndParams(sanitizedReq.parsedUrl);
+            const enterResolvedRoute = execEffect(historyEffect, sanitizedReq.url, statusCode);
 
-            execEffect(historyEffect, sanitizedReq.url, statusCode);
-            resolve(enterRoute(sanitizedReq, route, params)(getState, patchState, dispatchAction));
+            resolve(
+                enterResolvedRoute ?
+                    enterRoute(sanitizedReq, route, params)(getState, patchState, dispatchAction) :
+                    null
+            );
         });
 }

@@ -9,5 +9,7 @@ export default {
         // won't save the session on POST requests
         // https://stackoverflow.com/a/26532987
         res.redirect(statusCode, url);
+
+        return false; // false = do not enter the next route
     },
 };
