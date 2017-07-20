@@ -59,8 +59,6 @@ export default function createComponent(descriptor) {
                 this.dispatchAction = action => context.store.dispatch(action);
             }
 
-            // Set state undefined so that the user can use function default values during mapToState()
-            this.state = undefined;
             this.state = shouldConnect === true ? this.getStateFromStore() : null;
 
             if (descriptor.handlers !== undefined) {
