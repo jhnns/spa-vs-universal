@@ -1,5 +1,11 @@
+import has from "../../util/has";
+
 export default function csrf({ req }) {
-    // We need to check for the csrfToken function because there might have been an error in our middleware stack
-    // and the function is not defined yet.
-    return () => (typeof req.csrfToken === "function" ? req.csrfToken() : null);
+    return () => {
+        const token = has(req.session, "csrf") ? req.session.csrf : req.csrfToken();
+
+        req.session.csrf = token;
+
+        return token;
+    };
 }
