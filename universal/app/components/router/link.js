@@ -49,21 +49,24 @@ export default defineComponent({
             additionalParams,
             withoutParams = emptyArr,
             replaceRoute = false,
+            href,
             children,
             activeClass,
         } = props;
         const route = state.route;
-        const finalParams = filterProps(Object.assign({}, params, additionalParams), withoutParams);
-        const targetUrl = renderUrl(
-            route.error === true ? (typeof state.params.next === "string" ? state.params.next : "/") : route.url,
-            finalParams
-        );
+        let finalHref = href;
+
+        if (href === undefined) {
+            const finalParams = filterProps(Object.assign({}, params, additionalParams), withoutParams);
+
+            finalHref = renderUrl(route.url, finalParams);
+        }
 
         return (
             <a
                 {...anchorProps}
                 {...(state.isActive ? activeClass : emptyObj)}
-                href={targetUrl}
+                href={finalHref}
                 onMouseOver={this.handlers.handleMouseOver}
                 onFocus={this.handlers.handleFocus}
                 data-route={true}

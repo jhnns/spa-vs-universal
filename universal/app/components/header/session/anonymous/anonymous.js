@@ -16,13 +16,9 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [routerState.select],
-        mapToState: ({ request, route, params }) => {
-            const paramsToExtend = route.error === true ? emptyObj : params;
-
-            return {
-                nextUrlAfterLogin: renderUrl(route.url, filterProps(paramsToExtend, [triggerParam, "previous"])),
-            };
-        },
+        mapToState: ({ request, route, params }) => ({
+            nextUrlAfterLogin: renderUrl(route.url, filterProps(params, [triggerParam])),
+        }),
     },
     render(props, state) {
         return (

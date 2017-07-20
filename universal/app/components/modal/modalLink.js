@@ -11,18 +11,15 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [routerState.select],
-        mapToState: ({ request, route }) => ({
-            previous: route.error === true ? null : request.url,
+        mapToState: ({ params }) => ({
+            params,
         }),
     },
     render(props, state) {
         const linkProps = filterProps(props, ownProps);
-        const additionalParams = Object.assign({}, props.additionalParams);
+        const additionalParams = Object.assign({}, state.params, props.additionalParams);
 
         additionalParams[props.triggerParam] = 1;
-        if (state.previous !== null) {
-            additionalParams.previous = state.previous;
-        }
 
         return (
             <Link {...linkProps} additionalParams={additionalParams} preloadAction={props.importAction}>

@@ -2,6 +2,8 @@ import defineComponent from "../util/defineComponent";
 import { state as routerState } from "../router/router";
 import { state as modalState } from "./modal";
 import has from "../../util/has";
+import renderUrl from "../../util/renderUrl";
+import filterProps from "../../util/filterProps";
 
 const name = "modalTrigger";
 
@@ -19,6 +21,7 @@ export default defineComponent({
 
             return {
                 shouldBeActive: parseInt(params[triggerParam]) === 1,
+                backUrl: renderUrl(route.url, filterProps(params, [triggerParam])),
             };
         },
     },
@@ -29,7 +32,7 @@ export default defineComponent({
             if (has(props, "importAction")) {
                 dispatchAction(props.importAction);
             }
-            dispatchAction(modalState.actions.show(childComponent));
+            dispatchAction(modalState.actions.show(childComponent, state.backUrl));
         } else {
             dispatchAction(modalState.actions.hide(childComponent));
         }

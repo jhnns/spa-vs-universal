@@ -15,7 +15,7 @@ export default defineComponent({
             previousUrl: has(params, "previous") ? params.previous : has(props, "fallback") ? props.fallback : "/",
         }),
     },
-    render(props, state) {
+    render(props, state) {#
         const linkProps = filterProps(props, ownProps);
 
         return <Link {...linkProps} href={state.previousUrl} />;

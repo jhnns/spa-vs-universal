@@ -39,7 +39,11 @@ export default defineComponent({
 
         return (
             <Form
-                name={name} method={"POST"} actionRoute={routes.session} csrfToken={csrfToken}
+                name={name}
+                method={"POST"}
+                actionRoute={routes.session}
+                actionParams={{ next: props.next }}
+                csrfToken={csrfToken}
                 {...loginSheet}
             >
                 <label htmlFor={nameId} {...loginLabel}>

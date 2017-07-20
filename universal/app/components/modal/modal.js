@@ -1,7 +1,7 @@
 import defineComponent from "../util/defineComponent";
 import contexts from "../../contexts";
 import defineState from "../store/defineState";
-import GoBack from "../router/goBack";
+import Link from "../router/link";
 import { root, rootVisible, rootHidden, window, backdrop, backdropVisible, backdropHidden } from "./modal.css";
 
 const name = "modal";
@@ -17,6 +17,7 @@ export const state = defineState({
     context: contexts.state,
     initialState: {
         component: null,
+        backUrl: "",
     },
     hydrate(dehydrated) {
         return {
@@ -25,17 +26,17 @@ export const state = defineState({
         };
     },
     actions: {
-        show: component => (getState, patchState, dispatchAction) => {
-            if (isCurrentlyActive(getState(), component) === false) {
-                patchState({
-                    component,
-                });
-            }
+        show: (component, backUrl = "") => (getState, patchState, dispatchAction) => {
+            patchState({
+                component,
+                backUrl,
+            });
         },
         hide: component => (getState, patchState, dispatchAction) => {
             if (isCurrentlyActive(getState(), component) === true) {
                 patchState({
                     component: null,
+                    backUrl: "",
                 });
             }
         },
@@ -46,9 +47,10 @@ export default defineComponent({
     name,
     connectToStore: {
         watch: [state.select],
-        mapToState: ({ component }, oldState) => ({
+        mapToState: ({ component, backUrl }, oldState) => ({
             active: component !== null,
             component,
+            backUrl,
         }),
     },
     render(props, state) {
@@ -63,7 +65,7 @@ export default defineComponent({
 
         return (
             <div {...rootStyles}>
-                <GoBack {...backdropStyles} />
+                <Link href={state.backUrl} {...backdropStyles} />
                 <div {...window}>
                     {state.component}
                 </div>
