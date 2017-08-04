@@ -1,7 +1,3 @@
-import isPromise from "is-promise";
-
-const resolved = Promise.resolve();
-
 function isDefined(result) {
     return result !== null && result !== undefined;
 }
