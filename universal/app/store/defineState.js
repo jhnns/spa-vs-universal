@@ -1,4 +1,4 @@
-import has from "../../util/has";
+import has from "../util/has";
 
 const emptyObj = {};
 

@@ -1,4 +1,4 @@
-import defineState from "../store/defineState";
+import defineState from "../../store/defineState";
 import contexts from "../../contexts";
 import defineComponent from "../util/defineComponent";
 import getAll from "../../effects/api/posts/getAll";

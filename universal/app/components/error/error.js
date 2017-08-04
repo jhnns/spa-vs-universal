@@ -1,4 +1,4 @@
-import defineState from "../store/defineState";
+import defineState from "../../store/defineState";
 import defineComponent from "../util/defineComponent";
 import contexts from "../../contexts";
 import { errorSheet, headline, text } from "./error.css";

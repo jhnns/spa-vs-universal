@@ -1,5 +1,5 @@
 import contexts from "../../contexts";
-import defineState from "../store/defineState";
+import defineState from "../../store/defineState";
 import renderChild from "../util/renderChild";
 import document from "../../effects/document";
 

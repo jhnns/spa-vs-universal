@@ -1,4 +1,4 @@
-import defineState from "../store/defineState";
+import defineState from "../../store/defineState";
 import { state as storeState } from "../store/store";
 import contexts from "../../contexts";
 import renderChild from "../util/renderChild";

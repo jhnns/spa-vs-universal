@@ -1,4 +1,4 @@
-import defineState from "../store/defineState";
+import defineState from "../../store/defineState";
 import csrf from "../../effects/csrf";
 import session from "../../effects/session";
 import has from "../../util/has";

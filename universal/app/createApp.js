@@ -1,5 +1,5 @@
 import App from "./components/app/app";
-import createStore from "./components/store/createStore";
+import createStore from "./store/createStore";
 import contexts from "./contexts";
 
 export default function createApp(initialState, effectContext) {

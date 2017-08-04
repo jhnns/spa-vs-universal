@@ -1,4 +1,4 @@
-import defineState from "../store/defineState";
+import defineState from "../../store/defineState";
 import contexts from "../../contexts";
 import { aboutSheet, headline, text } from "./about.css";
 

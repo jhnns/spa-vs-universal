@@ -1,5 +1,5 @@
 import defineComponent from "../util/defineComponent";
-import defineState from "./defineState";
+import defineState from "../../store/defineState";
 import contexts from "../../contexts";
 
 const name = "store";

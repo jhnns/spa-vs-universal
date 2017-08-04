@@ -1,6 +1,6 @@
 import defineComponent from "../util/defineComponent";
 import contexts from "../../contexts";
-import defineState from "../store/defineState";
+import defineState from "../../store/defineState";
 import Link from "../router/link";
 import { root, rootVisible, rootHidden, window, backdrop, backdropVisible, backdropHidden } from "./modal.css";
 
