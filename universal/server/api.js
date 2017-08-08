@@ -37,7 +37,15 @@ export default app => {
     app.use("/api", passport.initialize());
     app.use("/api", (req, res, next) => {
         // Fake a delayed DB response
-        setTimeout(next, config.responseDelay);
+        const now = process.hrtime();
+
+        setTimeout(() => {
+            const diff = process.hrtime(now);
+            const diffInNanoseconds = diff[0] * 1e9 + diff[1];
+
+            console.log("Delayed response with setTimeout error of", Math.round(diffInNanoseconds / 1e6 - 300), "ms");
+            next();
+        }, config.responseDelay);
     });
     app.use("/api/users", authenticateJwt);
     app.get("/api/session", authenticateJwt, (req, res) => {
