@@ -4,10 +4,10 @@
 
 The setup has been verified to run correctly with:
 
+- macOS Sierra 10.12.6
 - Node.js v8.1.3
 - NPM v5.0.3
 - Chrome Browser 60.0.3112.90
-- Firefox 55.0
 
 **Please note: Only NPM 5 will install the exact same dependencies as specified in the `package-lock.json`. Older NPM versions might install different versions than the verified test setup.**
 
