@@ -34,7 +34,6 @@ export default function handleRequest(req, res) {
             title: store.when(s => documentState.select(s).title),
             headerTags: store.when(s => documentState.select(s).headerTags),
             html: appRendered.then(({ html }) => html),
-            css: appRendered.then(({ css }) => css),
             state: appRendered.then(({ state }) => state),
             chunks: appRendered.then(({ chunks }) => chunks),
         }).pipe(res);

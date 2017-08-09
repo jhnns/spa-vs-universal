@@ -3,7 +3,7 @@ import streamTemplate from "stream-template";
 import serializeJavascript from "serialize-javascript";
 import assetTags from "./assetTags";
 
-export default function createRenderStream({ title, headerTags, html, css, state, chunks }) {
+export default function createRenderStream({ title, headerTags, html, state, chunks }) {
     const renderedHeaderTags = Promise.resolve(headerTags).then(nodes =>
         nodes.map(renderToString).reduce((str, tag) => str + tag, "")
     );
@@ -20,9 +20,6 @@ export default function createRenderStream({ title, headerTags, html, css, state
   <link rel="shortcut icon" href="/favicon.ico" />
   <title>${ title }</title>
   ${ renderedHeaderTags }
-  <style>
-    ${ css }
-  </style>
   ${ assetTags("client") }
   ${ chunks.then(chunkNames => chunkNames.map(assetTags).join("")) }
 </head>

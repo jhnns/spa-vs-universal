@@ -17,7 +17,7 @@ function prepareAssetTags() {
                     return `<script src="${ asset }" defer></script>`;
                 }
                 if (/\.css$/.test(asset) === true) {
-                    return `<link href="${ asset }" type="text/css" rel="lazy-stylesheet" />`;
+                    return `<link href="${ asset }" type="text/css" rel="stylesheet" />`;
                 }
 
                 return "";
