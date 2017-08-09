@@ -23,10 +23,6 @@ function startApp() {
         captureLinkClick(store);
         captureFormSubmit(store);
         captureHistoryPop(store);
-
-        const applyLazyStylesheets = require("./applyLazyStylesheets").default;
-
-        applyLazyStylesheets();
     });
 }
 
