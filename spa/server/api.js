@@ -50,7 +50,7 @@ export default app => {
             const diff = process.hrtime(now);
             const diffInNanoseconds = diff[0] * 1e9 + diff[1];
 
-            console.log("Delayed response with setTimeout error of", Math.round(diffInNanoseconds / 1e6 - 300), "ms");
+            console.log("Delayed response with a setTimeout of", Math.round(diffInNanoseconds / 1e6 - 300), "ms");
             next();
         }, config.responseDelay);
     });
